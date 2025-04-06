@@ -8,9 +8,6 @@ public class PlayerMovement : MonoBehaviour
     Animator anim;
     Transform cam;
 
-    float speedSmoothVelocity;
-    float speedSmoothTime;
-    float currentSpeed;
     float velocityY;
     Vector3 moveInput;
     Vector3 dir;
@@ -19,9 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float gravity = 25f;
     [SerializeField] float moveSpeed = 2f;
     [SerializeField] float rotateSpeed = 3f;
+    [SerializeField] float jumpForce = 10f;
 
     public bool lockMovement;
-
 
     void Start()
     {
@@ -39,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInput()
     {
-        moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); //Use Raw for instant input
 
         Vector3 forward = cam.forward;
         Vector3 right = cam.right;
@@ -53,23 +50,34 @@ public class PlayerMovement : MonoBehaviour
 
     private void Movement()
     {
+        if (controller.isGrounded)
+        {
+            velocityY = -1f; //Slight downward force to keep grounded
 
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, moveSpeed, ref speedSmoothVelocity, speedSmoothTime * Time.deltaTime);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                velocityY = jumpForce;
+            }
+        }
+        else
+        {
+            velocityY -= gravity * Time.deltaTime;
+        }
 
-        if (velocityY > -10) velocityY -= Time.deltaTime * gravity;
-        Vector3 velocity = (dir * currentSpeed) + Vector3.up * velocityY;
-
+        Vector3 velocity = dir * moveSpeed + Vector3.up * velocityY;
         controller.Move(velocity * Time.deltaTime);
 
-        //anim.SetFloat("Movement", dir.magnitude, 0.1f, Time.deltaTime);
-        //anim.SetFloat("Horizontal", moveInput.x, 0.1f, Time.deltaTime);
-        //anim.SetFloat("Vertical", moveInput.y, 0.1f, Time.deltaTime);
+        //Optional animator values
+        //anim.SetFloat("Movement", dir.magnitude);
+        //anim.SetFloat("Horizontal", moveInput.x);
+        //anim.SetFloat("Vertical", moveInput.y);
     }
 
     private void PlayerRotation()
     {
         if (dir.magnitude == 0) return;
-        Vector3 rotDir = new Vector3(dir.x, dir.y, dir.z);
+
+        Vector3 rotDir = new Vector3(dir.x, 0, dir.z); //Only rotate on the Y axis
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(rotDir), Time.deltaTime * rotateSpeed);
     }
 }
