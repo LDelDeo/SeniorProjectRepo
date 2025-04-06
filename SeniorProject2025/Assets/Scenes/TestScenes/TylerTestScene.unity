@@ -1516,7 +1516,6 @@ GameObject:
   - component: {fileID: 700430409}
   - component: {fileID: 700430408}
   - component: {fileID: 700430407}
-  - component: {fileID: 700430411}
   - component: {fileID: 700430412}
   m_Layer: 6
   m_Name: Player
@@ -1606,28 +1605,6 @@ Transform:
   - {fileID: 1503718346}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &700430411
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 700430406}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 36fcb55df089d97478cebcb4867b4c5a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &700430412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1711,10 +1688,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 700430410}
   offset: {x: 0, y: 1, z: 0}
-  clampAxis: {x: -89, y: 89}
+  clampAxis: {x: -80, y: 80}
   follow_smoothing: 8
   rotate_Smoothing: 8
-  senstivity: 80
+  senstivity: 100
   lockedTarget: 0
 --- !u!4 &742737553
 Transform:
