@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] Vector3 offset;
-    [SerializeField] Vector2 clampAxis = new Vector2(60, 60);
+    [SerializeField] Vector2 clampAxis = new Vector2(-60, 60);
 
     [SerializeField] float follow_smoothing = 5;
     [SerializeField] float rotate_Smoothing = 5;
@@ -24,12 +24,15 @@ public class CameraFollow : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         cam = Camera.main.transform;
+        
+       
+
     }
     void Update()
     {
 
         Vector3 target_P = target.position + offset;
-        transform.position = Vector3.Lerp(transform.position, target_P, follow_smoothing * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, target_P, follow_smoothing);
 
 
         if (!lockedTarget) CameraTargetRotation(); else LookAtTarget();
@@ -53,13 +56,13 @@ public class CameraFollow : MonoBehaviour
     void CameraTargetRotation()
     {
         Vector2 mouseAxis = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        rotX += (mouseAxis.x * senstivity) * Time.deltaTime;
-        rotY -= (mouseAxis.y * senstivity) * Time.deltaTime;
+        rotX += mouseAxis.x * senstivity;
+        rotY -= mouseAxis.y * senstivity;
 
         rotY = Mathf.Clamp(rotY, clampAxis.x, clampAxis.y);
 
         Quaternion localRotation = Quaternion.Euler(rotY, rotX, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, localRotation, Time.deltaTime * rotate_Smoothing);
+        transform.rotation = Quaternion.Slerp(transform.rotation, localRotation, rotate_Smoothing );
     }
 
     void LookAtTarget()
