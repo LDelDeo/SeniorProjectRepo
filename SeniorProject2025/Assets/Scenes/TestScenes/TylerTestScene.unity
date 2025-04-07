@@ -1690,7 +1690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 700430410}
   offset: {x: 0, y: 0, z: 0}
-  clampAxis: {x: -80, y: 80}
+  clampAxis: {x: -89, y: 89}
   follow_smoothing: 10
   rotate_Smoothing: 10
   senstivity: 0.5
