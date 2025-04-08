@@ -17,7 +17,8 @@ public class EnemyLockOn : MonoBehaviour
     [SerializeField] bool zeroVert_Look;
     [SerializeField] float noticeZone = 10;
     [SerializeField] float lookAtSmoothing = 2;
-    [Tooltip("Angle_Degree")][SerializeField] float maxNoticeAngle = 60;
+    [Tooltip("Angle_Degree")]
+    [SerializeField] float maxNoticeAngle = 60;
     [SerializeField] float crossHair_Scale = 0.1f;
 
 
@@ -29,7 +30,6 @@ public class EnemyLockOn : MonoBehaviour
     [SerializeField] CameraFollow camFollow;
     [SerializeField] Transform lockOnCanvas;
     PlayerMovement playerMovement;
-
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -42,11 +42,10 @@ public class EnemyLockOn : MonoBehaviour
     {
         camFollow.lockedTarget = enemyLocked;
         playerMovement.lockMovement = enemyLocked;
-        if (Input.GetKeyDown(KeyCode.Mouse2))
+        if (Input.GetKeyDown(KeyCode.Mouse2) && GameManager.Instance.IsAiming == false)
         {
             if (currentTarget)
             {
-                //If there is already a target, Reset.
                 ResetTarget();
                 return;
             }
