@@ -6,10 +6,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public bool IsAiming { get; private set; }
+    public bool IsLockedOnTarget { get; private set; }
 
     public static event Action OnStartAiming;
     public static event Action OnStopAiming;
     public static event Action OnShoot;
+
+    public static event Action OnStartLockTarget;
+    public static event Action OnStopLockTarget;
 
     void Awake()
     {
@@ -32,6 +36,19 @@ public class GameManager : MonoBehaviour
         else
         { 
             OnStopAiming?.Invoke();
+        }
+    } 
+    public void SetPlayerLock(bool value)
+    {
+        IsLockedOnTarget = value;
+
+        if (value)
+        {
+            OnStartLockTarget?.Invoke();
+        }
+        else
+        { 
+            OnStopLockTarget?.Invoke();
         }
     }
 

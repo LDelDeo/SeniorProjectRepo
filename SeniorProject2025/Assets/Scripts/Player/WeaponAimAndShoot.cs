@@ -29,10 +29,10 @@ public class WeaponAimAndShoot : MonoBehaviour
 
     private void HandleAimingInput()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && !GameManager.Instance.IsLockedOnTarget)
             StartAiming();
 
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1) && GameManager.Instance.IsAiming)
             StopAiming();
 
         if (GameManager.Instance.IsAiming && canRotateToAim)

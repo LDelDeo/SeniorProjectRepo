@@ -23,7 +23,6 @@ public class EnemyLockOn : MonoBehaviour
 
 
     Transform cam;
-    bool enemyLocked;
     float currentYOffset;
     Vector3 pos;
 
@@ -40,8 +39,8 @@ public class EnemyLockOn : MonoBehaviour
 
     void Update()
     {
-        camFollow.lockedTarget = enemyLocked;
-        playerMovement.lockMovement = enemyLocked;
+        camFollow.lockedTarget = GameManager.Instance.IsLockedOnTarget;
+        playerMovement.lockMovement = GameManager.Instance.IsLockedOnTarget;
         if (Input.GetKeyDown(KeyCode.Mouse2) && GameManager.Instance.IsAiming == false)
         {
             if (currentTarget)
@@ -53,7 +52,7 @@ public class EnemyLockOn : MonoBehaviour
             if (currentTarget = ScanNearBy()) FoundTarget(); else ResetTarget();
         }
 
-        if (enemyLocked)
+        if (GameManager.Instance.IsLockedOnTarget)
         {
             if (!TargetOnRange()) ResetTarget();
             LookAtTarget();
@@ -66,14 +65,14 @@ public class EnemyLockOn : MonoBehaviour
     {
         lockOnCanvas.gameObject.SetActive(true);
         cinemachineAnimator.Play("TargetCamera");
-        enemyLocked = true;
+        GameManager.Instance.SetPlayerLock(true);
     }
 
     void ResetTarget()
     {
         lockOnCanvas.gameObject.SetActive(false);
         currentTarget = null;
-        enemyLocked = false;
+        GameManager.Instance.SetPlayerLock(false);
         cinemachineAnimator.Play("FollowCamera");
     }
 
