@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - OcclusionObstacle
+  - OrcEnemy
+  - MeleeOrcEnemy
+  - RangedOrcEnemy
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,9 @@ public class WeaponAimAndShoot : MonoBehaviour
     [SerializeField] private Transform playerBody;
     [SerializeField] private float aimRotateSpeed = 10f;
 
+    [Header("Script Grabs")]
+    public PlayerStats playerStats;
+
 
     private Camera cam;
     private bool canRotateToAim;
@@ -76,12 +79,20 @@ public class WeaponAimAndShoot : MonoBehaviour
         }
     }
 
+    //Ranged Player Attack
     private void Shoot()
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Debug.Log("Hit " + hit.collider.name);
+
+            if (hit.collider.tag == "MeleeOrcEnemy")
+            hit.collider.GetComponent<MeleeOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
+
+            if (hit.collider.tag == "RangedOrcEnemy")
+            hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
+
             //Add Bullets
         }
     }
