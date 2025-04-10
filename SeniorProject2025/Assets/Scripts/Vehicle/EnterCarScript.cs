@@ -4,33 +4,91 @@ using UnityEngine;
 
 public class EnterCarScript : MonoBehaviour
 {
-    public GameObject enterText;  // UI Text for entering car
-    public GameObject carPrefab;  // The car prefab to instantiate
-    public GameObject player;     // The player GameObject
-    private bool playerInTriggerZone = false;  // To track player presence in the trigger zone
+    public GameObject enterText;
+    public GameObject player;
+    public GameObject car;  // Reference to the car in the scene
+    public Camera carCamera;
+    public Camera playerCamera;
+    public Canvas carCanvas;
+    public Canvas playerCanvas;
+    public MonoBehaviour carControllerScript;  // Reference to the car controller script
+    private bool playerInTriggerZone = false;
+    private bool isInCar = false;
 
     void Start()
     {
-        // Optional: Make sure you can find the player object in case you don't manually assign it
-        // player = GameObject.FindWithTag("Player");
+        // Initially, the car's camera and canvas are off, and the player is visible.
+        carCamera.gameObject.SetActive(false);
+        carCanvas.gameObject.SetActive(false);
+        if (carControllerScript != null)
+        {
+            carControllerScript.enabled = false;  // Disable car controller by default when the player is not in the car
+        }
     }
 
     void Update()
     {
-        // Check for 'E' key input when player is inside the trigger zone
+        // If the player is in the trigger zone and presses the 'E' key
         if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("E key pressed. Instantiating car...");
-
-            // Instantiate the car in front of the player (adjust position if needed)
-            Instantiate(carPrefab, player.transform.position + Vector3.forward * 2f, Quaternion.identity);
-
-            // Destroy the player object to simulate entering the car
-            Destroy(player);
-
-            // Optionally destroy the trigger object (if it's not needed after use)
-            Destroy(gameObject);
+            if (!isInCar)
+            {
+                EnterCar(); // Enter the car
+            }
+            else
+            {
+                ExitCar(); // Exit the car
+            }
         }
+    }
+
+    private void EnterCar()
+    {
+        Debug.Log("Player entered the car.");
+
+        // Disable the entire player (including the player model, camera, and canvas)
+        player.SetActive(false);  // Disables the entire player GameObject
+
+        // Enable the car's camera and canvas
+        carCamera.gameObject.SetActive(true); // Enable the car's camera
+        carCanvas.gameObject.SetActive(true); // Enable the car's UI canvas
+
+        // Enable the car's controller script when the player is in the car
+        if (carControllerScript != null)
+        {
+            carControllerScript.enabled = true;
+        }
+
+        // Make the player a child of the car
+        player.transform.SetParent(car.transform);
+
+        isInCar = true; // Player is now in the car
+        enterText.SetActive(false); // Hide the 'Enter' text
+    }
+
+    private void ExitCar()
+    {
+        Debug.Log("Player exited the car.");
+
+        // Disable the entire player (including the player model, camera, and canvas)
+        player.SetActive(true);  // Enables the entire player GameObject
+
+        // Disable the car's camera and canvas
+        carCamera.gameObject.SetActive(false); // Disable the car's camera
+        carCanvas.gameObject.SetActive(false); // Disable the car's UI canvas
+
+        // Disable the car's controller script when the player is out of the car
+        if (carControllerScript != null)
+        {
+            carControllerScript.enabled = false;
+        }
+
+        // Detach the player from the car and place them slightly to the right
+        player.transform.SetParent(null);
+        player.transform.position = car.transform.position + new Vector3(2f, 0, 0); // Adjust the 2f value to position them better
+
+        isInCar = false; // Player is now out of the car
+        enterText.SetActive(true); // Show the 'Enter' text again
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,8 +96,8 @@ public class EnterCarScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player entered trigger zone.");
-            enterText.SetActive(true);  // Show the 'Enter' text when player enters the trigger
-            playerInTriggerZone = true;  // Set flag to true when player is in the trigger zone
+            enterText.SetActive(true); // Show the 'Enter' text when player enters the trigger
+            playerInTriggerZone = true; // Set flag to true when player is in the trigger zone
         }
     }
 
@@ -48,8 +106,8 @@ public class EnterCarScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player exited trigger zone.");
-            enterText.SetActive(false);  // Hide the 'Enter' text when player exits the trigger
-            playerInTriggerZone = false;  // Set flag to false when player exits the trigger zone
+            enterText.SetActive(false); // Hide the 'Enter' text when player exits the trigger
+            playerInTriggerZone = false; // Set flag to false when player exits the trigger zone
         }
     }
 }
