@@ -1025,7 +1025,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9984253, z: -0, w: 0.056097962}
   m_LocalPosition: {x: -2.0369406, y: 3.4475856, z: 0.19786835}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1.00596, y: 1.00596, z: 1.00596}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7305111604443820211}
@@ -1045,6 +1045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562f403170d9fe24cac30f2690fee905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   projectilePrefab: {fileID: 6921560689362896180, guid: 1c98ef3fd66b873419865351734da5ca, type: 3}
   firePoint: {fileID: 1747254117263665018}
   attackRange: 10

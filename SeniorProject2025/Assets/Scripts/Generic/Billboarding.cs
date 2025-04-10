@@ -3,13 +3,21 @@ using UnityEngine;
 public class Billboarding : MonoBehaviour
 {
     [Header("Target")]
-    public Transform cameraToFace; 
+    private Camera cameraToFace;
+
+    void Start()
+    {
+        cameraToFace = Camera.main;
+    }
 
     void Update()
     {
-        transform.LookAt(cameraToFace.position);
+        if (cameraToFace == null) return;
 
-        // Optional: Prevent rotation on the X and Z axes if you only want to rotate on the Y axis
+        // Make the object face the camera
+        transform.LookAt(cameraToFace.transform.position);
+
+        // Lock rotation to Y axis only (no tilting up/down)
         transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
     }
 }

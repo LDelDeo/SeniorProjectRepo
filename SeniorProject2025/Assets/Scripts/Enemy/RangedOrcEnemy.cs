@@ -14,6 +14,8 @@ public class RangedOrcEnemy : MonoBehaviour
     private PlayerHealth playerHealth;
     private GameObject playerTransform;
     private NavMeshAgent agent;
+    public GameObject alertIconPrefab;
+    private GameObject alertIconInstance;
 
     [Header("Ranged Attack")]
     public GameObject projectilePrefab; // Assign this in the Inspector
@@ -40,6 +42,20 @@ public class RangedOrcEnemy : MonoBehaviour
         AttackPlayer();
     }
 
+    // Will Attack
+    public void BecomeHostile()
+    {
+        isHostile = true;
+
+        if (alertIconPrefab != null && alertIconInstance == null)
+        {
+            alertIconInstance = Instantiate(alertIconPrefab, transform.position + Vector3.up * 4f, Quaternion.identity);
+            alertIconInstance.transform.SetParent(transform);
+        }
+    }
+
+
+
     // Dealing & Taking Damage
     public void DealDamage()
     {
@@ -58,7 +74,11 @@ public class RangedOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
-            Debug.Log("Orc Dead");
+            if (alertIconInstance != null)
+            {
+                Destroy(alertIconInstance);
+            }
+
             Destroy(gameObject);    
         }
     }
