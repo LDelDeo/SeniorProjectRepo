@@ -85,7 +85,7 @@ public class EnterCarScript : MonoBehaviour
 
         // Detach the player from the car and place them slightly to the right
         player.transform.SetParent(null);
-        player.transform.position = car.transform.position + new Vector3(2f, 0, 0); // Adjust the 2f value to position them better
+        player.transform.position = car.transform.position + new Vector3(2f, 5f, 0); // Adjust the 2f value to position them better
 
         isInCar = false; // Player is now out of the car
         enterText.SetActive(true); // Show the 'Enter' text again

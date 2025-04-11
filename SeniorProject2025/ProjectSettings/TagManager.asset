@@ -9,6 +9,11 @@ TagManager:
   - OrcEnemy
   - MeleeOrcEnemy
   - RangedOrcEnemy
+  - crimeOne
+  - crimeTwo
+  - crimeThree
+  - crimeFour
+  - crimeFive
   layers:
   - Default
   - TransparentFX
