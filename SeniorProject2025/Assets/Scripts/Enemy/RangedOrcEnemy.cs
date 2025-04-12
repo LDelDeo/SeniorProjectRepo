@@ -16,6 +16,7 @@ public class RangedOrcEnemy : MonoBehaviour
     private NavMeshAgent agent;
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
+    public ParticleSystem bloodShed;
 
     [Header("Ranged Attack")]
     public GameObject projectilePrefab; // Assign this in the Inspector
@@ -68,7 +69,7 @@ public class RangedOrcEnemy : MonoBehaviour
     public void TakeDamage(float damageToTake)
     {
         health -= damageToTake;
-        Debug.Log("Orc Health: " + health);
+        bloodShed.Play();
 
         isHostile = true;
 

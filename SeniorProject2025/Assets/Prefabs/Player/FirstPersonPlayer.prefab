@@ -265,6 +265,9 @@ MonoBehaviour:
   gunAnim: {fileID: 1536419302597273818}
   bulletsText: {fileID: 6091034134922115181}
   reloadText: {fileID: 666339246023674306}
+  muzzleFlash: {fileID: 0}
+  shakeMagnitude: 0.1
+  shakeDuration: 0.2
 --- !u!114 &4517398326081656282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +301,15 @@ MonoBehaviour:
   gravity: -9.81
   jumpHeight: 1.5
   cameraTransform: {fileID: 4197943569915888629}
+  groundCheck: {fileID: 0}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+  bobSpeed: 8
+  bobAmount: 0.05
+  swayAmount: 0.05
+  swaySpeed: 6
 --- !u!195 &4822596509738120251
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -559,8 +571,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3206556546052133647}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.96, y: -0.05, z: 0.78}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.96, y: -0.050000012, z: 0.77999973}
   m_LocalScale: {x: 0.25384, y: 0.23518874, z: -0.99954206}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -690,8 +702,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3577261828398990561}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.27, y: -0.24, z: 0.78}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.27, y: -0.24000001, z: 0.77999973}
   m_LocalScale: {x: 1, y: 1, z: -0.040952}
   m_ConstrainProportionsScale: 0
   m_Children: []

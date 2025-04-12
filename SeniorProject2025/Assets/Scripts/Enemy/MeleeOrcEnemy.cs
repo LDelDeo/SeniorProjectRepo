@@ -17,6 +17,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     private NavMeshAgent agent;
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
+    public ParticleSystem bloodShed;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 5f;
@@ -61,7 +62,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     public void TakeDamage(float damageToTake)
     {
         health -= damageToTake;
-        Debug.Log("Orc Health: " + health);
+        bloodShed.Play();
 
         isHostile = true;
 

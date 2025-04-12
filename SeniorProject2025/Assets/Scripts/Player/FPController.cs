@@ -3,26 +3,63 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class FPController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float mouseSensitivity = 2f;
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
+
+    [Header("Camera Settings")]
     public Transform cameraTransform;
+    public Transform groundCheck;
+    public float groundDistance = 0.4f;
+    public LayerMask groundMask;
+
+    [Header("Bobbing")]
+    public float bobSpeed = 8f;
+    public float bobAmount = 0.05f;
+    private float bobTimer = 0f;
+    private Vector3 cameraStartPos;
+
+    [Header("Side Sway")]
+    public float swayAmount = 0.05f;
+    public float swaySpeed = 6f;
 
     private CharacterController controller;
     private float verticalVelocity;
     private float xRotation = 0f;
+    private bool isGrounded;
+
+    private Vector3 lastPosition;
+    private Vector3 moveDirection;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (cameraTransform != null)
+            cameraStartPos = cameraTransform.localPosition;
+
+        lastPosition = transform.position;
     }
 
     void Update()
     {
+        GroundCheck();
         HandleMouseLook();
         HandleMovement();
+        HandleCameraEffects();
+    }
+
+    void GroundCheck()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
     }
 
     void HandleMouseLook()
@@ -42,16 +79,39 @@ public class FPController : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
-        controller.Move(move * moveSpeed * Time.deltaTime);
+        moveDirection = transform.right * moveX + transform.forward * moveZ;
+        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
 
-        if (controller.isGrounded && verticalVelocity < 0)
-            verticalVelocity = -2f;
-
-        if (Input.GetButtonDown("Jump") && controller.isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
 
         verticalVelocity += gravity * Time.deltaTime;
         controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+    }
+
+    void HandleCameraEffects()
+    {
+        Vector3 targetPosition = cameraStartPos;
+
+        // Only do effects if we're moving and grounded
+        bool isMoving = moveDirection.magnitude > 0.1f && isGrounded;
+
+        if (isMoving)
+        {
+            bobTimer += Time.deltaTime * bobSpeed;
+            float bobOffset = Mathf.Sin(bobTimer) * bobAmount;
+
+            float swayOffset = Mathf.Sin(bobTimer) * swayAmount;
+
+            targetPosition += new Vector3(swayOffset, bobOffset, 0f);
+        }
+        else
+        {
+            bobTimer = 0f; // reset for consistent sin wave
+        }
+
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * swaySpeed);
     }
 }
