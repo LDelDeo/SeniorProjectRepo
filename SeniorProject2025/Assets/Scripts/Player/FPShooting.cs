@@ -13,6 +13,7 @@ public class FPShooting : MonoBehaviour
     public Animator meleeAnim;
     public GameObject gun;
     public GameObject melee;
+    private EnterAssault enterAssault;
 
     [Header("Gameplay")]
     private bool isBlocking;
@@ -48,8 +49,23 @@ public class FPShooting : MonoBehaviour
     {
         bulletsText.text = "" + bullets;
 
+        // Button to Switch Weapons
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(WeaponType.Melee);
+
+        // Scroll Wheel to Switch Weapons
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0f)
+        {
+            currentWeapon = currentWeapon == WeaponType.Gun ? WeaponType.Melee : WeaponType.Gun;
+            SwitchWeapon(currentWeapon);
+        }
+
+        if (enterAssault == null)
+        {
+            enterAssault = FindObjectOfType<EnterAssault>();
+        }
+           
 
         // Left Click to Shoot
         if (Input.GetMouseButtonDown(0))
@@ -98,17 +114,23 @@ public class FPShooting : MonoBehaviour
             StartCoroutine(ShakeCamera());
 
             // Play the shooting animation
-            gunAnim.SetTrigger("ShootTrigger"); // Trigger the shoot animation
+            gunAnim.SetTrigger("ShootTrigger");
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
+                //Orcs
                 if (hit.collider.tag == "MeleeOrcEnemy")
                     hit.collider.GetComponent<MeleeOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
 
                 if (hit.collider.tag == "RangedOrcEnemy")
                     hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
-
-                //Add Bullets
+                
+                //Humans
+                if(hit.collider.tag == "MeleeHumanEnemy")
+                {
+                    hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromGun();
+                    enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                }
             }
         }
     }
@@ -119,20 +141,20 @@ public class FPShooting : MonoBehaviour
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-
-            // Trigger Camera Shake
-            StartCoroutine(ShakeCamera());
-
             // Play melee animation
             meleeAnim.SetTrigger("Melee");
 
             if (Physics.Raycast(ray, out RaycastHit hit, meleeRange))
             {
-                if (hit.collider.CompareTag("MeleeOrcEnemy"))
-                    hit.collider.GetComponent<MeleeOrcEnemy>().TakeDamage(playerStats.playerMeleeDamage);
+                //Baton Cannot Deal Damage to Orcs
+                //Baton CAN Deal Damage to Humans, Elves & Other Species
 
-                if (hit.collider.CompareTag("RangedOrcEnemy"))
-                    hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerMeleeDamage);
+                if (hit.collider.CompareTag("MeleeHumanEnemy"))
+                {
+                    hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
+                }
+                    
+
             }
         }
     }

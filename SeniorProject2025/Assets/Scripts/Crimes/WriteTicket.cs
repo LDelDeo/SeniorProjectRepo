@@ -15,6 +15,9 @@ public class WriteTicket : MonoBehaviour
     public FPShooting fPShooting;
     public GameObject ticketPanel;
 
+    [Header("Script Grabs")]
+    private CrimeCompletion crimeCompletion;
+
     void Start()
     {
         drawRect = drawArea.rectTransform;
@@ -34,6 +37,8 @@ public class WriteTicket : MonoBehaviour
 
     void Update()
     {
+        crimeCompletion = FindObjectOfType<CrimeCompletion>();
+
         if (Input.GetMouseButton(0))
         {
             Vector2 localPos;
@@ -101,5 +106,6 @@ public class WriteTicket : MonoBehaviour
 
         ticketPanel.SetActive(false);
         
+        crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
     }
 }

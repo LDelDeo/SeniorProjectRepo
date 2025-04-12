@@ -8,7 +8,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 125.0f;
     private float attackDamage = 35.0f;
-    private float speed = 8.0f;
+    private float speed = 12.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]

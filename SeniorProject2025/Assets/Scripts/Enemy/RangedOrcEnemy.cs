@@ -21,8 +21,8 @@ public class RangedOrcEnemy : MonoBehaviour
     [Header("Ranged Attack")]
     public GameObject projectilePrefab; // Assign this in the Inspector
     public Transform firePoint;         // Empty GameObject used as the spawn point
-    public float attackRange = 10f;
-    public float projectileSpeed = 15f;
+    public float attackRange = 30f;
+    public float projectileSpeed = 25f;
     private float attackCooldown = 2f;
     private float nextAttackTime = 0f;
 

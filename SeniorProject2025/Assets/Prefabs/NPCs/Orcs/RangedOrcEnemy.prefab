@@ -1050,8 +1050,8 @@ MonoBehaviour:
   bloodShed: {fileID: 4883786319280975909}
   projectilePrefab: {fileID: 6921560689362896180, guid: 1c98ef3fd66b873419865351734da5ca, type: 3}
   firePoint: {fileID: 1747254117263665018}
-  attackRange: 10
-  projectileSpeed: 15
+  attackRange: 30
+  projectileSpeed: 50
 --- !u!136 &8513357649598406191
 CapsuleCollider:
   m_ObjectHideFlags: 0
