@@ -10,9 +10,14 @@ public class FPShooting : MonoBehaviour
     public Camera cam;
     public Animator shieldAnim;
     public Animator gunAnim;  // Animator reference for the gun or player model
+    public Animator meleeAnim;
+    public GameObject gun;
+    public GameObject melee;
 
     [Header("Gameplay")]
     private bool isBlocking;
+    private enum WeaponType { Gun, Melee }
+    private WeaponType currentWeapon = WeaponType.Gun;
 
     [Header("Shooting & Reloading")]
     private float timeToReload = 2.5f;
@@ -22,10 +27,14 @@ public class FPShooting : MonoBehaviour
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
 
+    [Header("Melee Settings")]
+    public float meleeRange = 2f;
+
     [Header("Camera Shake Settings")]
     public float shakeMagnitude = 0.1f;
     public float shakeDuration = 0.2f;
     private Vector3 originalCamPosition;
+
 
     private void Start()
     {
@@ -39,10 +48,14 @@ public class FPShooting : MonoBehaviour
     {
         bulletsText.text = "" + bullets;
 
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(WeaponType.Melee);
+
         // Left Click to Shoot
         if (Input.GetMouseButtonDown(0))
         {
             Shoot();
+            MeleeAttack();
         }
 
         // Right Click to Shield
@@ -75,7 +88,7 @@ public class FPShooting : MonoBehaviour
 
     private void Shoot()
     {
-        if (!isBlocking && hasAmmo)
+        if (!isBlocking && hasAmmo && currentWeapon == WeaponType.Gun)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             bullets--;
@@ -96,6 +109,30 @@ public class FPShooting : MonoBehaviour
                     hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
 
                 //Add Bullets
+            }
+        }
+    }
+
+    private void MeleeAttack()
+    {
+        if (!isBlocking && currentWeapon == WeaponType.Melee)
+        {
+            Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+
+            // Trigger Camera Shake
+            StartCoroutine(ShakeCamera());
+
+            // Play melee animation
+            meleeAnim.SetTrigger("Melee");
+
+            if (Physics.Raycast(ray, out RaycastHit hit, meleeRange))
+            {
+                if (hit.collider.CompareTag("MeleeOrcEnemy"))
+                    hit.collider.GetComponent<MeleeOrcEnemy>().TakeDamage(playerStats.playerMeleeDamage);
+
+                if (hit.collider.CompareTag("RangedOrcEnemy"))
+                    hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerMeleeDamage);
             }
         }
     }
@@ -143,5 +180,23 @@ public class FPShooting : MonoBehaviour
 
         // After the shake, reset the camera position back to its original position
         cam.transform.localPosition = originalCamPosition;
+    }
+
+    private void SwitchWeapon(WeaponType type)
+    {
+        currentWeapon = type;
+
+        switch (type)
+        {
+            case WeaponType.Gun:
+                gun.SetActive(true);
+                melee.SetActive(false);
+                break;
+
+            case WeaponType.Melee:
+                gun.SetActive(false);
+                melee.SetActive(true);
+                break;
+        }
     }
 }
