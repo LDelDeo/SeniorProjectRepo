@@ -19,8 +19,8 @@ public class RangedOrcEnemy : MonoBehaviour
     public ParticleSystem bloodShed;
 
     [Header("Ranged Attack")]
-    public GameObject projectilePrefab; // Assign this in the Inspector
-    public Transform firePoint;         // Empty GameObject used as the spawn point
+    public GameObject projectilePrefab; //Assign this in the Inspector
+    public Transform firePoint;         //Empty GameObject used as the spawn point
     public float attackRange = 30f;
     public float projectileSpeed = 25f;
     private float attackCooldown = 2f;
@@ -29,12 +29,12 @@ public class RangedOrcEnemy : MonoBehaviour
     // Start & Update
     private void Start()
     {
-        // Private Grabs
+        //Private Grabs
         playerHealth = FindObjectOfType<PlayerHealth>();
         playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
 
-        // Game Elements
+        //Game Elements
         health = maxHealth;
     }
 
@@ -43,7 +43,7 @@ public class RangedOrcEnemy : MonoBehaviour
         AttackPlayer();
     }
 
-    // Will Attack
+    //Will Attack
     public void BecomeHostile()
     {
         isHostile = true;
@@ -57,7 +57,7 @@ public class RangedOrcEnemy : MonoBehaviour
 
 
 
-    // Dealing & Taking Damage
+    //Dealing & Taking Damage
     public void DealDamage()
     {
         if (playerHealth != null)
@@ -84,7 +84,7 @@ public class RangedOrcEnemy : MonoBehaviour
         }
     }
 
-    // Movement and Attacking
+    //Movement and Attacking
     private void AttackPlayer()
     {
         if (!isHostile || playerTransform == null || agent == null) return;
@@ -93,12 +93,12 @@ public class RangedOrcEnemy : MonoBehaviour
 
         if (distanceToPlayer > attackRange)
         {
-            // Move toward player if out of range
+            //Move toward player if out of range
             agent.destination = playerTransform.transform.position;
         }
         else
         {
-            // Stop moving and shoot if in range
+            //Stop moving and shoot if in range
             agent.destination = transform.position;
 
             if (Time.time >= nextAttackTime)
@@ -119,6 +119,11 @@ public class RangedOrcEnemy : MonoBehaviour
             if (rb != null)
             {
                 rb.linearVelocity = direction * projectileSpeed;
+            }
+            BoulderProjectile boulder = projectile.GetComponent<BoulderProjectile>();
+            if (boulder != null)
+            {
+                boulder.SetOwner(this); //Pass this enemy as the source of damage
             }
         }
         else

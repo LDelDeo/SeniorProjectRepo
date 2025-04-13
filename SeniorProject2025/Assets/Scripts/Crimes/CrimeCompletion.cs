@@ -4,6 +4,9 @@ using TMPro;
 
 public class CrimeCompletion : MonoBehaviour
 {
+    [Header("Grabs")]
+    public PlayerData playerData;
+
     [Header("References")]
     public GameObject completionScreenPrefab;
     public Transform canvasTransform;
@@ -34,7 +37,9 @@ public class CrimeCompletion : MonoBehaviour
         xpGained.text = "You Gained " + XP + " XP";
         creditsGained.text = "You Gained " + Credits + " Credits";
 
-        // Store The Added XP and Credits in PlayerPrefs
+        playerData.AddCredits(Credits);
+        playerData.AddXP(XP);
+        
 
     }
 }

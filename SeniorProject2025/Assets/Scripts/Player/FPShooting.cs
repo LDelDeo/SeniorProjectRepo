@@ -15,10 +15,10 @@ public class FPShooting : MonoBehaviour
     public GameObject melee;
     private EnterAssault enterAssault;
 
-    [Header("Gameplay")]
-    private bool isBlocking;
+    //[Header("Gameplay")]
     private enum WeaponType { Gun, Melee }
     private WeaponType currentWeapon = WeaponType.Gun;
+   
 
     [Header("Shooting & Reloading")]
     private float timeToReload = 2.5f;
@@ -28,13 +28,15 @@ public class FPShooting : MonoBehaviour
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
 
-    [Header("Melee Settings")]
-    public float meleeRange = 2f;
 
     [Header("Camera Shake Settings")]
     public float shakeMagnitude = 0.1f;
     public float shakeDuration = 0.2f;
     private Vector3 originalCamPosition;
+
+    [Header("Shield Settings")]
+    private Coroutine shieldCoroutine;
+    public TMP_Text shieldStatusText;  
 
 
     private void Start()
@@ -43,6 +45,7 @@ public class FPShooting : MonoBehaviour
         bullets = 16;
         reloadText.text = "";
         originalCamPosition = cam.transform.localPosition; // Store the camera's original position
+        shieldStatusText.text = "Shield Ready";
     }
 
     private void Update()
@@ -86,7 +89,7 @@ public class FPShooting : MonoBehaviour
         }
 
         // R to Reload
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && bullets != 16)
         {
             Reload();
         }
@@ -104,7 +107,7 @@ public class FPShooting : MonoBehaviour
 
     private void Shoot()
     {
-        if (!isBlocking && hasAmmo && currentWeapon == WeaponType.Gun)
+        if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             bullets--;
@@ -116,7 +119,7 @@ public class FPShooting : MonoBehaviour
             // Play the shooting animation
             gunAnim.SetTrigger("ShootTrigger");
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerRangedRange))
             {
                 //Orcs
                 if (hit.collider.tag == "MeleeOrcEnemy")
@@ -137,14 +140,14 @@ public class FPShooting : MonoBehaviour
 
     private void MeleeAttack()
     {
-        if (!isBlocking && currentWeapon == WeaponType.Melee)
+        if (!playerStats.isBlocking && currentWeapon == WeaponType.Melee)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
             // Play melee animation
             meleeAnim.SetTrigger("Melee");
 
-            if (Physics.Raycast(ray, out RaycastHit hit, meleeRange))
+            if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerMeleeRange))
             {
                 //Baton Cannot Deal Damage to Orcs
                 //Baton CAN Deal Damage to Humans, Elves & Other Species
@@ -175,14 +178,29 @@ public class FPShooting : MonoBehaviour
 
     private void Block()
     {
-        isBlocking = true;
-        shieldAnim.SetBool("shieldUp", true);
+        if (playerStats.canBlock && !playerStats.isBlocking)
+        {
+            playerStats.isBlocking = true;
+            playerStats.canBlock = false;
+            shieldAnim.SetBool("shieldUp", true);
+            shieldStatusText.text = "Shield Active";
+            shieldCoroutine = StartCoroutine(ShieldRoutine());
+        }
     }
 
-    private void Unblock()
+    public void Unblock()
     {
-        isBlocking = false;
-        shieldAnim.SetBool("shieldUp", false);
+        if (playerStats.isBlocking)
+        {
+            playerStats.isBlocking = false;
+            shieldAnim.SetBool("shieldUp", false);
+            shieldStatusText.text = "Recharging...";
+
+            if (shieldCoroutine != null)
+                StopCoroutine(shieldCoroutine);
+
+            StartCoroutine(ShieldCooldown());
+        }
     }
 
     private IEnumerator ShakeCamera()
@@ -220,5 +238,20 @@ public class FPShooting : MonoBehaviour
                 melee.SetActive(true);
                 break;
         }
+    }
+
+    private IEnumerator ShieldRoutine()
+    {
+        yield return new WaitForSeconds(playerStats.shieldUpTime);
+        Unblock();
+    }
+
+    private IEnumerator ShieldCooldown()
+    {
+        playerStats.isShieldCooldown = true;
+        yield return new WaitForSeconds(playerStats.shieldDownTime);
+        playerStats.isShieldCooldown = false;
+        playerStats.canBlock = true;
+        shieldStatusText.text = "Shield Ready";
     }
 }
