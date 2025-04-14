@@ -14,6 +14,8 @@ public class EnterCarScript : MonoBehaviour
     public MonoBehaviour carControllerScript;  // Reference to the car controller script
     private bool playerInTriggerZone = false;
     private bool isInCar = false;
+    public GameObject carLights;
+    private bool areLightsOn;
 
     void Start()
     {
@@ -38,6 +40,33 @@ public class EnterCarScript : MonoBehaviour
             else
             {
                 ExitCar(); // Exit the car
+            }
+        }
+
+        if (carLights.activeSelf)
+        {
+            areLightsOn = true;
+        }
+        else
+        {
+            areLightsOn = false;
+        }
+        
+
+        CarLights();
+    }
+
+    private void CarLights()
+    {
+        if (isInCar && Input.GetKeyDown(KeyCode.P))
+        {
+            if (!areLightsOn)
+            {
+                carLights.SetActive(true);
+            }
+            else
+            {
+                carLights.SetActive(false);
             }
         }
     }

@@ -57,7 +57,7 @@ public class PlayerData : MonoBehaviour
         {
             xp -= xpToNextLevel;
             level++;
-            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.25f); //XP required increases per level
+            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f); //XP required increases per level
 
             PlayerPrefs.SetInt("Level", level);
             PlayerPrefs.SetInt("XP", xp);

@@ -134,6 +134,12 @@ public class FPShooting : MonoBehaviour
                     hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromGun();
                     enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
+                if(hit.collider.tag == "RangedHumanEnemy")
+                {
+                    hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromGun();
+                    enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                }
+                
             }
         }
     }
@@ -155,6 +161,11 @@ public class FPShooting : MonoBehaviour
                 if (hit.collider.CompareTag("MeleeHumanEnemy"))
                 {
                     hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
+                }
+                if(hit.collider.tag == "RangedHumanEnemy")
+                {
+                    hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
+
                 }
                     
 
