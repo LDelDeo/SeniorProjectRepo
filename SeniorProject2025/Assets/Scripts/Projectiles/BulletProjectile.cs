@@ -3,6 +3,7 @@ using UnityEngine;
 public class BulletProjectile : MonoBehaviour
 {
     private RangedHumanEnemy owner;
+    private bool hasDealtDamage = false; 
 
     public void SetOwner(RangedHumanEnemy human)
     {
@@ -11,8 +12,12 @@ public class BulletProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hasDealtDamage) return;
+
         if (other.CompareTag("Player"))
         {
+            hasDealtDamage = true;
+
             if (owner != null)
             {
                 owner.DealDamage();
@@ -20,9 +25,6 @@ public class BulletProjectile : MonoBehaviour
 
             Destroy(gameObject);
         }
-       else
-        {
-
-        }
     }
 }
+

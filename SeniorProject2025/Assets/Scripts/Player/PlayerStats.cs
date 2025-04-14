@@ -20,4 +20,6 @@ public class PlayerStats : MonoBehaviour
     public float shieldUpTime = 3f;
     public float shieldDownTime = 3f;
     public bool isShieldCooldown = false;
+    public int blockAmt = 0;
+    public int maxBlockAmt = 3;
 }

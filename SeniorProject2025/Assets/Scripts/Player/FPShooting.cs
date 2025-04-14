@@ -94,7 +94,7 @@ public class FPShooting : MonoBehaviour
             Reload();
         }
 
-        if (bullets <= 0)
+        if (bullets <= 3)
         {
             hasAmmo = false;
             reloadText.text = "R to Reload";
@@ -201,17 +201,20 @@ public class FPShooting : MonoBehaviour
 
     public void Unblock()
     {
-        if (playerStats.isBlocking)
+        if (!playerStats.isBlocking)
+            return;
+
+        playerStats.isBlocking = false;
+        shieldAnim.SetBool("shieldUp", false);
+        shieldStatusText.text = "Recharging...";
+
+        if (shieldCoroutine != null)
         {
-            playerStats.isBlocking = false;
-            shieldAnim.SetBool("shieldUp", false);
-            shieldStatusText.text = "Recharging...";
-
-            if (shieldCoroutine != null)
-                StopCoroutine(shieldCoroutine);
-
-            StartCoroutine(ShieldCooldown());
+            StopCoroutine(shieldCoroutine);
+            shieldCoroutine = null;
         }
+
+        StartCoroutine(ShieldCooldown());
     }
 
     private IEnumerator ShakeCamera()
@@ -256,13 +259,22 @@ public class FPShooting : MonoBehaviour
         yield return new WaitForSeconds(playerStats.shieldUpTime);
         Unblock();
     }
-
     private IEnumerator ShieldCooldown()
     {
         playerStats.isShieldCooldown = true;
-        yield return new WaitForSeconds(playerStats.shieldDownTime);
-        playerStats.isShieldCooldown = false;
+        float cooldownTime = playerStats.shieldDownTime;
+        float timer = cooldownTime;
+
+        while (timer > 0f)
+        {
+            shieldStatusText.text = "Cooldown: " + timer.ToString("F1") + "s";
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+
         playerStats.canBlock = true;
+        playerStats.isShieldCooldown = false;
         shieldStatusText.text = "Shield Ready";
     }
+
 }

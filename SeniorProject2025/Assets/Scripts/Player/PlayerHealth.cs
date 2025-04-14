@@ -19,13 +19,17 @@ public class PlayerHealth : MonoBehaviour
     {
         if (playerStats.isBlocking)
         {
-            //Auto-drop the shield when it blocks a hit
-            if (fpsShooting != null)
-                StartCoroutine(DelayedUnblock());
+            playerStats.blockAmt++;
+            if (playerStats.blockAmt >= playerStats.maxBlockAmt)
+            {
+                if (fpsShooting != null)
+                    fpsShooting.Unblock(); 
 
+                playerStats.blockAmt = 0;
+            }
             return;
         }
-
+        playerStats.blockAmt = 0;
         playerStats.health -= damageToTake;
         UpdateHealthUI();
         Debug.Log("Updated Player Health: " + playerStats.health);

@@ -3,6 +3,7 @@ using UnityEngine;
 public class BoulderProjectile : MonoBehaviour
 {
     private RangedOrcEnemy owner;
+    private bool hasDealtDamage = false;
 
     public void SetOwner(RangedOrcEnemy orc)
     {
@@ -11,18 +12,18 @@ public class BoulderProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hasDealtDamage) return;
+
         if (other.CompareTag("Player"))
         {
+            hasDealtDamage = true;
+
             if (owner != null)
             {
                 owner.DealDamage();
             }
 
             Destroy(gameObject);
-        }
-       else
-        {
-
         }
     }
 }
