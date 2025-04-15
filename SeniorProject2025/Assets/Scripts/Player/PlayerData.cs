@@ -9,6 +9,9 @@ public class PlayerData : MonoBehaviour
     public int level = 1;
     public int xpToNextLevel = 100;
 
+    [Header("Player Position")]
+    public Transform playerTransform; 
+
     [Header("UI References")]
     public TMP_Text creditsText;
     public TMP_Text xpText;
@@ -19,8 +22,24 @@ public class PlayerData : MonoBehaviour
         credits = PlayerPrefs.GetInt("Credits", 0);
         xp = PlayerPrefs.GetInt("XP", 0);
         level = PlayerPrefs.GetInt("Level", 1);
+        xpToNextLevel = PlayerPrefs.GetInt("XPToNextLevel", 100);
+
+        float posX = PlayerPrefs.GetFloat("PlayerPosX", 0f);
+        float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f); 
+        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f); 
+        playerTransform.position = new Vector3(posX, posY, posZ); 
+
+        Debug.Log("Loaded XP: " + xp + " XP to Next Level: " + xpToNextLevel);
+        Debug.Log("Loaded Position: " + playerTransform.position);
+
+        LoadPlayerPosition();
 
         UpdateUI();
+    }
+
+    void Update()
+    {
+        SavePlayerPosition();
     }
 
     public void AddCredits(int amount)
@@ -47,7 +66,11 @@ public class PlayerData : MonoBehaviour
         xp += amount;
         CheckLevelUp();
         PlayerPrefs.SetInt("XP", xp);
+        PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
         PlayerPrefs.Save();
+
+        Debug.Log("Added XP: " + amount);
+        Debug.Log("Current XP: " + xp + " XP to Next Level: " + xpToNextLevel);
         UpdateUI();
     }
 
@@ -57,10 +80,13 @@ public class PlayerData : MonoBehaviour
         {
             xp -= xpToNextLevel;
             level++;
-            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f); //XP required increases per level
+            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f); // XP required increases per level
 
             PlayerPrefs.SetInt("Level", level);
             PlayerPrefs.SetInt("XP", xp);
+            PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
+            PlayerPrefs.Save();
+            Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
         }
     }
 
@@ -81,6 +107,10 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.DeleteKey("Credits");
         PlayerPrefs.DeleteKey("XP");
         PlayerPrefs.DeleteKey("Level");
+        PlayerPrefs.DeleteKey("XPToNextLevel");
+        PlayerPrefs.DeleteKey("PlayerPosX");
+        PlayerPrefs.DeleteKey("PlayerPosY");
+        PlayerPrefs.DeleteKey("PlayerPosZ");
 
         credits = 0;
         xp = 0;
@@ -88,6 +118,27 @@ public class PlayerData : MonoBehaviour
         xpToNextLevel = 100;
 
         UpdateUI();
+    }
+
+    public void SavePlayerPosition()
+    {
+        PlayerPrefs.SetFloat("PlayerPosX", playerTransform.position.x);
+        PlayerPrefs.SetFloat("PlayerPosY", playerTransform.position.y);
+        PlayerPrefs.SetFloat("PlayerPosZ", playerTransform.position.z);
+
+        PlayerPrefs.Save();
+
+        Debug.Log("Player position saved!");
+    }
+
+    public void LoadPlayerPosition()
+    {
+        float posX = PlayerPrefs.GetFloat("PlayerPosX", 0f);
+        float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f);
+        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f);
+        playerTransform.position = new Vector3(posX, posY, posZ);
+
+        Debug.Log("Player position loaded!");
     }
 }
 

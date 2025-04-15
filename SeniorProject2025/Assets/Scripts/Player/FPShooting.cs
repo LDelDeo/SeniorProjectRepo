@@ -14,11 +14,8 @@ public class FPShooting : MonoBehaviour
     public GameObject gun;
     public GameObject melee;
     private EnterAssault enterAssault;
-
-    //[Header("Gameplay")]
-    private enum WeaponType { Gun, Melee }
-    private WeaponType currentWeapon = WeaponType.Gun;
-   
+    private EnterDrugDeal enterDrugDeal;
+    
 
     [Header("Shooting & Reloading")]
     private float timeToReload = 2.5f;
@@ -27,7 +24,8 @@ public class FPShooting : MonoBehaviour
     public TMP_Text bulletsText;
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
-
+    private bool isReloading = false;
+    
 
     [Header("Camera Shake Settings")]
     public float shakeMagnitude = 0.1f;
@@ -36,7 +34,12 @@ public class FPShooting : MonoBehaviour
 
     [Header("Shield Settings")]
     private Coroutine shieldCoroutine;
-    public TMP_Text shieldStatusText;  
+    public TMP_Text shieldStatusText;
+    public Image shieldCooldownBar;
+
+    //Weapon Types
+    private enum WeaponType { Gun, Melee }
+    private WeaponType currentWeapon = WeaponType.Gun;
 
 
     private void Start()
@@ -46,11 +49,20 @@ public class FPShooting : MonoBehaviour
         reloadText.text = "";
         originalCamPosition = cam.transform.localPosition; // Store the camera's original position
         shieldStatusText.text = "Shield Ready";
+        shieldCooldownBar.fillAmount = 0f;
     }
 
     private void Update()
     {
-        bulletsText.text = "" + bullets;
+        if (currentWeapon == WeaponType.Gun)
+        {
+            bulletsText.text = "" + bullets;
+        }
+        else
+        {
+            bulletsText.text = "";
+        }
+        
 
         // Button to Switch Weapons
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
@@ -64,10 +76,12 @@ public class FPShooting : MonoBehaviour
             SwitchWeapon(currentWeapon);
         }
 
-        if (enterAssault == null)
+        if (enterAssault == null || enterDrugDeal == null)
         {
             enterAssault = FindObjectOfType<EnterAssault>();
+            enterDrugDeal = FindObjectOfType<EnterDrugDeal>();
         }
+
            
 
         // Left Click to Shoot
@@ -94,9 +108,13 @@ public class FPShooting : MonoBehaviour
             Reload();
         }
 
-        if (bullets <= 3)
+        if (bullets == 0)
         {
             hasAmmo = false;
+        }
+
+        if (bullets <= 3)
+        {
             reloadText.text = "R to Reload";
         }
         else
@@ -107,7 +125,7 @@ public class FPShooting : MonoBehaviour
 
     private void Shoot()
     {
-        if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun)
+        if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             bullets--;
@@ -137,7 +155,7 @@ public class FPShooting : MonoBehaviour
                 if(hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromGun();
-                    enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                    enterDrugDeal.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
                 
             }
@@ -182,9 +200,11 @@ public class FPShooting : MonoBehaviour
 
     private IEnumerator Reloading()
     {
+        isReloading = true;
         yield return new WaitForSeconds(timeToReload);
         hasAmmo = true;
         bullets = 16;
+        isReloading = false;
     }
 
     private void Block()
@@ -214,8 +234,11 @@ public class FPShooting : MonoBehaviour
             shieldCoroutine = null;
         }
 
+        shieldCooldownBar.gameObject.SetActive(false); 
+
         StartCoroutine(ShieldCooldown());
     }
+
 
     private IEnumerator ShakeCamera()
     {
@@ -256,9 +279,22 @@ public class FPShooting : MonoBehaviour
 
     private IEnumerator ShieldRoutine()
     {
-        yield return new WaitForSeconds(playerStats.shieldUpTime);
+        float shieldTime = playerStats.shieldUpTime;
+        float timer = shieldTime;
+
+        shieldCooldownBar.fillAmount = 1f; // Full when starting
+        shieldCooldownBar.gameObject.SetActive(true); // Show the image
+
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            shieldCooldownBar.fillAmount = timer / shieldTime;
+            yield return null;
+        }
+
         Unblock();
     }
+
     private IEnumerator ShieldCooldown()
     {
         playerStats.isShieldCooldown = true;
