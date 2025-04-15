@@ -18,6 +18,8 @@ public class ObjectivesList : MonoBehaviour
     // Tier 3
     private GameObject armedRobbery;
     public GameObject objectiveAR;
+    private GameObject bombPlant;
+    public GameObject objectiveBP;
 
     void Update()
     {
@@ -26,6 +28,7 @@ public class ObjectivesList : MonoBehaviour
        AttachObjective(assault, objectiveA, "crimeThree");
        AttachObjective(drugDeal, objectiveDD, "crimeFour");
        AttachObjective(armedRobbery, objectiveAR, "crimeFive");
+       AttachObjective(bombPlant, objectiveBP, "crimeSix");
     }
 
     public void AttachObjective(GameObject crime, GameObject objectiveText, string crimeTag)
