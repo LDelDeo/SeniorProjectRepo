@@ -22,4 +22,8 @@ public class PlayerStats : MonoBehaviour
     public bool isShieldCooldown = false;
     public int blockAmt = 0;
     public int maxBlockAmt = 3;
+
+    [Header("Respawn")]
+    public bool isRespawning = false;
+
 }

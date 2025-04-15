@@ -24,7 +24,10 @@ public class PlayerHealth : MonoBehaviour
     private float currentStimCooldown = 0f;
     private bool isStimReady = true;
     private float stimShotAnimTime = 0.75f;
-    
+
+    [Header("Fade & Respawn")]
+    public Image fadeImage;
+    public float fadeDuration = 1.5f;
 
     private bool wasBlocking = false;
 
@@ -130,7 +133,8 @@ public class PlayerHealth : MonoBehaviour
 
         if (playerStats.health <= 0)
         {
-            // GameOver or Death Screen
+            StartCoroutine(FadeOutAndRespawn());
+            playerStats.isRespawning = true;
         }
     }
 
@@ -197,5 +201,41 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return null;
         fpsShooting.Unblock();
+    }
+
+    private IEnumerator FadeOutAndRespawn()
+    {
+        float t = 0f;
+        Color c = fadeImage.color;
+
+        // Fade to black
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+            c.a = Mathf.Lerp(0f, 1f, t / fadeDuration);
+            fadeImage.color = c;
+            yield return null;
+        }
+
+        // Disable movement & respawn
+        CharacterController controller = GetComponent<CharacterController>();
+        controller.enabled = false;
+        transform.position = Vector3.zero;
+        controller.enabled = true;
+
+        // Reset health
+        playerStats.health = playerStats.maxHealth;
+        UpdateHealthUI();
+
+        // Fade back in
+        t = 0f;
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+            c.a = Mathf.Lerp(1f, 0f, t / fadeDuration);
+            fadeImage.color = c;
+            yield return null;
+        }
+        playerStats.isRespawning = false;
     }
 }

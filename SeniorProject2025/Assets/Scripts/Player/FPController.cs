@@ -7,6 +7,7 @@ public class FPController : MonoBehaviour
     public float moveSpeed = 5f;
     public float mouseSensitivity = 2f;
     public float gravity = -9.81f;
+    public float gravityMultiplier = 1.5f;
     public float jumpHeight = 1.5f;
 
     [Header("Camera Settings")]
@@ -87,7 +88,7 @@ public class FPController : MonoBehaviour
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        verticalVelocity += gravity * Time.deltaTime;
+        verticalVelocity += (gravity * gravityMultiplier) * Time.deltaTime;
         controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
     }
 
