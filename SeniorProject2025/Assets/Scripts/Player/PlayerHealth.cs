@@ -12,18 +12,39 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Shield UI")]
     public Image[] shieldIcons;
+    public GameObject shieldObject;
+
+    [Header("Stim Shot")]
+    public Animator stimAnim;
+    public GameObject stimObject;
+    public Image stimCooldownIcon;
+    public TMP_Text stimStatus;
+    private Color originalTextColor;
+    private float stimCooldownTime = 30f;
+    private float currentStimCooldown = 0f;
+    private bool isStimReady = true;
+    private float stimShotAnimTime = 0.75f;
+    
 
     private bool wasBlocking = false;
 
     void Start()
     {
+        //Health
         playerStats.health = playerStats.maxHealth;
         HealthText.text = "HP: " + Mathf.CeilToInt(playerStats.health);
+        
+        //Shield
         SetShieldIconsVisible(false);
+
+        //Stim
+        stimObject.SetActive(false);
+        originalTextColor = stimStatus.color;
     }
 
-   void Update()
+    void Update()
     {
+        // Shield Block Stuff
         if (playerStats.isBlocking)
         {
             if (!wasBlocking)
@@ -42,6 +63,43 @@ public class PlayerHealth : MonoBehaviour
         }
 
         wasBlocking = playerStats.isBlocking;
+
+        // Stim Shot Stuff
+
+        if (!isStimReady)
+        {
+            currentStimCooldown -= Time.deltaTime;
+            stimCooldownIcon.fillAmount = 1 - (currentStimCooldown / stimCooldownTime);
+
+            if (currentStimCooldown <= 0)
+            {
+                isStimReady = true;
+                stimCooldownIcon.fillAmount = 1f;
+            }
+
+            stimStatus.text = "Recharging";
+            stimStatus.color = Color.yellow;
+        }
+        else
+        {
+            stimStatus.text = "Ready";
+            stimStatus.color = originalTextColor;
+        }
+
+        if (!playerStats.isBlocking && Input.GetKeyDown(KeyCode.Q))
+        {
+            if (isStimReady)
+            {
+                StimShot();
+            } 
+        }
+    }
+
+    // Heal Stuff
+    private void UpdateHealthUI()
+    {
+        if (HealthText != null)
+            HealthText.text = "HP: " + Mathf.CeilToInt(playerStats.health);
     }
 
     public void TakeDamage(float damageToTake)
@@ -76,6 +134,35 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    // Stim Stuff
+    private void StimShot()
+    {
+        // Stim Cooldown Stuff
+        isStimReady = false;
+        currentStimCooldown = stimCooldownTime;
+        stimCooldownIcon.fillAmount = 0f;
+
+        // Stim Animation & Healing Stuff
+        shieldObject.SetActive(false);
+        stimObject.SetActive(true);
+        stimAnim.SetTrigger("stimShot");
+        StartCoroutine(PlayerHeal());
+    }
+
+    private IEnumerator PlayerHeal()
+    {
+        yield return new WaitForSeconds(stimShotAnimTime);
+        while (playerStats.health < playerStats.maxHealth)
+        {
+            playerStats.health++;  
+            UpdateHealthUI();
+            yield return new WaitForSeconds(0.05f); // Rapidly Increases Health, not all at Once
+        }
+        shieldObject.SetActive(true);
+        stimObject.SetActive(false);
+    }
+
+    // Shield Stuff
     private void UpdateShieldIcons()
     {
         for (int i = 0; i < shieldIcons.Length; i++)
@@ -104,12 +191,6 @@ public class PlayerHealth : MonoBehaviour
         {
             icon.enabled = visible;
         }
-    }
-
-    private void UpdateHealthUI()
-    {
-        if (HealthText != null)
-            HealthText.text = "HP: " + Mathf.CeilToInt(playerStats.health);
     }
 
     private IEnumerator DelayedUnblock()
