@@ -133,9 +133,15 @@ public class PlayerHealth : MonoBehaviour
 
         if (playerStats.health <= 0)
         {
-            StartCoroutine(FadeOutAndRespawn());
-            playerStats.isRespawning = true;
+            playerDied();
         }
+    }
+
+    // Player Death
+    public void playerDied()
+     {
+        StartCoroutine(FadeOutAndRespawn());
+        playerStats.isRespawning = true;
     }
 
     // Stim Stuff

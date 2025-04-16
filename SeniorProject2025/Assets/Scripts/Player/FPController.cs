@@ -5,10 +5,13 @@ public class FPController : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
+    public float sprintSpeed = 10f;
     public float mouseSensitivity = 2f;
     public float gravity = -9.81f;
     public float gravityMultiplier = 1.5f;
     public float jumpHeight = 1.5f;
+    public bool isSprinting = false;
+    
 
     [Header("Camera Settings")]
     public Transform cameraTransform;
@@ -17,14 +20,20 @@ public class FPController : MonoBehaviour
     public LayerMask groundMask;
 
     [Header("Bobbing")]
-    public float bobSpeed = 8f;
     public float bobAmount = 0.05f;
+    public float bobSpeed = 6f;
+    public float currentBobSpeed =6f;
+    public float sprintBobSpeed =8f;
+
+
     private float bobTimer = 0f;
     private Vector3 cameraStartPos;
 
     [Header("Side Sway")]
     public float swayAmount = 0.05f;
     public float swaySpeed = 6f;
+    public float currentSwaySpeed = 6f;
+    public float sprintSwaySpeed = 8f;
 
     private CharacterController controller;
     private float verticalVelocity;
@@ -81,7 +90,22 @@ public class FPController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         moveDirection = transform.right * moveX + transform.forward * moveZ;
-        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+        
+
+        if (Input.GetKey(KeyCode.LeftShift) && isSprinting == false)
+        {
+            controller.Move(moveDirection * sprintSpeed * Time.deltaTime);
+            isSprinting = true;
+            currentBobSpeed = sprintBobSpeed;
+            currentSwaySpeed = sprintSwaySpeed;
+        }
+        else
+        {
+            isSprinting = false;
+            currentBobSpeed = bobSpeed;
+            currentSwaySpeed = swaySpeed;
+            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+        }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -90,7 +114,8 @@ public class FPController : MonoBehaviour
 
         verticalVelocity += (gravity * gravityMultiplier) * Time.deltaTime;
         controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
-    }
+    } 
+   
 
     void HandleCameraEffects()
     {
@@ -101,7 +126,7 @@ public class FPController : MonoBehaviour
 
         if (isMoving)
         {
-            bobTimer += Time.deltaTime * bobSpeed;
+            bobTimer += Time.deltaTime * currentBobSpeed;
             float bobOffset = Mathf.Sin(bobTimer) * bobAmount;
 
             float swayOffset = Mathf.Sin(bobTimer) * swayAmount;
@@ -113,6 +138,6 @@ public class FPController : MonoBehaviour
             bobTimer = 0f; // reset for consistent sin wave
         }
 
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * swaySpeed);
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * currentSwaySpeed);
     }
 }

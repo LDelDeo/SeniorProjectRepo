@@ -17,6 +17,7 @@ public class EnterBombPlant : MonoBehaviour
     [Header("Script Grabs")]
     private CrimeCompletion crimeCompletion;
     private WireCut wireCut;
+    private PlayerHealth playerHealth;
 
     private void Start()
     {
@@ -24,65 +25,70 @@ public class EnterBombPlant : MonoBehaviour
     }
 
     void Update()
-{
-    if (crimeCompletion == null)
-        crimeCompletion = FindObjectOfType<CrimeCompletion>();
-
-    if (wireCut == null)
-        wireCut = FindObjectOfType<WireCut>();
-
-    if (timerStarted && !timerEnded)
     {
-        countdownTime -= Time.deltaTime;
-        countdownText.text = Mathf.CeilToInt(countdownTime).ToString();
+        if (crimeCompletion == null)
+            crimeCompletion = FindObjectOfType<CrimeCompletion>();
 
-        if (countdownTime <= 0f)
+        if (wireCut == null)
+            wireCut = FindObjectOfType<WireCut>();
+
+        if (playerHealth == null)
+            playerHealth = FindObjectOfType<PlayerHealth>();
+
+        if (timerStarted && !timerEnded)
         {
-            countdownText.text = "Too Late!";
-            wireCut.doneCorrectly = false;
+            countdownTime -= Time.deltaTime;
+            countdownText.text = Mathf.CeilToInt(countdownTime).ToString();
 
-            Debug.Log("Crime Failed: Timer ran out.");
+            if (countdownTime <= 0f)
+            {
+                //wireCut.doneCorrectly = false;
 
-            Destroy(exclamationPoint);
-            Destroy(gameObject);
-            timerEnded = true;
-        }
+                playerHealth.playerDied();
+                Destroy(exclamationPoint);
+                Destroy(gameObject);
+                timerEnded = true;
+            }
 
-        if (wireCut.doneCorrectly)
-        {
-            Debug.Log("Crime Stopped!");
-            crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits);
+            if (wireCut != null)
+            {
+                if (wireCut.doneCorrectly)
+                {
+                    Debug.Log("Crime Stopped!");
+                    crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits);
 
-            Destroy(exclamationPoint);
-            Destroy(gameObject);
-            timerEnded = true;
+                    Destroy(exclamationPoint);
+                    Destroy(gameObject);
+                    timerEnded = true;
+                }
+            }
         }
     }
-}
 
 
-    private void OnTriggerEnter(Collider other) 
-    {
-        if (other.CompareTag("Player"))
+
+        private void OnTriggerEnter(Collider other)
         {
-            timerStarted = true;
-
-            foreach (Transform child in transform)
+            if (other.CompareTag("Player"))
             {
-                MeleeOrcEnemy melee = child.GetComponent<MeleeOrcEnemy>();
-                if (melee != null)
-                {
-                    melee.BecomeHostile();
-                }
+                timerStarted = true;
 
-                RangedOrcEnemy ranged = child.GetComponent<RangedOrcEnemy>();
-                if (ranged != null)
+                foreach (Transform child in transform)
                 {
-                    ranged.BecomeHostile();
+                    MeleeOrcEnemy melee = child.GetComponent<MeleeOrcEnemy>();
+                    if (melee != null)
+                    {
+                        melee.BecomeHostile();
+                    }
+
+                    RangedOrcEnemy ranged = child.GetComponent<RangedOrcEnemy>();
+                    if (ranged != null)
+                    {
+                        ranged.BecomeHostile();
+                    }
                 }
             }
         }
     }
 
     
-}
