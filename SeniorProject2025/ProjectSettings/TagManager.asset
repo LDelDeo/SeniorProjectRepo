@@ -17,6 +17,8 @@ TagManager:
   - MeleeHumanEnemy
   - RangedHumanEnemy
   - crimeSix
+  - crimeSeven
+  - crimeEight
   layers:
   - Default
   - TransparentFX

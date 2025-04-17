@@ -11,7 +11,7 @@ public class EnterCarScript : MonoBehaviour
     public Camera playerCamera;
     public Canvas carCanvas;
     public Canvas playerCanvas;
-    public MonoBehaviour carControllerScript;  // Reference to the car controller script
+    public CarController carControllerScript;  // Reference to the car controller script
     private bool playerInTriggerZone = false;
     private bool isInCar = false;
     public GameObject carLights;
@@ -30,6 +30,10 @@ public class EnterCarScript : MonoBehaviour
 
     void Update()
     {
+        if (!isInCar) 
+        {
+            carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0);
+        }
         // If the player is in the trigger zone and presses the 'E' key
         if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E))
         {
@@ -101,6 +105,7 @@ public class EnterCarScript : MonoBehaviour
 
         // Disable the entire player (including the player model, camera, and canvas)
         player.SetActive(true);  // Enables the entire player GameObject
+        player.transform.rotation = Quaternion.identity;
 
         // Disable the car's camera and canvas
         carCamera.gameObject.SetActive(false); // Disable the car's camera
@@ -118,6 +123,8 @@ public class EnterCarScript : MonoBehaviour
 
         isInCar = false; // Player is now out of the car
         enterText.SetActive(true); // Show the 'Enter' text again
+
+        
     }
 
     private void OnTriggerEnter(Collider other)

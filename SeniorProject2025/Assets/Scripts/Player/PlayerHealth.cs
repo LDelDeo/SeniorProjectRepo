@@ -8,6 +8,7 @@ public class PlayerHealth : MonoBehaviour
     [Header("Script Grabs")]
     public PlayerStats playerStats;
     public FPShooting fpsShooting;
+
     public TMP_Text HealthText;
 
     [Header("Shield UI")]
@@ -24,10 +25,13 @@ public class PlayerHealth : MonoBehaviour
     private float currentStimCooldown = 0f;
     private bool isStimReady = true;
     private float stimShotAnimTime = 0.75f;
+    private float currentHealthNow;
 
     [Header("Fade & Respawn")]
     public Image fadeImage;
     public float fadeDuration = 1.5f;
+    public GameObject car;
+    private GameObject crime;
 
     private bool wasBlocking = false;
 
@@ -91,7 +95,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (!playerStats.isBlocking && Input.GetKeyDown(KeyCode.Q))
         {
-            if (isStimReady)
+            if (isStimReady && playerStats.health < playerStats.maxHealth)
             {
                 StimShot();
             } 
@@ -151,6 +155,7 @@ public class PlayerHealth : MonoBehaviour
         isStimReady = false;
         currentStimCooldown = stimCooldownTime;
         stimCooldownIcon.fillAmount = 0f;
+        currentHealthNow = playerStats.health;
 
         // Stim Animation & Healing Stuff
         shieldObject.SetActive(false);
@@ -162,8 +167,12 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator PlayerHeal()
     {
         yield return new WaitForSeconds(stimShotAnimTime);
-        while (playerStats.health < playerStats.maxHealth)
+        
+        var healthToHeal = playerStats.maxHealth - currentHealthNow;
+        var healingHealth = 0;
+        while (healingHealth < healthToHeal)
         {
+            healingHealth++;
             playerStats.health++;  
             UpdateHealthUI();
             yield return new WaitForSeconds(0.05f); // Rapidly Increases Health, not all at Once
@@ -228,11 +237,31 @@ public class PlayerHealth : MonoBehaviour
         controller.enabled = false;
         transform.position = Vector3.zero;
         controller.enabled = true;
+        isStimReady = true;
+        currentStimCooldown = 0;
+        stimCooldownIcon.fillAmount = 1f;
+        currentHealthNow = playerStats.health;
 
         // Reset health
         playerStats.health = playerStats.maxHealth;
         UpdateHealthUI();
 
+        // Reset Mag
+        fpsShooting.bullets = 16;
+
+        // Reset Car Position
+        car.transform.position = new Vector3(2.5f, 1, -3);
+
+        // Destroy Current Crimes
+        DestroyCrime("crimeOne");
+        DestroyCrime("crimeTwo");
+        DestroyCrime("crimeThree");
+        DestroyCrime("crimeFour");
+        DestroyCrime("crimeFive");
+        DestroyCrime("crimeSix");
+        DestroyCrime("crimeSeven");
+        DestroyCrime("crimeEight");
+        
         // Fade back in
         t = 0f;
         while (t < fadeDuration)
@@ -243,5 +272,18 @@ public class PlayerHealth : MonoBehaviour
             yield return null;
         }
         playerStats.isRespawning = false;
+    }
+
+    public void DestroyCrime(string crimeTag)
+    {
+        crime = GameObject.FindWithTag(crimeTag);
+        if (crime == null)
+        {
+            // Your Good
+        }
+        else if (crime != null)
+        {
+            Destroy(crime);
+        }
     }
 }

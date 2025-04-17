@@ -10,7 +10,10 @@ public class PlayerData : MonoBehaviour
     public int xpToNextLevel = 100;
 
     [Header("Player Position")]
-    public Transform playerTransform; 
+    public Transform playerTransform;
+
+    [Header("Player's Car Position")]
+    public Transform carTransform;
 
     [Header("UI References")]
     public TMP_Text creditsText;
@@ -26,13 +29,17 @@ public class PlayerData : MonoBehaviour
 
         float posX = PlayerPrefs.GetFloat("PlayerPosX", 0f);
         float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f); 
-        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f); 
-        playerTransform.position = new Vector3(posX, posY, posZ); 
+        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f);
 
-        Debug.Log("Loaded XP: " + xp + " XP to Next Level: " + xpToNextLevel);
-        Debug.Log("Loaded Position: " + playerTransform.position);
+        float posX1 = PlayerPrefs.GetFloat("CarPosX", 0f);
+        float posY1 = PlayerPrefs.GetFloat("CarPosY", 0f);
+        float posZ1 = PlayerPrefs.GetFloat("CarPosZ", 0f);
+
+        playerTransform.position = new Vector3(posX, posY, posZ); 
+        carTransform.position = new Vector3(posX1, posY1, posZ1); 
 
         LoadPlayerPosition();
+        LoadCarPosition();
 
         UpdateUI();
     }
@@ -40,6 +47,7 @@ public class PlayerData : MonoBehaviour
     void Update()
     {
         SavePlayerPosition();
+        SaveCarPosition();
     }
 
     public void AddCredits(int amount)
@@ -127,8 +135,6 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.SetFloat("PlayerPosZ", playerTransform.position.z);
 
         PlayerPrefs.Save();
-
-        Debug.Log("Player position saved!");
     }
 
     public void LoadPlayerPosition()
@@ -137,8 +143,23 @@ public class PlayerData : MonoBehaviour
         float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f);
         float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f);
         playerTransform.position = new Vector3(posX, posY, posZ);
+    }
 
-        Debug.Log("Player position loaded!");
+    public void SaveCarPosition()
+    {
+        PlayerPrefs.SetFloat("CarPosX", carTransform.position.x);
+        PlayerPrefs.SetFloat("CarPosY", carTransform.position.y);
+        PlayerPrefs.SetFloat("CarPosZ", carTransform.position.z);
+
+        PlayerPrefs.Save();
+    }
+
+    public void LoadCarPosition()
+    {
+        float posX1 = PlayerPrefs.GetFloat("CarPosX", 0f);
+        float posY1 = PlayerPrefs.GetFloat("CarPosY", 0f);
+        float posZ1 = PlayerPrefs.GetFloat("CarPosZ", 0f);
+        carTransform.position = new Vector3(posX1, posY1, posZ1);
     }
 }
 

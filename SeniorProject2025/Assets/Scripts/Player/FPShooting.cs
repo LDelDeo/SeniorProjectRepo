@@ -20,7 +20,7 @@ public class FPShooting : MonoBehaviour
     [Header("Shooting & Reloading")]
     private float timeToReload = 2.5f;
     private bool hasAmmo;
-    private int bullets;
+    public int bullets;
     public TMP_Text bulletsText;
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
@@ -38,7 +38,7 @@ public class FPShooting : MonoBehaviour
     public Image shieldCooldownBar;
 
     //Weapon Types
-    private enum WeaponType { Gun, Melee }
+    private enum WeaponType { Gun, Melee, None }
     private WeaponType currentWeapon = WeaponType.Gun;
 
 
@@ -89,6 +89,7 @@ public class FPShooting : MonoBehaviour
         {
             Shoot();
             MeleeAttack();
+            
         }
 
         // Right Click to Shield
@@ -103,8 +104,9 @@ public class FPShooting : MonoBehaviour
         }
 
         // R to Reload
-        if (Input.GetKeyDown(KeyCode.R) && bullets != 16)
+        if (Input.GetKeyDown(KeyCode.R) && bullets != 16 && !isReloading)
         {
+
             Reload();
         }
 
@@ -125,6 +127,12 @@ public class FPShooting : MonoBehaviour
 
     private void Shoot()
     {
+
+        if (bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking)
+        {
+            Reload();
+        }
+
         if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -160,6 +168,13 @@ public class FPShooting : MonoBehaviour
                 
             }
         }
+       
+    }
+    public void RefillAmmo()
+    {
+        hasAmmo = true;
+        bullets = 16;
+        isReloading = false;
     }
 
     private void MeleeAttack()
@@ -195,17 +210,10 @@ public class FPShooting : MonoBehaviour
     {
         // Play Reload Animation here
         gunAnim.SetTrigger("ReloadTrigger"); // Trigger the reload animation
-        StartCoroutine(Reloading());
+        isReloading = true;
     }
 
-    private IEnumerator Reloading()
-    {
-        isReloading = true;
-        yield return new WaitForSeconds(timeToReload);
-        hasAmmo = true;
-        bullets = 16;
-        isReloading = false;
-    }
+   
 
     private void Block()
     {
@@ -266,14 +274,33 @@ public class FPShooting : MonoBehaviour
         switch (type)
         {
             case WeaponType.Gun:
+                // Active
+                gunAnim.enabled = true;
                 gun.SetActive(true);
+                // Inactive
+                meleeAnim.enabled = false;
                 melee.SetActive(false);
                 break;
 
             case WeaponType.Melee:
-                gun.SetActive(false);
+                // Active
+                meleeAnim.enabled = true;
                 melee.SetActive(true);
+                // Inactive
+                gunAnim.enabled = false;
+                gun.SetActive(false);
                 break;
+
+            case WeaponType.None:
+                // Melee
+                meleeAnim.enabled = false;
+                melee.SetActive(false);
+                // Gun
+                gun.SetActive(false);
+                gunAnim.enabled = false;
+                break;
+                
+                
         }
     }
 

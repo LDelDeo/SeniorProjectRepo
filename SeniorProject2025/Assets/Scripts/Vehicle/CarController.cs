@@ -11,11 +11,11 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
 
     // Settings
-    [SerializeField] private float motorForce, breakForce, maxSteerAngle, decelerationSpeed;
+    [SerializeField] public float motorForce, breakForce, maxSteerAngle, decelerationSpeed;
 
     // Wheel Colliders
-    [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
-    [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
+    [SerializeField] public WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
+    [SerializeField] public WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
 
     // Wheels
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
@@ -24,7 +24,7 @@ public class CarController : MonoBehaviour
     // UI Speed Display
     [SerializeField] private TMP_Text speedText;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     private void Start()
     {
@@ -64,7 +64,7 @@ public class CarController : MonoBehaviour
         ApplyBreaking();
     }
 
-    private void ApplyBreaking()
+    public void ApplyBreaking()
     {
         frontRightWheelCollider.brakeTorque = currentbreakForce;
         frontLeftWheelCollider.brakeTorque = currentbreakForce;
@@ -72,7 +72,7 @@ public class CarController : MonoBehaviour
         rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
 
-    private void ApplyDeceleration()
+    public void ApplyDeceleration()
     {
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, decelerationSpeed * Time.fixedDeltaTime);
     }

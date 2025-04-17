@@ -10,10 +10,29 @@ public class WireCut : MonoBehaviour
     public Button yellowWireButton;
     public TMP_Text feedbackText;
 
+    private PlayerStats playerStats;    
+    private PlayerHealth playerHealth;
+
     public bool doneCorrectly;
 
     private string correctWire;
 
+    void Start()
+    {
+        if (playerHealth == null)
+            playerHealth = FindObjectOfType<PlayerHealth>();
+
+        if (playerStats == null)
+            playerStats = FindObjectOfType<PlayerStats>();
+    }
+
+    private void Update()
+    {
+        if (playerStats.isRespawning)
+        {
+            CloseMinigame();
+        }
+    }
     public void StartMinigame()
     {
         wireMinigameUI.SetActive(true);
@@ -56,6 +75,7 @@ public class WireCut : MonoBehaviour
 
             doneCorrectly = false;
             // Player Death/Explosion
+            playerHealth.playerDied();
         }
         
     }
@@ -63,6 +83,8 @@ public class WireCut : MonoBehaviour
     private void CloseMinigame()
     {
         wireMinigameUI.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         redWireButton.onClick.RemoveAllListeners();
         blueWireButton.onClick.RemoveAllListeners();
         yellowWireButton.onClick.RemoveAllListeners();
