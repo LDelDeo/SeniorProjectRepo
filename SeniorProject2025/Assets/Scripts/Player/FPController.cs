@@ -11,6 +11,7 @@ public class FPController : MonoBehaviour
     public float gravityMultiplier = 1.5f;
     public float jumpHeight = 1.5f;
     public bool isSprinting = false;
+    public bool isMoving;
     
 
     [Header("Camera Settings")]
@@ -22,8 +23,8 @@ public class FPController : MonoBehaviour
     [Header("Bobbing")]
     public float bobAmount = 0.05f;
     public float bobSpeed = 6f;
-    public float currentBobSpeed =6f;
-    public float sprintBobSpeed =8f;
+    public float currentBobSpeed = 6f;
+    public float sprintBobSpeed = 8f;
 
 
     private float bobTimer = 0f;
@@ -35,13 +36,13 @@ public class FPController : MonoBehaviour
     public float currentSwaySpeed = 6f;
     public float sprintSwaySpeed = 8f;
 
-    private CharacterController controller;
+    public CharacterController controller;
     private float verticalVelocity;
     private float xRotation = 0f;
-    private bool isGrounded;
+    public bool isGrounded;
 
     private Vector3 lastPosition;
-    private Vector3 moveDirection;
+    public Vector3 moveDirection;
 
     void Start()
     {
@@ -122,7 +123,7 @@ public class FPController : MonoBehaviour
         Vector3 targetPosition = cameraStartPos;
 
         // Only do effects if we're moving and grounded
-        bool isMoving = moveDirection.magnitude > 0.1f && isGrounded;
+        isMoving = moveDirection.magnitude > 0.1f && isGrounded;
 
         if (isMoving)
         {

@@ -15,6 +15,7 @@ public class FPShooting : MonoBehaviour
     public GameObject melee;
     private EnterAssault enterAssault;
     private EnterDrugDeal enterDrugDeal;
+    public Animator weaponTypeAnim;
     
 
     [Header("Shooting & Reloading")]
@@ -25,6 +26,7 @@ public class FPShooting : MonoBehaviour
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
     private bool isReloading = false;
+    public Image reticle;
     
 
     [Header("Camera Shake Settings")]
@@ -38,8 +40,8 @@ public class FPShooting : MonoBehaviour
     public Image shieldCooldownBar;
 
     //Weapon Types
-    private enum WeaponType { Gun, Melee, None }
-    private WeaponType currentWeapon = WeaponType.Gun;
+    public enum WeaponType { Gun, Melee, None }
+    public WeaponType currentWeapon = WeaponType.Gun;
 
 
     private void Start()
@@ -82,7 +84,7 @@ public class FPShooting : MonoBehaviour
             enterDrugDeal = FindObjectOfType<EnterDrugDeal>();
         }
 
-           
+        UpdateReticle();    
 
         // Left Click to Shoot
         if (Input.GetMouseButtonDown(0))
@@ -123,6 +125,38 @@ public class FPShooting : MonoBehaviour
         {
             reloadText.text = "";
         }
+    }
+
+    private void UpdateReticle()
+    {
+        float range = currentWeapon == WeaponType.Gun 
+            ? playerStats.playerRangedRange 
+            : playerStats.playerMeleeRange;
+
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, range))
+        {
+            if (currentWeapon == WeaponType.Gun &&
+                (hit.collider.CompareTag("MeleeOrcEnemy") ||
+                hit.collider.CompareTag("RangedOrcEnemy") ||
+                hit.collider.CompareTag("MeleeHumanEnemy") ||
+                hit.collider.CompareTag("RangedHumanEnemy")))
+            {
+                reticle.color = Color.red;
+                return;
+            }
+
+            if (currentWeapon == WeaponType.Melee &&
+                (hit.collider.CompareTag("MeleeHumanEnemy") ||
+                hit.collider.CompareTag("RangedHumanEnemy")))
+            {
+                reticle.color = Color.red;
+                return;
+            }
+        }
+
+        // Default color when not over a valid target
+        reticle.color = Color.white;
     }
 
     private void Shoot()
@@ -270,6 +304,8 @@ public class FPShooting : MonoBehaviour
     private void SwitchWeapon(WeaponType type)
     {
         currentWeapon = type;
+        
+        weaponTypeAnim.SetTrigger("WeaponSwitch");
 
         switch (type)
         {

@@ -30,8 +30,8 @@ TagManager:
   - Enemy
   - OcclusionObstacle
   - Ground
-  - 
-  - 
+  - MapMarker
+  - ParticleInSky
   - 
   - 
   - 

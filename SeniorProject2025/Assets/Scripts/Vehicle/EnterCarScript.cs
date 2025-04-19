@@ -13,7 +13,7 @@ public class EnterCarScript : MonoBehaviour
     public Canvas playerCanvas;
     public CarController carControllerScript;  // Reference to the car controller script
     private bool playerInTriggerZone = false;
-    private bool isInCar = false;
+    public bool isInCar = false;
     public GameObject carLights;
     private bool areLightsOn;
 
