@@ -26,4 +26,5 @@ public class PlayerStats : MonoBehaviour
     [Header("Respawn")]
     public bool isRespawning = false;
 
+    
 }

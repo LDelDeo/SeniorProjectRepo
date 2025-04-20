@@ -3,6 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class FPController : MonoBehaviour
 {
+    [Header("Script Grabs")]
+    public FPShooting fpShooting;
+
+
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float sprintSpeed = 10f;
@@ -10,9 +14,9 @@ public class FPController : MonoBehaviour
     public float gravity = -9.81f;
     public float gravityMultiplier = 1.5f;
     public float jumpHeight = 1.5f;
-    public bool isSprinting = false;
     public bool isMoving;
-    
+    public bool isSprinting = false;
+
 
     [Header("Camera Settings")]
     public Transform cameraTransform;
@@ -46,6 +50,7 @@ public class FPController : MonoBehaviour
 
     void Start()
     {
+        fpShooting = FindObjectOfType<FPShooting>();
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -91,22 +96,33 @@ public class FPController : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         moveDirection = transform.right * moveX + transform.forward * moveZ;
-        
+        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.LeftShift) && isSprinting == false)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && moveDirection.magnitude > 0.1f && !isSprinting)
         {
             controller.Move(moveDirection * sprintSpeed * Time.deltaTime);
             isSprinting = true;
             currentBobSpeed = sprintBobSpeed;
             currentSwaySpeed = sprintSwaySpeed;
+            if (!fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
+            {
+                fpShooting.gunAnim.SetBool("IsSprintingBool", true);
+            }
+
         }
-        else
+        else if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection.magnitude <= 0.1f)
         {
             isSprinting = false;
             currentBobSpeed = bobSpeed;
             currentSwaySpeed = swaySpeed;
             controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+            if (fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("SprintPose") || fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
+            {
+                fpShooting.gunAnim.SetBool("IsSprintingBool", false);
+            }
         }
+       
+        
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {

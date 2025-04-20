@@ -13,6 +13,7 @@ public class MeleeOrcEnemy : MonoBehaviour
 
     [Header("Script & Player Grabs")]
     private PlayerHealth playerHealth;
+    private FPShooting fpShooting;
     private GameObject playerTransform;
     private NavMeshAgent agent;
     public GameObject alertIconPrefab;
@@ -28,6 +29,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     private void Start()
     {
         playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
         playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
@@ -68,6 +70,7 @@ public class MeleeOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            fpShooting.Deathmarker();
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
@@ -77,6 +80,7 @@ public class MeleeOrcEnemy : MonoBehaviour
         }
         else
         {
+            fpShooting.Hitmarker();
             StartCoroutine(ApplyKnockback());
         }
     }

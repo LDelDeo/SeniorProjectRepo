@@ -7,6 +7,7 @@ public class FPShooting : MonoBehaviour
 {
     [Header("Grabs")]
     public PlayerStats playerStats;
+    public FPController fpController;
     public Camera cam;
     public Animator shieldAnim;
     public Animator gunAnim;  // Animator reference for the gun or player model
@@ -36,8 +37,17 @@ public class FPShooting : MonoBehaviour
 
     [Header("Shield Settings")]
     private Coroutine shieldCoroutine;
+    private Coroutine shieldCooldownRoutine;
     public TMP_Text shieldStatusText;
     public Image shieldCooldownBar;
+
+    [Header("Hitmarker Settings")]
+    public Image hitmarkerImage;
+    public Image DeathMarkerImage;
+    public float hitmarkerDuration = 0.1f;
+    public float DeathmarkerDuration = 0.1f;
+    private Coroutine hitmarkerRoutine;
+    private Coroutine deathmarkerRoutine;
 
     //Weapon Types
     public enum WeaponType { Gun, Melee, None }
@@ -49,9 +59,12 @@ public class FPShooting : MonoBehaviour
         hasAmmo = true;
         bullets = 16;
         reloadText.text = "";
+        hitmarkerImage.enabled = false;
         originalCamPosition = cam.transform.localPosition; // Store the camera's original position
         shieldStatusText.text = "Shield Ready";
         shieldCooldownBar.fillAmount = 0f;
+
+        fpController = FindObjectOfType<FPController>();
     }
 
     private void Update()
@@ -162,12 +175,12 @@ public class FPShooting : MonoBehaviour
     private void Shoot()
     {
 
-        if (bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking)
+        if (bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking && !fpController.isSprinting)
         {
             Reload();
         }
 
-        if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading)
+        if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading && !fpController.isSprinting)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             bullets--;
@@ -183,10 +196,14 @@ public class FPShooting : MonoBehaviour
             {
                 //Orcs
                 if (hit.collider.tag == "MeleeOrcEnemy")
+                {
                     hit.collider.GetComponent<MeleeOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
+                }
 
                 if (hit.collider.tag == "RangedOrcEnemy")
+                {
                     hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
+                }
                 
                 //Humans
                 if(hit.collider.tag == "MeleeHumanEnemy")
@@ -232,7 +249,6 @@ public class FPShooting : MonoBehaviour
                 if(hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
-
                 }
                     
 
@@ -276,29 +292,26 @@ public class FPShooting : MonoBehaviour
             shieldCoroutine = null;
         }
 
-        shieldCooldownBar.gameObject.SetActive(false); 
+        shieldCooldownBar.gameObject.SetActive(false);
 
-        StartCoroutine(ShieldCooldown());
+        shieldCooldownRoutine = StartCoroutine(ShieldCooldown());
     }
 
-
-    private IEnumerator ShakeCamera()
+    public void Hitmarker()
     {
-        float elapsed = 0.0f;
-        
-        // While the shake duration is still active, shake the camera
-        while (elapsed < shakeDuration)
-        {
-            float shakeX = Random.Range(-shakeMagnitude, shakeMagnitude);
-            float shakeY = Random.Range(-shakeMagnitude, shakeMagnitude);
-            cam.transform.localPosition = originalCamPosition + new Vector3(shakeX, shakeY, 0);
+        if (hitmarkerRoutine != null)
+            StopCoroutine(hitmarkerRoutine);
 
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        hitmarkerRoutine = StartCoroutine(ShowHitMarker());
 
-        // After the shake, reset the camera position back to its original position
-        cam.transform.localPosition = originalCamPosition;
+    }
+    public void Deathmarker()
+    {
+        if (deathmarkerRoutine != null)
+            StopCoroutine(deathmarkerRoutine);
+
+        deathmarkerRoutine = StartCoroutine(ShowDeathMarker());
+
     }
 
     private void SwitchWeapon(WeaponType type)
@@ -340,6 +353,25 @@ public class FPShooting : MonoBehaviour
         }
     }
 
+    private IEnumerator ShakeCamera()
+    {
+        float elapsed = 0.0f;
+
+        // While the shake duration is still active, shake the camera
+        while (elapsed < shakeDuration)
+        {
+            float shakeX = Random.Range(-shakeMagnitude, shakeMagnitude);
+            float shakeY = Random.Range(-shakeMagnitude, shakeMagnitude);
+            cam.transform.localPosition = originalCamPosition + new Vector3(shakeX, shakeY, 0);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // After the shake, reset the camera position back to its original position
+        cam.transform.localPosition = originalCamPosition;
+    }
+
     private IEnumerator ShieldRoutine()
     {
         float shieldTime = playerStats.shieldUpTime;
@@ -374,6 +406,35 @@ public class FPShooting : MonoBehaviour
         playerStats.canBlock = true;
         playerStats.isShieldCooldown = false;
         shieldStatusText.text = "Shield Ready";
+    }
+
+    public void CancelShieldCooldown()
+    {
+        if (shieldCooldownRoutine != null)
+        {
+            StopCoroutine(shieldCooldownRoutine);
+            shieldCooldownRoutine = null;
+        }
+
+        playerStats.canBlock = true;
+        playerStats.isShieldCooldown = false;
+        shieldStatusText.text = "Shield Ready";
+    }
+
+    private IEnumerator ShowHitMarker()
+    {
+        hitmarkerImage.enabled = true;
+        yield return new WaitForSeconds(hitmarkerDuration);
+        hitmarkerImage.enabled = false;
+        hitmarkerRoutine = null;
+    } 
+    
+    private IEnumerator ShowDeathMarker()
+    {
+        DeathMarkerImage.enabled = true;
+        yield return new WaitForSeconds(hitmarkerDuration);
+        DeathMarkerImage.enabled = false;
+        deathmarkerRoutine = null;
     }
 
 }

@@ -12,6 +12,7 @@ public class RangedOrcEnemy : MonoBehaviour
 
     [Header("Script & Player Grabs")]
     private PlayerHealth playerHealth;
+    private FPShooting fpShooting;
     private GameObject playerTransform;
     private NavMeshAgent agent;
     public GameObject alertIconPrefab;
@@ -31,6 +32,7 @@ public class RangedOrcEnemy : MonoBehaviour
     {
         //Private Grabs
         playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
         playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
 
@@ -75,12 +77,17 @@ public class RangedOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            fpShooting.Deathmarker();
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
             }
 
-            Destroy(gameObject);    
+            Destroy(gameObject);
+        }
+        else
+        {
+            fpShooting.Hitmarker();
         }
     }
 

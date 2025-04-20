@@ -249,6 +249,10 @@ public class PlayerHealth : MonoBehaviour
         // Reset Mag
         fpsShooting.bullets = 16;
 
+        // Reset Shield
+        fpsShooting.CancelShieldCooldown();
+
+
         // Reset Car Position
         car.transform.position = new Vector3(2.5f, 1, -3);
 

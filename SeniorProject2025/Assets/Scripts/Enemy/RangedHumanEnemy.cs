@@ -13,6 +13,7 @@ public class RangedHumanEnemy : MonoBehaviour
 
     [Header("Script & Player Grabs")]
     private PlayerHealth playerHealth;
+    private FPShooting fpShooting;
     private GameObject playerTransform;
     private NavMeshAgent agent;
     public GameObject alertIconPrefab;
@@ -37,6 +38,7 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         //Private Grabs
         playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
         playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
 
@@ -97,7 +99,7 @@ public class RangedHumanEnemy : MonoBehaviour
     public void TakeDamageFromGun()
     {
         bloodShed.Play();
-
+        fpShooting.Deathmarker();
 
         if (alertIconInstance != null)
         {
@@ -113,11 +115,12 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
-
+        
         isHostile = true;
 
         if (health <= 0)
         {
+            fpShooting.Deathmarker();
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
@@ -127,6 +130,7 @@ public class RangedHumanEnemy : MonoBehaviour
         }
         else
         {
+            fpShooting.Hitmarker();
             StartCoroutine(ApplyKnockback());
         }
     }
