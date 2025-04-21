@@ -22,9 +22,6 @@ public class PlayerData : MonoBehaviour
     public Slider xpBar;
     public TMP_Text levelText;
 
-    [Header("Level Up Display")]
-    public LevelUpDisplay levelUpDisplay;
-    public bool IsCrimeStopped = false;
 
     void Start()
     {
@@ -105,8 +102,6 @@ public class PlayerData : MonoBehaviour
             Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
 
 
-            if (levelUpDisplay != null)
-                StartCoroutine(levelUpDisplay.DelayLevelUp(IsCrimeStopped));
         }
     }
 
