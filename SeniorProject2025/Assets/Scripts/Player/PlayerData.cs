@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerData : MonoBehaviour
 {
@@ -17,8 +19,12 @@ public class PlayerData : MonoBehaviour
 
     [Header("UI References")]
     public TMP_Text creditsText;
-    public TMP_Text xpText;
+    public Slider xpBar;
     public TMP_Text levelText;
+
+    [Header("Level Up Display")]
+    public LevelUpDisplay levelUpDisplay;
+    public bool IsCrimeStopped = false;
 
     void Start()
     {
@@ -42,6 +48,7 @@ public class PlayerData : MonoBehaviour
         LoadCarPosition();
 
         UpdateUI();
+        
     }
 
     void Update()
@@ -88,13 +95,18 @@ public class PlayerData : MonoBehaviour
         {
             xp -= xpToNextLevel;
             level++;
-            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f); // XP required increases per level
+            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f);
 
             PlayerPrefs.SetInt("Level", level);
             PlayerPrefs.SetInt("XP", xp);
             PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
             PlayerPrefs.Save();
+
             Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
+
+
+            if (levelUpDisplay != null)
+                StartCoroutine(levelUpDisplay.DelayLevelUp(IsCrimeStopped));
         }
     }
 
@@ -103,11 +115,14 @@ public class PlayerData : MonoBehaviour
         if (creditsText != null)
             creditsText.text = "Credits: " + credits;
 
-        if (xpText != null)
-            xpText.text = "XP: " + xp + " / " + xpToNextLevel;
+        if (xpBar != null)
+        {
+            xpBar.maxValue = xpToNextLevel;
+            xpBar.value = xp;
+        }
 
         if (levelText != null)
-            levelText.text = "Level: " + level;
+            levelText.text = "" + level;
     }
 
     public void ResetData()
@@ -161,5 +176,7 @@ public class PlayerData : MonoBehaviour
         float posZ1 = PlayerPrefs.GetFloat("CarPosZ", 0f);
         carTransform.position = new Vector3(posX1, posY1, posZ1);
     }
+
+    
 }
 

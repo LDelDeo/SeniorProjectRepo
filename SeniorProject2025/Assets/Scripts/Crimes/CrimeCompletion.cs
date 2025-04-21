@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class CrimeCompletion : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class CrimeCompletion : MonoBehaviour
 
     public void CrimeStopped(int XP, int Credits)
     {
+        playerData.IsCrimeStopped = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
@@ -39,7 +41,10 @@ public class CrimeCompletion : MonoBehaviour
 
         playerData.AddCredits(Credits);
         playerData.AddXP(XP);
+
         
 
     }
+
+   
 }
