@@ -9,7 +9,13 @@ public class PlayerHealth : MonoBehaviour
     public PlayerStats playerStats;
     public FPShooting fpsShooting;
 
+    [Header("Health Effects")]
     public TMP_Text HealthText;
+    public Image bloodSplatter;
+    private float previousHealth;
+    private float flashAlpha = 1f;
+    private float flashDuration = 0.2f;
+    private float flashTimer = 0f;
 
     [Header("Shield UI")]
     public Image[] shieldIcons;
@@ -40,6 +46,7 @@ public class PlayerHealth : MonoBehaviour
         //Health
         playerStats.health = playerStats.maxHealth;
         HealthText.text = "HP: " + Mathf.CeilToInt(playerStats.health);
+        previousHealth = playerStats.health;
         
         //Shield
         SetShieldIconsVisible(false);
@@ -100,6 +107,39 @@ public class PlayerHealth : MonoBehaviour
                 StimShot();
             } 
         }
+
+        // Blood Splatter Stuff
+        bloodSplatterBorder();
+    }
+
+    // Blood Splatter
+    private void bloodSplatterBorder()
+    {
+        float currentHealth = playerStats.health;
+        float maxHealth = playerStats.maxHealth;
+        float healthPercent = currentHealth / maxHealth;
+
+        if (currentHealth < previousHealth)
+        {
+            flashTimer = flashDuration;
+            flashAlpha = 1f; 
+        }
+
+        if (flashTimer > 0f)
+        {
+            flashTimer -= Time.deltaTime;
+        }
+        else
+        {
+            float targetAlpha = Mathf.Clamp01(1f - healthPercent);
+            flashAlpha = Mathf.Lerp(flashAlpha, targetAlpha, Time.deltaTime * 3f);
+        }
+
+        Color color = bloodSplatter.color;
+        color.a = flashAlpha;
+        bloodSplatter.color = color;
+
+        previousHealth = currentHealth;
     }
 
     // Heal Stuff

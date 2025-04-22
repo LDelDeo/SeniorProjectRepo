@@ -92,7 +92,7 @@ public class PlayerData : MonoBehaviour
         {
             xp -= xpToNextLevel;
             level++;
-            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 2.5f);
+            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.75f);
 
             PlayerPrefs.SetInt("Level", level);
             PlayerPrefs.SetInt("XP", xp);
