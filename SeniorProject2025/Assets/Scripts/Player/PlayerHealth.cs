@@ -95,7 +95,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (!playerStats.isBlocking && Input.GetKeyDown(KeyCode.Q))
         {
-            if (isStimReady && playerStats.health < playerStats.maxHealth)
+            if (isStimReady && playerStats.health < playerStats.maxHealth && playerStats.health > 0)
             {
                 StimShot();
             } 
@@ -167,6 +167,7 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator PlayerHeal()
     {
         yield return new WaitForSeconds(stimShotAnimTime);
+        shieldObject.SetActive(true);
         
         var healthToHeal = playerStats.maxHealth - currentHealthNow;
         var healingHealth = 0;
@@ -177,7 +178,6 @@ public class PlayerHealth : MonoBehaviour
             UpdateHealthUI();
             yield return new WaitForSeconds(0.05f); // Rapidly Increases Health, not all at Once
         }
-        shieldObject.SetActive(true);
         stimObject.SetActive(false);
     }
 

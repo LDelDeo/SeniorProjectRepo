@@ -7,6 +7,8 @@ public class CrimeCompletion : MonoBehaviour
 {
     [Header("Grabs")]
     public PlayerData playerData;
+    public FPShooting fPShooting;
+    public FPController fPController;
 
     [Header("References")]
     public GameObject completionScreenPrefab;
@@ -30,6 +32,9 @@ public class CrimeCompletion : MonoBehaviour
       
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        fPShooting.enabled = false;
+        fPController.enabled = false;
 
         GameObject screen = Instantiate(completionScreenPrefab, canvasTransform);
 

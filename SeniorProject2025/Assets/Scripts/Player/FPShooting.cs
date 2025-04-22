@@ -16,6 +16,7 @@ public class FPShooting : MonoBehaviour
     public GameObject melee;
     private EnterAssault enterAssault;
     private EnterDrugDeal enterDrugDeal;
+    private EnterVandalism enterVandalism;
     public Animator weaponTypeAnim;
     
 
@@ -91,10 +92,11 @@ public class FPShooting : MonoBehaviour
             SwitchWeapon(currentWeapon);
         }
 
-        if (enterAssault == null || enterDrugDeal == null)
+        if (enterAssault == null || enterDrugDeal == null || enterVandalism == null)
         {
             enterAssault = FindObjectOfType<EnterAssault>();
             enterDrugDeal = FindObjectOfType<EnterDrugDeal>();
+            enterVandalism = FindObjectOfType<EnterVandalism>();
         }
 
         UpdateReticle();    
@@ -210,6 +212,7 @@ public class FPShooting : MonoBehaviour
                 {
                     hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromGun();
                     enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                    enterVandalism.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
                 if(hit.collider.tag == "RangedHumanEnemy")
                 {

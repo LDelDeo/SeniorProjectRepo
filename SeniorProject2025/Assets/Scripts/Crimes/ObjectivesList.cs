@@ -14,6 +14,8 @@ public class ObjectivesList : MonoBehaviour
     public GameObject objectiveA;
     private GameObject drugDeal;
     public GameObject objectiveDD;
+    private GameObject vandalism;
+    public GameObject objectiveV;
 
     // Tier 3
     private GameObject armedRobbery;
@@ -27,6 +29,7 @@ public class ObjectivesList : MonoBehaviour
        AttachObjective(graffiti, objectiveG, "crimeTwo");
        AttachObjective(assault, objectiveA, "crimeThree");
        AttachObjective(drugDeal, objectiveDD, "crimeFour");
+       AttachObjective(vandalism, objectiveV, "crimeSeven");
        AttachObjective(armedRobbery, objectiveAR, "crimeFive");
        AttachObjective(bombPlant, objectiveBP, "crimeSix");
     }

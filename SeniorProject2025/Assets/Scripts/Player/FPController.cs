@@ -152,7 +152,7 @@ public class FPController : MonoBehaviour
         }
         else
         {
-            bobTimer = 0f; // reset for consistent sin wave
+            //bobTimer = 0f; // reset for consistent sin wave
         }
 
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * currentSwaySpeed);
