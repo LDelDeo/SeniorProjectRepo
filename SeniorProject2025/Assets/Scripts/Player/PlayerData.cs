@@ -149,9 +149,9 @@ public class PlayerData : MonoBehaviour
 
     public void LoadPlayerPosition()
     {
-        float posX = PlayerPrefs.GetFloat("PlayerPosX", 0f);
-        float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f);
-        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f);
+        float posX = PlayerPrefs.GetFloat("PlayerPosX", -.53f);
+        float posY = PlayerPrefs.GetFloat("PlayerPosY", .13f);
+        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", -11.45f);
         playerTransform.position = new Vector3(posX, posY, posZ);
     }
 
@@ -166,9 +166,9 @@ public class PlayerData : MonoBehaviour
 
     public void LoadCarPosition()
     {
-        float posX1 = PlayerPrefs.GetFloat("CarPosX", 0f);
-        float posY1 = PlayerPrefs.GetFloat("CarPosY", 0f);
-        float posZ1 = PlayerPrefs.GetFloat("CarPosZ", 0f);
+        float posX1 = PlayerPrefs.GetFloat("CarPosX", 2.5f);
+        float posY1 = PlayerPrefs.GetFloat("CarPosY", -1f);
+        float posZ1 = PlayerPrefs.GetFloat("CarPosZ", -3f);
         carTransform.position = new Vector3(posX1, posY1, posZ1);
     }
 

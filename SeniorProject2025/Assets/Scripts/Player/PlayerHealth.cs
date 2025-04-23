@@ -47,7 +47,8 @@ public class PlayerHealth : MonoBehaviour
         playerStats.health = playerStats.maxHealth;
         HealthText.text = "HP: " + Mathf.CeilToInt(playerStats.health);
         previousHealth = playerStats.health;
-        
+        flashAlpha = 0f;
+
         //Shield
         SetShieldIconsVisible(false);
 
@@ -124,6 +125,7 @@ public class PlayerHealth : MonoBehaviour
             flashTimer = flashDuration;
             flashAlpha = 1f; 
         }
+      
 
         if (flashTimer > 0f)
         {

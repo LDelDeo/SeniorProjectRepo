@@ -66,6 +66,7 @@ public class FPController : MonoBehaviour
         HandleMouseLook();
         HandleMovement();
         HandleCameraEffects();
+        HandleSprint();
     }
 
     void GroundCheck()
@@ -97,32 +98,6 @@ public class FPController : MonoBehaviour
 
         moveDirection = transform.right * moveX + transform.forward * moveZ;
         controller.Move(moveDirection * moveSpeed * Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && moveDirection.magnitude > 0.1f && !isSprinting)
-        {
-            controller.Move(moveDirection * sprintSpeed * Time.deltaTime);
-            isSprinting = true;
-            currentBobSpeed = sprintBobSpeed;
-            currentSwaySpeed = sprintSwaySpeed;
-            if (!fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
-            {
-                fpShooting.gunAnim.SetBool("IsSprintingBool", true);
-            }
-
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection.magnitude <= 0.1f)
-        {
-            isSprinting = false;
-            currentBobSpeed = bobSpeed;
-            currentSwaySpeed = swaySpeed;
-            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
-            if (fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("SprintPose") || fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
-            {
-                fpShooting.gunAnim.SetBool("IsSprintingBool", false);
-            }
-        }
-       
-        
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -156,5 +131,31 @@ public class FPController : MonoBehaviour
         }
 
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * currentSwaySpeed);
+    }
+    void HandleSprint()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
+        {
+            controller.Move(moveDirection * sprintSpeed * Time.deltaTime);
+            isSprinting = true;
+            currentBobSpeed = sprintBobSpeed;
+            currentSwaySpeed = sprintSwaySpeed;
+            if (!fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
+            {
+                fpShooting.gunAnim.SetBool("IsSprintingBool", true);
+            }
+
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && isSprinting)
+        {
+            isSprinting = false;
+            currentBobSpeed = bobSpeed;
+            currentSwaySpeed = swaySpeed;
+            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+            if (fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("SprintPose") || fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
+            {
+                fpShooting.gunAnim.SetBool("IsSprintingBool", false);
+            }
+        }
     }
 }
