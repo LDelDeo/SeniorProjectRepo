@@ -17,6 +17,7 @@ public class FPShooting : MonoBehaviour
     private EnterAssault enterAssault;
     private EnterDrugDeal enterDrugDeal;
     private EnterVandalism enterVandalism;
+    private EnterGraffiti enterGraffiti;
     public Animator weaponTypeAnim;
     
 
@@ -92,11 +93,12 @@ public class FPShooting : MonoBehaviour
             SwitchWeapon(currentWeapon);
         }
 
-        if (enterAssault == null || enterDrugDeal == null || enterVandalism == null)
+        if (enterAssault == null || enterDrugDeal == null || enterVandalism == null || enterGraffiti == null)
         {
             enterAssault = FindObjectOfType<EnterAssault>();
             enterDrugDeal = FindObjectOfType<EnterDrugDeal>();
             enterVandalism = FindObjectOfType<EnterVandalism>();
+            enterGraffiti = FindObjectOfType<EnterGraffiti>();
         }
 
         UpdateReticle();    
@@ -152,7 +154,8 @@ public class FPShooting : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
             if (currentWeapon == WeaponType.Gun &&
-                (hit.collider.CompareTag("MeleeOrcEnemy") ||
+                (hit.collider.CompareTag("GoblinGraffitiEnemy") ||
+                hit.collider.CompareTag("MeleeOrcEnemy") ||
                 hit.collider.CompareTag("RangedOrcEnemy") ||
                 hit.collider.CompareTag("MeleeHumanEnemy") ||
                 hit.collider.CompareTag("RangedHumanEnemy")))
@@ -162,7 +165,8 @@ public class FPShooting : MonoBehaviour
             }
 
             if (currentWeapon == WeaponType.Melee &&
-                (hit.collider.CompareTag("MeleeHumanEnemy") ||
+                (hit.collider.CompareTag("GoblinGraffitiEnemy") ||
+                hit.collider.CompareTag("MeleeHumanEnemy") ||
                 hit.collider.CompareTag("RangedHumanEnemy")))
             {
                 reticle.color = Color.red;
@@ -196,6 +200,13 @@ public class FPShooting : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerRangedRange))
             {
+                //Goblins
+                if (hit.collider.CompareTag("GoblinGraffitiEnemy"))
+                {
+                    hit.collider.GetComponent<GoblinGraffitiEnemy>().TakeDamageFromGun();
+                    enterGraffiti.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                }
+
                 //Orcs
                 if (hit.collider.tag == "MeleeOrcEnemy")
                 {
@@ -245,11 +256,19 @@ public class FPShooting : MonoBehaviour
                 //Baton Cannot Deal Damage to Orcs
                 //Baton CAN Deal Damage to Humans, Elves & Other Species
 
+                //Goblins
+                if (hit.collider.CompareTag("GoblinGraffitiEnemy"))
+                {
+                    hit.collider.GetComponent<GoblinGraffitiEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
+                    enterGraffiti.crimeFoughtCorrectly = false; // You Are Not Supposed To Use Weapons on Tier 1 Threats
+                }
+
+                //Humans
                 if (hit.collider.CompareTag("MeleeHumanEnemy"))
                 {
                     hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
                 }
-                if(hit.collider.tag == "RangedHumanEnemy")
+                if (hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
                 }

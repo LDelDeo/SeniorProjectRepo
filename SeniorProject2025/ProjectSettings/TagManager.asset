@@ -19,6 +19,8 @@ TagManager:
   - crimeSix
   - crimeSeven
   - crimeEight
+  - GoblinGraffitiEnemy
+  - handcuffText
   layers:
   - Default
   - TransparentFX
