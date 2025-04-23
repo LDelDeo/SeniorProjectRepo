@@ -8,7 +8,7 @@ public class RangedOrcEnemy : MonoBehaviour
     private float maxHealth = 125.0f;
     private float attackDamage = 35.0f;
     private float speed = 8.0f;
-    private bool isHostile = false;
+    public bool isHostile = false;
 
     [Header("Script & Player Grabs")]
     private PlayerHealth playerHealth;
