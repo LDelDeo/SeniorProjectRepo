@@ -28,9 +28,6 @@ public class MeleeHumanEnemy : MonoBehaviour
     //Start & Update
     private void Start()
     {
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
-        playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
     }
@@ -39,6 +36,10 @@ public class MeleeHumanEnemy : MonoBehaviour
     {
         if (!isKnockedBack)
             FollowPlayer();
+
+        playerTransform = GameObject.FindWithTag("Player");
+        playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
     }
 
     // Will Attack 

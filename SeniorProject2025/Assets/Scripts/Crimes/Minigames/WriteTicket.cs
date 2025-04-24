@@ -60,6 +60,7 @@ public class WriteTicket : MonoBehaviour
         fPController.enabled = false;
         fPShooting.enabled = false;
 
+        if (parkedCar != null)
         parkedCar = GameObject.Find("IllegallyParkedCar");
     }
 
@@ -102,10 +103,10 @@ public class WriteTicket : MonoBehaviour
 
         ClearCanvas();
 
-        Destroy(parkedCar);
-
         ticketPanel.SetActive(false);
         
         crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
+
+        Destroy(parkedCar);
     }
 }

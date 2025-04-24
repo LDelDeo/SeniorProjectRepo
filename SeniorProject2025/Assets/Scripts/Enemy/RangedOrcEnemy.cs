@@ -31,9 +31,6 @@ public class RangedOrcEnemy : MonoBehaviour
     private void Start()
     {
         //Private Grabs
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
-        playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
 
         //Game Elements
@@ -42,6 +39,10 @@ public class RangedOrcEnemy : MonoBehaviour
 
     private void Update()
     {
+        playerTransform = GameObject.FindWithTag("Player");
+        playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
+
         AttackPlayer();
     }
 

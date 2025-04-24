@@ -28,15 +28,16 @@ public class MeleeOrcEnemy : MonoBehaviour
     //Start & Update
     private void Start()
     {
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
-        playerTransform = GameObject.FindWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
     }
 
     private void Update()
     {
+        playerTransform = GameObject.FindWithTag("Player");
+        playerHealth = FindObjectOfType<PlayerHealth>();
+        fpShooting = FindObjectOfType<FPShooting>();
+
         if (!isKnockedBack)
             FollowPlayer();
     }

@@ -33,17 +33,18 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        policeOfficer = GameObject.FindGameObjectWithTag("Player");
-        fpShooting = FindObjectOfType<FPShooting>();
-        GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
-        pressE = pressEObject.GetComponent<TMP_Text>();
-
+        
         health = maxHealth;
         pressE.text = "";
     }
 
     void Update()
     {
+        policeOfficer = GameObject.FindGameObjectWithTag("Player");
+        fpShooting = FindObjectOfType<FPShooting>();
+        GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
+        pressE = pressEObject.GetComponent<TMP_Text>();
+
         if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             RunAway();

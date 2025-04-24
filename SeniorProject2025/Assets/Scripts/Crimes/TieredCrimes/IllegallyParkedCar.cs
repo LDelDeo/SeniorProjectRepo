@@ -4,7 +4,7 @@ public class IllegallyParkedCar : MonoBehaviour
 {
     private Minigames minigames;
 
-    void Start()
+    void Update()
     {
         minigames = GameObject.Find("Minigames").GetComponent<Minigames>();
     }
