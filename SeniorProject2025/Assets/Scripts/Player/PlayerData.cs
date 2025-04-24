@@ -10,7 +10,6 @@ public class PlayerData : MonoBehaviour
     public int xp;
     public int level = 1;
     public int xpToNextLevel = 100;
-    public bool completedTutorial = true;
 
     [Header("Player Position")]
     public Transform playerTransform;
@@ -143,7 +142,6 @@ public class PlayerData : MonoBehaviour
         xp = 0;
         level = 1;
         xpToNextLevel = 100;
-        completedTutorial = true;
 
         UpdateUI();
     }

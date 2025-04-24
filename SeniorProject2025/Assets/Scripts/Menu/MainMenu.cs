@@ -11,17 +11,31 @@ public class Menu : MonoBehaviour
     public GameObject options;
     public GameObject credits;
     public Toggle playTutorial;
+    public GameObject newGameButton;
+    public GameObject continueButton;
 
     private void Start()
     {
         playScreen.SetActive(false);
         options.SetActive(false);
         credits.SetActive(false);
-        if (playerData.completedTutorial)
+
+        bool hasPlayedBefore = PlayerPrefs.HasKey("XP") && PlayerPrefs.GetInt("XP") > 0;
+
+        if (hasPlayedBefore)
         {
-            playTutorial.isOn = false;
+            continueButton.SetActive(true);
+            newGameButton.SetActive(true); 
+            playTutorial.isOn = false;     
+        }
+        else
+        {
+            continueButton.SetActive(false);
+            newGameButton.SetActive(true);
+            playTutorial.isOn = true;      
         }
     }
+
 
     public void PlayGame()
     {
@@ -37,9 +51,11 @@ public class Menu : MonoBehaviour
         credits.SetActive(false);
     }
 
-    public void loadGame()
+    public void NewGame()
     {
-        if (playTutorial.isOn && !playerData.completedTutorial)
+        
+
+        if (playTutorial.isOn)
         {
             SceneManager.LoadScene("TutorialScene");
         }
@@ -47,6 +63,11 @@ public class Menu : MonoBehaviour
         {
             SceneManager.LoadScene("MainScene");
         }
+    }
+
+    public void ContinueGame()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     public void Options()
