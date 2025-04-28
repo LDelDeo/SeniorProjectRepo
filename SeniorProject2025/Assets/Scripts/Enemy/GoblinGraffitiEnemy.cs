@@ -24,6 +24,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    private EnterCarScript enterCarScript;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -33,17 +34,31 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        enterCarScript = FindObjectOfType<EnterCarScript>();
         
         health = maxHealth;
-        pressE.text = "";
+
+        if (enterCarScript.isInCar == false && pressE != null)
+        {
+            pressE.text = "";
+        }
     }
 
     void Update()
     {
-        policeOfficer = GameObject.FindGameObjectWithTag("Player");
-        fpShooting = FindObjectOfType<FPShooting>();
-        GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
-        pressE = pressEObject.GetComponent<TMP_Text>();
+        if (enterCarScript.isInCar == false)
+        {
+            policeOfficer = GameObject.FindGameObjectWithTag("Player");
+            fpShooting = FindObjectOfType<FPShooting>();
+            GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
+            if (pressEObject != null)
+            {
+                pressE = pressEObject.GetComponent<TMP_Text>();
+            }
+        }
+
+        
+        
 
         if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {

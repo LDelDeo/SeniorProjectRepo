@@ -3,10 +3,21 @@ using UnityEngine;
 public class IllegallyParkedCar : MonoBehaviour
 {
     private Minigames minigames;
+    private EnterCarScript enterCarScript;
 
     void Update()
     {
-        minigames = GameObject.Find("Minigames").GetComponent<Minigames>();
+        enterCarScript = FindObjectOfType<EnterCarScript>();
+
+        if (minigames == null && enterCarScript.isInCar == false)
+        {
+            minigames = GameObject.Find("Minigames").GetComponent<Minigames>();
+        }
+    }
+
+    public void ParkedCarGone()
+    {
+        Destroy(gameObject);
     }
 
 

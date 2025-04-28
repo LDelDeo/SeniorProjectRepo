@@ -41,9 +41,6 @@ public class CrimeSpawner : MonoBehaviour
     private float tierTwoTimer;
     private float tierThreeTimer;
 
-    [Header("Script Grabs")]
-    public int deleteLater;
-
     void Start()
     {
         tierOneTimer = tierOneInterval;

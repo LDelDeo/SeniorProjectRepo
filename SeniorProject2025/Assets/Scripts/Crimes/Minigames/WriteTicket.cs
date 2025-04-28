@@ -17,6 +17,7 @@ public class WriteTicket : MonoBehaviour
 
     [Header("Script Grabs")]
     private CrimeCompletion crimeCompletion;
+    private IllegallyParkedCar illegallyParkedCar;
 
     void Start()
     {
@@ -29,15 +30,14 @@ public class WriteTicket : MonoBehaviour
         texture.SetPixels(fillColor);
         texture.Apply();
 
-        drawArea.texture = texture;
-
-        
+        drawArea.texture = texture;   
     }
     
 
     void Update()
     {
         crimeCompletion = FindObjectOfType<CrimeCompletion>();
+        illegallyParkedCar = FindObjectOfType<IllegallyParkedCar>();
 
         if (Input.GetMouseButton(0))
         {
@@ -60,7 +60,7 @@ public class WriteTicket : MonoBehaviour
         fPController.enabled = false;
         fPShooting.enabled = false;
 
-        if (parkedCar != null)
+        if (parkedCar == null)
         parkedCar = GameObject.Find("IllegallyParkedCar");
     }
 
@@ -107,6 +107,6 @@ public class WriteTicket : MonoBehaviour
         
         crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
 
-        Destroy(parkedCar);
+        illegallyParkedCar.ParkedCarGone();
     }
 }

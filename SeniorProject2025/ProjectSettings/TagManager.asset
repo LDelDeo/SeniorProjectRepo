@@ -21,6 +21,7 @@ TagManager:
   - crimeEight
   - GoblinGraffitiEnemy
   - handcuffText
+  - PlayerHUD
   layers:
   - Default
   - TransparentFX

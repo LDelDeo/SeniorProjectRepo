@@ -1558,7 +1558,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85990ad85f236b84b88284a11be30497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressE: {fileID: 5752509097958278582}
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 7278556807897425918}
   knockbackForce: 6
@@ -1627,8 +1626,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.7936764, y: 3.0826275, z: 1.6056955}
-  m_Center: {x: 0.022289425, y: 1.0413136, z: -0.0034351337}
+  m_Size: {x: 3.8269806, y: 3.0826275, z: 3.6633227}
+  m_Center: {x: -0.05187968, y: 1.0413136, z: 0.023472799}
 --- !u!1 &4191205936579100168
 GameObject:
   m_ObjectHideFlags: 0

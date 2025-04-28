@@ -77,8 +77,6 @@ public class EnterCarScript : MonoBehaviour
 
     private void EnterCar()
     {
-        Debug.Log("Player entered the car.");
-
         // Disable the entire player (including the player model, camera, and canvas)
         player.SetActive(false);  // Disables the entire player GameObject
 
@@ -101,8 +99,6 @@ public class EnterCarScript : MonoBehaviour
 
     private void ExitCar()
     {
-        Debug.Log("Player exited the car.");
-
         // Disable the entire player (including the player model, camera, and canvas)
         player.SetActive(true);  // Enables the entire player GameObject
         player.transform.rotation = Quaternion.identity;
@@ -131,7 +127,6 @@ public class EnterCarScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player entered trigger zone.");
             enterText.SetActive(true); // Show the 'Enter' text when player enters the trigger
             playerInTriggerZone = true; // Set flag to true when player is in the trigger zone
         }
@@ -141,7 +136,6 @@ public class EnterCarScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player exited trigger zone.");
             enterText.SetActive(false); // Hide the 'Enter' text when player exits the trigger
             playerInTriggerZone = false; // Set flag to false when player exits the trigger zone
         }

@@ -38,6 +38,7 @@ public class PlayerHealth : MonoBehaviour
     public float fadeDuration = 1.5f;
     public GameObject car;
     private GameObject crime;
+    public GameObject player;
 
     private bool wasBlocking = false;
 
@@ -59,6 +60,12 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
+        //If Player Falls Out of Map
+        if (player.transform.position.y < -15)
+        {
+            playerDied();
+        }
+
         // Shield Block Stuff
         if (playerStats.isBlocking)
         {
@@ -175,8 +182,6 @@ public class PlayerHealth : MonoBehaviour
         playerStats.health -= damageToTake;
         UpdateHealthUI();
 
-        Debug.Log("Updated Player Health: " + playerStats.health);
-
         if (playerStats.health <= 0)
         {
             playerDied();
@@ -185,7 +190,7 @@ public class PlayerHealth : MonoBehaviour
 
     // Player Death
     public void playerDied()
-     {
+    {
         StartCoroutine(FadeOutAndRespawn());
         playerStats.isRespawning = true;
     }

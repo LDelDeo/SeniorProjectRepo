@@ -13,6 +13,9 @@ public class WireCut : MonoBehaviour
     private PlayerStats playerStats;    
     private PlayerHealth playerHealth;
 
+    public FPController fPController;
+    public FPShooting fPShooting;
+
     public bool doneCorrectly;
 
     private string correctWire;
@@ -32,9 +35,13 @@ public class WireCut : MonoBehaviour
         {
             CloseMinigame();
         }
+
+       
     }
     public void StartMinigame()
     {
+        doneCorrectly = false;
+
         wireMinigameUI.SetActive(true);
         AssignRandomCorrectWire();
 
@@ -42,7 +49,8 @@ public class WireCut : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
+        fPController.enabled = false;
+        fPShooting.enabled = false;
 
         redWireButton.onClick.AddListener(() => CutWire("Red"));
         blueWireButton.onClick.AddListener(() => CutWire("Blue"));
@@ -72,6 +80,7 @@ public class WireCut : MonoBehaviour
         else
         {
             feedbackText.text = "Wrong Wire";
+            Invoke("CloseMinigame", 0.5f);
 
             doneCorrectly = false;
             // Player Death/Explosion
@@ -83,8 +92,12 @@ public class WireCut : MonoBehaviour
     private void CloseMinigame()
     {
         wireMinigameUI.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        fPController.enabled = true;
+        fPShooting.enabled = true;
+
         redWireButton.onClick.RemoveAllListeners();
         blueWireButton.onClick.RemoveAllListeners();
         yellowWireButton.onClick.RemoveAllListeners();

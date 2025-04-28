@@ -13,6 +13,7 @@ public class CrimeCompletion : MonoBehaviour
     [Header("References")]
     public GameObject completionScreenPrefab;
     public Transform canvasTransform;
+    public GameObject playerHUD;
 
     [Header("XP & Credits Amounts")]
 
@@ -29,12 +30,13 @@ public class CrimeCompletion : MonoBehaviour
 
     public void CrimeStopped(int XP, int Credits)
     {
-      
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         fPShooting.enabled = false;
         fPController.enabled = false;
+
+        playerHUD.SetActive(false);
 
         GameObject screen = Instantiate(completionScreenPrefab, canvasTransform);
 

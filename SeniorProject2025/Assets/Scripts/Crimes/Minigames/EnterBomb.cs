@@ -3,9 +3,16 @@ using UnityEngine;
 public class EnterBomb : MonoBehaviour
 {
     private Minigames minigames;
-    void Start()
+    private EnterCarScript enterCarScript;
+
+    void Update()
     {
-        minigames = FindObjectOfType<Minigames>();
+        enterCarScript = FindObjectOfType<EnterCarScript>();
+
+        if (minigames == null && enterCarScript.isInCar == false)
+        {
+            minigames = GameObject.Find("Minigames").GetComponent<Minigames>();
+        }
     }
     private void OnTriggerEnter(Collider other) 
     {
