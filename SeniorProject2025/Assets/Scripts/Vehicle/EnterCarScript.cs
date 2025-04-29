@@ -32,8 +32,9 @@ public class EnterCarScript : MonoBehaviour
     {
         if (!isInCar) 
         {
-            carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0);
+            carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0); 
         }
+        
         // If the player is in the trigger zone and presses the 'E' key
         if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E))
         {

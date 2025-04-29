@@ -46,6 +46,18 @@ public class CrimeSpawner : MonoBehaviour
         tierOneTimer = tierOneInterval;
         tierTwoTimer = tierTwoInterval;
         tierThreeTimer = tierThreeInterval;
+
+        //Starts the Game With A Crime
+        int randomNum = Random.Range(0, 2);
+
+        if (randomNum == 0 && !isCrimeActive("crimeOne") && illegalParkedCarLocations.Length > 0)
+        {
+            Instantiate(illegalParkedCarPrefab, GetRandomPos(illegalParkedCarLocations), Quaternion.identity);
+        }
+        else if (randomNum == 1 && !isCrimeActive("crimeTwo") && graffitiLocations.Length > 0)
+        {
+            Instantiate(graffitiPrefab, GetRandomPos(graffitiLocations), Quaternion.identity);
+        }
     }
 
     void Update()

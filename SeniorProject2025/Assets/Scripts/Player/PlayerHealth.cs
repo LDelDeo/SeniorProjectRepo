@@ -279,6 +279,10 @@ public class PlayerHealth : MonoBehaviour
             yield return null;
         }
 
+        // Reset Mouse
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         // Disable movement & respawn
         CharacterController controller = GetComponent<CharacterController>();
         controller.enabled = false;

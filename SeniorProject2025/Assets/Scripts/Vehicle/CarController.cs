@@ -12,6 +12,7 @@ public class CarController : MonoBehaviour
 
     // Settings
     [SerializeField] public float motorForce, breakForce, maxSteerAngle, decelerationSpeed;
+    [SerializeField] private float maxSpeed = 22.35f; // ≈ 50 MPH in m/s
 
     // Wheel Colliders
     [SerializeField] public WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
@@ -39,6 +40,7 @@ public class CarController : MonoBehaviour
         HandleSteering();
         UpdateWheels();
         DisplaySpeed();
+        CapMaxSpeed();
     }
 
     private void GetInput()
@@ -113,7 +115,15 @@ public class CarController : MonoBehaviour
     private void DisplaySpeed()
     {
         float speed = rb.linearVelocity.magnitude * 2.23694f; // Convert to mph
+        speed = Mathf.Min(speed, 50f); // Cap display at 50 MPH
         speedText.text = Mathf.Round(speed) + " mph";
     }
 
+    private void CapMaxSpeed()
+    {
+        if (rb.linearVelocity.magnitude > maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
+    }
 }
