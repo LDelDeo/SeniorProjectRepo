@@ -93,10 +93,10 @@ public class WireCut : MonoBehaviour
     {
         wireMinigameUI.SetActive(false);
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        fPController.enabled = true;
-        fPShooting.enabled = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        fPController.enabled = false;
+        fPShooting.enabled = false;
 
         redWireButton.onClick.RemoveAllListeners();
         blueWireButton.onClick.RemoveAllListeners();
