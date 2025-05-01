@@ -57,6 +57,7 @@ public class PlayerData : MonoBehaviour
     {
         SavePlayerPosition();
         SaveCarPosition();
+        CheckCurrentLvl();
     }
 
     public void AddCredits(int amount)
@@ -95,9 +96,10 @@ public class PlayerData : MonoBehaviour
     {
         while (xp >= xpToNextLevel)
         {
+   
             xp -= xpToNextLevel;
             level++;
-            xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.75f);
+            
 
             PlayerPrefs.SetInt("Level", level);
             PlayerPrefs.SetInt("XP", xp);
@@ -109,7 +111,35 @@ public class PlayerData : MonoBehaviour
 
         }
     }
-
+    private void CheckCurrentLvl()
+    {
+        switch (level)
+        {
+            case 1:
+                xpToNextLevel = 95;
+                break;
+            case 2:
+                xpToNextLevel = 195;
+                break;
+            case 3:
+                xpToNextLevel = 500;
+                break;
+            case 4:
+                xpToNextLevel = 600;
+                break;
+            case 5:
+                xpToNextLevel = 700;
+                break;
+            case 6:
+                xpToNextLevel = 1400;
+                break;
+            default:
+                int linearXP = 50;
+                xpToNextLevel = 1400 + (level - 6) * linearXP;
+                Debug.Log(xpToNextLevel);
+                break;
+        }
+    }
     private void UpdateUI()
     {
         if (creditsText != null)

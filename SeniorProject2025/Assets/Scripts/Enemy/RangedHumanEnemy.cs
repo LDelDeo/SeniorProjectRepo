@@ -36,15 +36,13 @@ public class RangedHumanEnemy : MonoBehaviour
     // Start & Update
     private void Start()
     {
-        //Private Grabs
-        agent = GetComponent<NavMeshAgent>();
-
         //Game Elements
         health = maxHealth;
     }
 
     private void Update()
     {
+        agent = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindWithTag("Player");
         playerHealth = FindObjectOfType<PlayerHealth>();
         fpShooting = FindObjectOfType<FPShooting>();

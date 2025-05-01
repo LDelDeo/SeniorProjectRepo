@@ -16,6 +16,14 @@ public class EnterCarScript : MonoBehaviour
     public bool isInCar = false;
     public GameObject carLights;
     private bool areLightsOn;
+    public Transform playerInCarTransform;
+    public Transform exitCarTransform;
+    public Transform lookForwardTransform;
+   public FPController playerMovement;
+   public FPShooting fpShooting;
+
+
+   
 
     void Start()
     {
@@ -30,9 +38,14 @@ public class EnterCarScript : MonoBehaviour
 
     void Update()
     {
+
         if (!isInCar) 
         {
-            carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0); 
+            carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0);
+        }
+        else
+        {
+              player.transform.position = playerInCarTransform.position;
         }
         
         // If the player is in the trigger zone and presses the 'E' key
@@ -78,9 +91,19 @@ public class EnterCarScript : MonoBehaviour
 
     private void EnterCar()
     {
-        // Disable the entire player (including the player model, camera, and canvas)
-        player.SetActive(false);  // Disables the entire player GameObject
+        player.GetComponent<CharacterController>().enabled = false;
+        // Set Player Pos to Under Map Car Transform
+        player.transform.position = playerInCarTransform.position;
 
+        player.GetComponent<Rigidbody>().useGravity = false;
+        // Disable Player Camera
+        playerCamera.gameObject.SetActive(false);
+        // Disbale Player HUD
+        playerCanvas.gameObject.SetActive(false);
+        // Disable Player Movement Script
+        playerMovement.enabled = false;
+        // Disable Player Shoot Script
+        fpShooting.enabled = false;
         // Enable the car's camera and canvas
         carCamera.gameObject.SetActive(true); // Enable the car's camera
         carCanvas.gameObject.SetActive(true); // Enable the car's UI canvas
@@ -91,22 +114,29 @@ public class EnterCarScript : MonoBehaviour
             carControllerScript.enabled = true;
         }
 
-        // Make the player a child of the car
-        player.transform.SetParent(car.transform);
-
         isInCar = true; // Player is now in the car
         enterText.SetActive(false); // Hide the 'Enter' text
     }
 
     private void ExitCar()
     {
-        // Disable the entire player (including the player model, camera, and canvas)
-        player.SetActive(true);  // Enables the entire player GameObject
+
+        // Enable Player Camera
+        playerCamera.gameObject.SetActive(true);
+
+        // Enable Player HUD
+        playerCanvas.gameObject.SetActive(true);
+        // Enable Player Movement Script
+        playerMovement.enabled = true;
+        // Enable Player Shoot Script
+        fpShooting.enabled = true;
         player.transform.rotation = Quaternion.identity;
 
         // Disable the car's camera and canvas
         carCamera.gameObject.SetActive(false); // Disable the car's camera
         carCanvas.gameObject.SetActive(false); // Disable the car's UI canvas
+
+        player.GetComponent<Rigidbody>().useGravity = true;
 
         // Disable the car's controller script when the player is out of the car
         if (carControllerScript != null)
@@ -114,14 +144,11 @@ public class EnterCarScript : MonoBehaviour
             carControllerScript.enabled = false;
         }
 
-        // Detach the player from the car and place them slightly to the right
-        player.transform.SetParent(null);
-        player.transform.position = car.transform.position + new Vector3(2f, 5f, 0); // Adjust the 2f value to position them better
-
         isInCar = false; // Player is now out of the car
         enterText.SetActive(true); // Show the 'Enter' text again
 
-        
+        player.transform.position = exitCarTransform.position;
+        player.GetComponent<CharacterController>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)

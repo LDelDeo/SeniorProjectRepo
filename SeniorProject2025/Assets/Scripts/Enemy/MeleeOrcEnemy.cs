@@ -28,7 +28,6 @@ public class MeleeOrcEnemy : MonoBehaviour
     //Start & Update
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
         health = maxHealth;
     }
 
@@ -37,6 +36,7 @@ public class MeleeOrcEnemy : MonoBehaviour
         playerTransform = GameObject.FindWithTag("Player");
         playerHealth = FindObjectOfType<PlayerHealth>();
         fpShooting = FindObjectOfType<FPShooting>();
+        agent = GetComponent<NavMeshAgent>();
 
         if (!isKnockedBack)
             FollowPlayer();

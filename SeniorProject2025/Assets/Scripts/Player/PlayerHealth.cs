@@ -63,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
         //If Player Falls Out of Map
         if (player.transform.position.y < -15)
         {
-            playerDied();
+            //playerDied();
         }
 
         // Shield Block Stuff

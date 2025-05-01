@@ -52,6 +52,9 @@ public class CrimeCompletion : MonoBehaviour
         playerData.AddCredits(Credits);
         playerData.AddXP(XP);
 
+        int newLevel = playerData.level;
+        int newXP = playerData.xp;
+
         // Update completion screen UI
         Slider xpBar = screen.transform.Find("CompletionXPBar").GetComponent<Slider>();
         TMP_Text completionLevelText = screen.transform.Find("CompletionLevelText").GetComponent<TMP_Text>();
@@ -61,7 +64,7 @@ public class CrimeCompletion : MonoBehaviour
         {
             xpBar.maxValue = playerData.xpToNextLevel;
             xpBar.value = 0;
-            StartCoroutine(AnimateXPBar(xpBar, oldXP, playerData.xp, playerData.xpToNextLevel));
+            StartCoroutine(AnimateXPBar(xpBar, oldXP, newXP, playerData.xpToNextLevel, oldLevel, newLevel));
         }
 
         if (completionLevelText != null)
@@ -75,56 +78,58 @@ public class CrimeCompletion : MonoBehaviour
 
     }
 
-    private IEnumerator AnimateXPBar(Slider xpBar, int oldXP, int newXP, int finalMaxXP)
+    private IEnumerator AnimateXPBar(Slider xpBar, int oldXP, int newXP, int finalMaxXP, int oldLevel, int newLevel)
     {
         float duration = 0.8f;
         int startXP = oldXP;
-        int currentMax = Mathf.RoundToInt(finalMaxXP / 2.5f); 
+        int currentMax = finalMaxXP;
+        int levelsToAnimate = newLevel - oldLevel;
 
-        int currentLevel = playerData.level;
-        int targetXP = newXP;
-        int levelsToAnimate = 0;
-
-        int tempXP = newXP;
-        int tempMax = finalMaxXP;
-        int tempLevel = currentLevel;
-
-        while (tempLevel > 1 && tempXP < currentMax)
+        if (levelsToAnimate <= 0)
         {
-            tempLevel--;
-            tempMax = Mathf.RoundToInt(tempMax / 2.5f);
-            levelsToAnimate++;
-        }
-
-        for (int i = 0; i < levelsToAnimate; i++)
-        {
+            // Just animate XP gain within same level
             float t = 0f;
             while (t < duration)
             {
                 t += Time.deltaTime;
-                xpBar.maxValue = currentMax;
-                xpBar.value = Mathf.Lerp(startXP, currentMax, t / duration);
+                xpBar.value = Mathf.Lerp(startXP, newXP, t / duration);
+                yield return null;
+            }
+            xpBar.value = newXP;
+        }
+        else
+        {
+            // Animate level-up progression
+            for (int i = 0; i < levelsToAnimate; i++)
+            {
+                float t = 0f;
+                while (t < duration)
+                {
+                    t += Time.deltaTime;
+                    xpBar.maxValue = currentMax;
+                    xpBar.value = Mathf.Lerp(startXP, currentMax, t / duration);
+                    yield return null;
+                }
+
+                xpBar.value = currentMax;
+                yield return new WaitForSeconds(0.15f);
+
+                startXP = 0;
+                currentMax = Mathf.RoundToInt(currentMax * 2.5f); // You can change this scaling if needed
+            }
+
+            // Animate final partial XP
+            xpBar.maxValue = finalMaxXP;
+            float tFinal = 0f;
+            while (tFinal < duration)
+            {
+                tFinal += Time.deltaTime;
+                xpBar.value = Mathf.Lerp(0, newXP, tFinal / duration);
                 yield return null;
             }
 
-            xpBar.value = currentMax;
-
-            yield return new WaitForSeconds(0.15f); 
-
-            startXP = 0;
-            currentMax = Mathf.RoundToInt(currentMax * 2.5f); 
+            xpBar.value = newXP;
         }
-
-        xpBar.maxValue = finalMaxXP;
-        float tFinal = 0f;
-        while (tFinal < duration)
-        {
-            tFinal += Time.deltaTime;
-            xpBar.value = Mathf.Lerp(0, targetXP, tFinal / duration);
-            yield return null;
-        }
-
-        xpBar.value = targetXP;
     }
 
     private IEnumerator ShowLevelUpMessage(TMP_Text levelUpText)

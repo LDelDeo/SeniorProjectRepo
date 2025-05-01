@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BoulderProjectile : MonoBehaviour
@@ -8,6 +9,16 @@ public class BoulderProjectile : MonoBehaviour
     public void SetOwner(RangedOrcEnemy orc)
     {
         owner = orc;
+    }
+
+    public void Start()
+    {
+        StartCoroutine(destroyAfterTime());
+    }
+
+    public IEnumerator destroyAfterTime()
+    {
+        yield return new WaitForSeconds(2.5f);
     }
 
     private void OnTriggerEnter(Collider other)
