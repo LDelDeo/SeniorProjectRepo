@@ -91,7 +91,8 @@ public class EnterCarScript : MonoBehaviour
 
     private void EnterCar()
     {
-        player.GetComponent<CharacterController>().enabled = false;
+        // Disable Player Movement Script and Character Controller
+        playerMovement.enabled = false;
         // Set Player Pos to Under Map Car Transform
         player.transform.position = playerInCarTransform.position;
 
@@ -100,8 +101,7 @@ public class EnterCarScript : MonoBehaviour
         playerCamera.gameObject.SetActive(false);
         // Disbale Player HUD
         playerCanvas.gameObject.SetActive(false);
-        // Disable Player Movement Script
-        playerMovement.enabled = false;
+        
         // Disable Player Shoot Script
         fpShooting.enabled = false;
         // Enable the car's camera and canvas
@@ -126,8 +126,7 @@ public class EnterCarScript : MonoBehaviour
 
         // Enable Player HUD
         playerCanvas.gameObject.SetActive(true);
-        // Enable Player Movement Script
-        playerMovement.enabled = true;
+        
         // Enable Player Shoot Script
         fpShooting.enabled = true;
         player.transform.rotation = Quaternion.identity;
@@ -148,7 +147,11 @@ public class EnterCarScript : MonoBehaviour
         enterText.SetActive(true); // Show the 'Enter' text again
 
         player.transform.position = exitCarTransform.position;
-        player.GetComponent<CharacterController>().enabled = true;
+        // Make Player look Forward
+        player.transform.LookAt(lookForwardTransform.position);
+        // Enable Player Movement Script and Character Controller
+        playerMovement.enabled = true;
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -168,4 +171,5 @@ public class EnterCarScript : MonoBehaviour
             playerInTriggerZone = false; // Set flag to false when player exits the trigger zone
         }
     }
+
 }

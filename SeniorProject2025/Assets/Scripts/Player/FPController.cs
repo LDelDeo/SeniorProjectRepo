@@ -158,4 +158,18 @@ public class FPController : MonoBehaviour
             }
         }
     }
+    void OnEnable()
+    {
+        if (this.GetComponent<CharacterController>() != null)
+        {
+            this.GetComponent<CharacterController>().enabled = true;
+        }
+    }
+    void OnDisable()
+    {
+        if (this.GetComponent<CharacterController>() != null)
+        {
+            this.GetComponent<CharacterController>().enabled = false;
+        }
+    }
 }
