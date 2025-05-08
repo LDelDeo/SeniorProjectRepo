@@ -11,8 +11,12 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
 
     // Settings
-    [SerializeField] public float motorForce, breakForce, maxSteerAngle, decelerationSpeed;
+    [SerializeField] public float motorForce = 1000f;
+    [SerializeField] public float breakForce = 1500f;
+    [SerializeField] public float maxSteerAngle = 28f;
+    [SerializeField] public float decelerationSpeed = 2.5f;
     [SerializeField] private float maxSpeed = 22.35f; // ≈ 50 MPH in m/s
+    [SerializeField] private float downforce = 100f;
 
     // Wheel Colliders
     [SerializeField] public WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
@@ -31,6 +35,12 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.1f, 0);
+
+        // Adjust friction on all wheels
+        AdjustWheelFriction(frontLeftWheelCollider);
+        AdjustWheelFriction(frontRightWheelCollider);
+        AdjustWheelFriction(rearLeftWheelCollider);
+        AdjustWheelFriction(rearRightWheelCollider);
     }
 
     private void FixedUpdate()
@@ -41,6 +51,13 @@ public class CarController : MonoBehaviour
         UpdateWheels();
         DisplaySpeed();
         CapMaxSpeed();
+
+        ApplyDownforce();
+    }
+
+    private void LateUpdate()
+    {
+        ReduceSideSlip();
     }
 
     private void GetInput()
@@ -66,7 +83,7 @@ public class CarController : MonoBehaviour
         ApplyBreaking();
     }
 
-    public void ApplyBreaking()
+    private void ApplyBreaking()
     {
         frontRightWheelCollider.brakeTorque = currentbreakForce;
         frontLeftWheelCollider.brakeTorque = currentbreakForce;
@@ -74,14 +91,17 @@ public class CarController : MonoBehaviour
         rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
 
-    public void ApplyDeceleration()
+    private void ApplyDeceleration()
     {
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, decelerationSpeed * Time.fixedDeltaTime);
     }
 
     private void HandleSteering()
     {
-        currentSteerAngle = maxSteerAngle * horizontalInput;
+        float speedFactor = Mathf.Clamp01(rb.linearVelocity.magnitude / 10f);
+        float steerLimit = Mathf.Lerp(maxSteerAngle, maxSteerAngle * 0.4f, speedFactor);
+        currentSteerAngle = steerLimit * horizontalInput;
+
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }
@@ -96,18 +116,14 @@ public class CarController : MonoBehaviour
 
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
-        Vector3 pos;
-        Quaternion rot;
-        wheelCollider.GetWorldPose(out pos, out rot);
+        wheelCollider.GetWorldPose(out Vector3 pos, out Quaternion rot);
         wheelTransform.rotation = rot * Quaternion.Euler(0, 90, 90);
         wheelTransform.position = pos;
     }
 
     private void UpdateSingleWheelRight(WheelCollider wheelCollider, Transform wheelTransform)
     {
-        Vector3 pos;
-        Quaternion rot;
-        wheelCollider.GetWorldPose(out pos, out rot);
+        wheelCollider.GetWorldPose(out Vector3 pos, out Quaternion rot);
         wheelTransform.rotation = rot * Quaternion.Euler(0, -90, 90);
         wheelTransform.position = pos;
     }
@@ -115,7 +131,7 @@ public class CarController : MonoBehaviour
     private void DisplaySpeed()
     {
         float speed = rb.linearVelocity.magnitude * 2.23694f; // Convert to mph
-        speed = Mathf.Min(speed, 50f); // Cap display at 50 MPH
+        speed = Mathf.Min(speed, 50f);
         speedText.text = Mathf.Round(speed) + " mph";
     }
 
@@ -125,5 +141,28 @@ public class CarController : MonoBehaviour
         {
             rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
         }
+    }
+
+    private void ApplyDownforce()
+    {
+        rb.AddForce(-transform.up * downforce * rb.linearVelocity.magnitude);
+    }
+
+    private void ReduceSideSlip()
+    {
+        Vector3 localVelocity = transform.InverseTransformDirection(rb.linearVelocity);
+        localVelocity.x *= 0.95f; // Damp sideways velocity
+        rb.linearVelocity = transform.TransformDirection(localVelocity);
+    }
+
+    private void AdjustWheelFriction(WheelCollider wheel)
+    {
+        WheelFrictionCurve forward = wheel.forwardFriction;
+        forward.stiffness = 2.0f;
+        wheel.forwardFriction = forward;
+
+        WheelFrictionCurve sideways = wheel.sidewaysFriction;
+        sideways.stiffness = 2.5f;
+        wheel.sidewaysFriction = sideways;
     }
 }
