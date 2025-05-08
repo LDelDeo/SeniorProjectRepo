@@ -17,7 +17,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     [Header("Enemy Values")]
     private float health;
-    private float maxHealth = 75.0f;
+    private float maxHealth = 1f;
 
     [Header("Script & Player Grabs")]
     private FPShooting fpShooting;

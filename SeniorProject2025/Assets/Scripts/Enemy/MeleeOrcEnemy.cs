@@ -6,7 +6,7 @@ public class MeleeOrcEnemy : MonoBehaviour
 {
     [Header("Enemy Values")]
     private float health;
-    private float maxHealth = 125.0f;
+    private float maxHealth = 6.5f;
     private float attackDamage = 35.0f;
     private float speed = 12.0f;
     private bool isHostile = false;

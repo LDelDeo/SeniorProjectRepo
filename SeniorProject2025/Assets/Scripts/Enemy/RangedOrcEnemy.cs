@@ -5,7 +5,7 @@ public class RangedOrcEnemy : MonoBehaviour
 {
     [Header("Enemy Values")]
     private float health;
-    private float maxHealth = 125.0f;
+    private float maxHealth = 4.5f;
     private float attackDamage = 35.0f;
     private float speed = 8.0f;
     public bool isHostile = false;

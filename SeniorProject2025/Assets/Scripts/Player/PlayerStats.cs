@@ -3,8 +3,8 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     [Header("Damage")]
-    public float playerRangedDamage = 25f;
-    public float playerMeleeDamage = 50f;
+    public float playerRangedDamage = 1f;
+    public float playerMeleeDamage = 1f;
 
     [Header("Range")]
     public float playerRangedRange = 10f;

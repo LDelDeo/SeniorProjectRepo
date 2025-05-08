@@ -6,7 +6,7 @@ public class MeleeHumanEnemy : MonoBehaviour
 {
     [Header("Enemy Values")]
     private float health;
-    private float maxHealth = 100.0f;
+    private float maxHealth = 4f;
     private float attackDamage = 15.0f;
     private float speed = 18.0f;
     private bool isHostile = false;

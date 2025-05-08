@@ -6,7 +6,7 @@ public class RangedHumanEnemy : MonoBehaviour
 {
     [Header("Enemy Values")]
     private float health;
-    private float maxHealth = 100.0f;
+    private float maxHealth = 3f;
     private float attackDamage = 20.0f;
     private float speed = 12.0f;
     private bool isHostile = false;
