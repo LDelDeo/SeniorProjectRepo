@@ -24,12 +24,20 @@ public class EnterCarScript : MonoBehaviour
 
     void Start()
     {
-        // Initially, the car's camera and canvas are off, and the player is visible.
-        carCamera.gameObject.SetActive(false);
-        carCanvas.gameObject.SetActive(false);
-        if (carControllerScript != null)
+        isInCar = PlayerPrefs.GetInt("IsInCar", 0) == 1;
+
+        if (isInCar)
         {
-            carControllerScript.enabled = false;  // Disable car controller by default when the player is not in the car
+            EnterCar();
+        }
+        else
+        {
+            carCamera.gameObject.SetActive(false);
+            carCanvas.gameObject.SetActive(false);
+            if (carControllerScript != null)
+            {
+                carControllerScript.enabled = false;
+            }
         }
     }
 
@@ -88,6 +96,7 @@ public class EnterCarScript : MonoBehaviour
 
     private void EnterCar()
     {
+
         // Disable Player Movement Script and Character Controller
         playerMovement.enabled = false;
         // Set Player Pos to Under Map Car Transform
@@ -113,11 +122,12 @@ public class EnterCarScript : MonoBehaviour
 
         isInCar = true; // Player is now in the car
         enterText.SetActive(false); // Hide the 'Enter' text
-
+        PlayerPrefs.SetInt("IsInCar", isInCar ? 1 : 0);
     }
 
     private void ExitCar()
     {
+        
 
         // Enable Player Camera
         playerCamera.gameObject.SetActive(true);
@@ -149,7 +159,7 @@ public class EnterCarScript : MonoBehaviour
         player.transform.LookAt(lookForwardTransform.position);
         // Enable Player Movement Script and Character Controller
         playerMovement.enabled = true;
-
+        PlayerPrefs.SetInt("IsInCar", isInCar ? 1 : 0);
     }
 
     private void OnTriggerEnter(Collider other)
