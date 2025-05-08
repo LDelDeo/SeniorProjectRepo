@@ -22,9 +22,6 @@ public class EnterCarScript : MonoBehaviour
    public FPController playerMovement;
    public FPShooting fpShooting;
 
-
-   
-
     void Start()
     {
         // Initially, the car's camera and canvas are off, and the player is visible.
@@ -45,7 +42,7 @@ public class EnterCarScript : MonoBehaviour
         }
         else
         {
-              player.transform.position = playerInCarTransform.position;
+            player.transform.position = playerInCarTransform.position;
         }
         
         // If the player is in the trigger zone and presses the 'E' key
@@ -116,6 +113,7 @@ public class EnterCarScript : MonoBehaviour
 
         isInCar = true; // Player is now in the car
         enterText.SetActive(false); // Hide the 'Enter' text
+
     }
 
     private void ExitCar()

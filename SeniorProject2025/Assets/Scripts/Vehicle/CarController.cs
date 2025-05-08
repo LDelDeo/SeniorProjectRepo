@@ -6,8 +6,8 @@ using TMPro;
 
 public class CarController : MonoBehaviour
 {
-    private float horizontalInput, verticalInput;
-    private float currentSteerAngle, currentbreakForce;
+    public float horizontalInput, verticalInput;
+    public float currentSteerAngle, currentbreakForce;
     private bool isBreaking;
 
     // Settings
