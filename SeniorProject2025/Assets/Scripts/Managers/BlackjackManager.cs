@@ -41,6 +41,7 @@ public class BlackjackManager : MonoBehaviour
         standButton.onClick.AddListener(OnStand);
         restartButton.onClick.AddListener(OnRestart);
         exitButton.onClick.AddListener(OnExit);
+        restartButton.interactable = false;
 
         DisableMainButtons();
         resultText.text = "Place your bets to begin.";
@@ -145,7 +146,7 @@ public class BlackjackManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
     }
 
-    void EndGame(bool playerWon, bool tie = false)
+    IEnumerator EndGame(bool playerWon, bool tie = false)
     {
         gameOver = true;
         DisableMainButtons();
@@ -165,19 +166,16 @@ public class BlackjackManager : MonoBehaviour
             resultText.text = "You lose.";
         }
 
-        FlipDealerSecondCard();
+        yield return StartCoroutine(FlipAllDealerCards());
+
         UpdateCreditsUI();
+
+        yield return new WaitForSeconds(2f);
+
+        restartButton.interactable = true;
     }
 
-    void FlipDealerSecondCard()
-    {
-        if (dealerHandArea.childCount < 2) return;
 
-        Transform secondCard = dealerHandArea.GetChild(1);
-        CardVisual cv = secondCard.GetComponent<CardVisual>();
-        if (cv != null)
-            cv.FlipToFront(dealerHand[1]);
-    }
 
     void CheckMatchDealer()
     {
@@ -223,7 +221,7 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator DealerPlay()
     {
-        FlipDealerSecondCard();
+        yield return StartCoroutine(FlipAllDealerCards());
         yield return new WaitForSeconds(0.5f);
 
         while (GetHandValue(dealerHand) < 17)
@@ -236,15 +234,15 @@ public class BlackjackManager : MonoBehaviour
 
         if (dealerTotal > 21 || playerTotal > dealerTotal)
         {
-            EndGame(true);
+            yield return StartCoroutine(EndGame(true));
         }
         else if (dealerTotal == playerTotal)
         {
-            EndGame(false, true);
+            yield return StartCoroutine(EndGame(false, true));
         }
         else
         {
-            EndGame(false);
+            yield return StartCoroutine(EndGame(false));
         }
     }
 
@@ -267,6 +265,7 @@ public class BlackjackManager : MonoBehaviour
 
         DisableMainButtons();
         UpdateCreditsUI();
+        restartButton.interactable = false;
     }
 
     public void OnExit()
@@ -344,6 +343,21 @@ public class BlackjackManager : MonoBehaviour
         if (playerCreditsText != null && playerData != null)
         {
             playerCreditsText.text = "Credits: " + playerData.credits;
+        }
+    }
+
+    IEnumerator FlipAllDealerCards()
+    {
+        for (int i = 0; i < dealerHandArea.childCount; i++)
+        {
+            Transform cardObj = dealerHandArea.GetChild(i);
+            CardVisual cv = cardObj.GetComponent<CardVisual>();
+
+            if (cv != null)
+            {
+                cv.FlipToFront(dealerHand[i]);
+                yield return new WaitForSeconds(0.3f); // adjust for flip duration
+            }
         }
     }
 }
