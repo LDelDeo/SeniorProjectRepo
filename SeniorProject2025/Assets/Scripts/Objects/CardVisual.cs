@@ -1,17 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class CardVisual : MonoBehaviour
 {
     private Card hiddenCard;
     private Animator animator;
-    private Image image;
+
+    public Transform parentAfterFlip;
 
     void Awake()
     {
         animator = GetComponent<Animator>();
-        image = GetComponent<Image>();
     }
 
     public void SetHiddenCard(Card card)
@@ -28,10 +27,10 @@ public class CardVisual : MonoBehaviour
             animator.SetTrigger("Flip");
         }
 
-        StartCoroutine(DelayedReveal(0.25f));
+        StartCoroutine(ReplaceWithFrontPrefab(1.2f));
     }
 
-    private IEnumerator DelayedReveal(float delay)
+    private IEnumerator ReplaceWithFrontPrefab(float delay)
     {
         yield return new WaitForSeconds(delay);
 
@@ -44,17 +43,20 @@ public class CardVisual : MonoBehaviour
             _ => hiddenCard.value.ToString()
         };
 
-        string spriteName = $"Card_{face}_{hiddenCard.suit}";
-        Sprite cardSprite = Resources.Load<Sprite>("CardSprites/" + spriteName);
+        string prefabName = $"Card_{face}_{hiddenCard.suit}";
+        GameObject cardPrefab = Resources.Load<GameObject>("Cards/Sprites/" + prefabName);
 
-        if (cardSprite != null)
+        if (cardPrefab != null)
         {
-            image.sprite = cardSprite;
+            GameObject newCard = Instantiate(cardPrefab, transform.parent);
+            newCard.transform.SetSiblingIndex(transform.GetSiblingIndex());
+            newCard.transform.localScale = transform.localScale;
         }
         else
         {
-            Debug.LogWarning("Missing sprite: " + spriteName);
+            Debug.LogWarning("Missing card prefab: " + prefabName);
         }
+
+        Destroy(gameObject);
     }
 }
-

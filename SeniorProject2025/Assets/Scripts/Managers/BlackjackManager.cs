@@ -78,11 +78,15 @@ public class BlackjackManager : MonoBehaviour
     {
         deck = GenerateDeck();
         ShuffleDeck();
+        ClearHandArea(playerHandArea);
+        ClearHandArea(dealerHandArea);
+
+        playerHand?.Clear();
+        dealerHand?.Clear();
         playerHand = new List<Card>();
         dealerHand = new List<Card>();
 
-        ClearHandArea(playerHandArea);
-        ClearHandArea(dealerHandArea);
+
 
         dealerPointsText.text = "Dealer: ?";
         playerPointsText.text = "Player: 0";
@@ -130,8 +134,14 @@ public class BlackjackManager : MonoBehaviour
         }
         else
         {
-            string prefabName = $"Card_{CardFace(card.value)}_{card.suit}";
+            string face = CardFace(card.value);
+            string prefabName = $"Card_{face}_{card.suit}";
+            Debug.Log("Trying to load: " + prefabName);
             cardPrefab = Resources.Load<GameObject>("Cards/Sprites/" + prefabName);
+        }
+        if (cardPrefab == null)
+        {
+            Debug.LogWarning($"Missing prefab for: Card_{CardFace(card.value)}_{card.suit}");
         }
 
         if (cardPrefab != null)
@@ -170,6 +180,7 @@ public class BlackjackManager : MonoBehaviour
             _ => value.ToString()
         };
     }
+
     public void AddDebugCredits()
     {
         playerData.AddCredits(1000);
@@ -323,14 +334,11 @@ public class BlackjackManager : MonoBehaviour
     {
         foreach (Transform child in area)
         {
-            Image img = child.GetComponent<Image>();
-            if (img != null)
-            {
-                img.color = Color.white;
-            }
-            Destroy(child.gameObject);
+            Destroy(child.gameObject, 0.1f);
         }
     }
+
+
 
     List<Card> GenerateDeck()
     {
