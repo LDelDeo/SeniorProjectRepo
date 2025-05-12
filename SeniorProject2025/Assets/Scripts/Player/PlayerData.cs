@@ -136,7 +136,7 @@ public class PlayerData : MonoBehaviour
             default:
                 int linearXP = 50;
                 xpToNextLevel = 1400 + (level - 6) * linearXP;
-                Debug.Log(xpToNextLevel);
+                //Debug.Log(xpToNextLevel);
                 break;
         }
     }
