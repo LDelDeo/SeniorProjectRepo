@@ -1,8 +1,8 @@
 [System.Serializable]
 public struct Card
 {
-    public int value;     // 1 = A, 11 = J, etc.
-    public string suit;   // "Hearts", "Spades", etc.
+    public int value;     // 1 = A, 11 = J
+    public string suit;   
 
     public Card(int value, string suit)
     {

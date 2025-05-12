@@ -12,12 +12,6 @@ public class CardVisual : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         image = GetComponent<Image>();
-
-        if (animator == null)
-            Debug.LogWarning("Missing Animator on: " + gameObject.name);
-
-        if (image == null)
-            Debug.LogWarning("Missing UI Image on: " + gameObject.name);
     }
 
     public void SetHiddenCard(Card card)
@@ -34,7 +28,7 @@ public class CardVisual : MonoBehaviour
             animator.SetTrigger("Flip");
         }
 
-        StartCoroutine(DelayedReveal(0.2f)); // adjust to match flip halfway timing
+        StartCoroutine(DelayedReveal(0.25f));
     }
 
     private IEnumerator DelayedReveal(float delay)
@@ -51,15 +45,16 @@ public class CardVisual : MonoBehaviour
         };
 
         string spriteName = $"Card_{face}_{hiddenCard.suit}";
-        Sprite cardSprite = Resources.Load<Sprite>("Cards/" + spriteName);
+        Sprite cardSprite = Resources.Load<Sprite>("CardSprites/" + spriteName);
 
-        if (cardSprite != null && image != null)
+        if (cardSprite != null)
         {
             image.sprite = cardSprite;
         }
         else
         {
-            Debug.LogWarning("Sprite not found: " + spriteName);
+            Debug.LogWarning("Missing sprite: " + spriteName);
         }
     }
 }
+

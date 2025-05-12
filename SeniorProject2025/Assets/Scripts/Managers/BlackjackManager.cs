@@ -11,6 +11,8 @@ public class BlackjackManager : MonoBehaviour
     public TMP_Text resultText;
     public TMP_Text matchResultText;
     public TMP_Text playerCreditsText;
+    public TMP_Text playerPointsText;
+    public TMP_Text dealerPointsText;
 
     public Button hitButton;
     public Button standButton;
@@ -41,8 +43,8 @@ public class BlackjackManager : MonoBehaviour
         standButton.onClick.AddListener(OnStand);
         restartButton.onClick.AddListener(OnRestart);
         exitButton.onClick.AddListener(OnExit);
-        restartButton.interactable = false;
 
+        restartButton.interactable = false;
         DisableMainButtons();
         resultText.text = "Place your bets to begin.";
         UpdateCreditsUI();
@@ -56,7 +58,10 @@ public class BlackjackManager : MonoBehaviour
             return;
         }
 
-        if (!int.TryParse(matchBetInputField.text, out matchBet)) matchBet = 0;
+        if (!int.TryParse(matchBetInputField.text, out matchBet) || matchBet < 0)
+        {
+            matchBet = 0;
+        }
 
         if (currentBet + matchBet > playerData.credits)
         {
@@ -79,6 +84,9 @@ public class BlackjackManager : MonoBehaviour
         ClearHandArea(playerHandArea);
         ClearHandArea(dealerHandArea);
 
+        dealerPointsText.text = "Dealer: ?";
+        playerPointsText.text = "Player: 0";
+
         yield return DealCard(playerHand, playerHandArea);
         yield return DealCard(dealerHand, dealerHandArea);
         yield return DealCard(playerHand, playerHandArea);
@@ -94,7 +102,18 @@ public class BlackjackManager : MonoBehaviour
         betInputField.interactable = false;
         matchBetInputField.interactable = false;
 
+        UpdatePointsUI();
         CheckMatchDealer();
+
+        yield return new WaitForSeconds(0.1f);
+
+        int playerTotal = GetHandValue(playerHand);
+        if (playerTotal == 21 && playerHand.Count == 2)
+        {
+            HighlightLastCard(Color.green);
+            yield return new WaitForSeconds(0.4f);
+            yield return StartCoroutine(EndGame(true));
+        }
     }
 
     IEnumerator DealCard(List<Card> hand, Transform area, bool faceDown = false)
@@ -103,24 +122,22 @@ public class BlackjackManager : MonoBehaviour
         hand.Add(card);
 
         GameObject cardPrefab = null;
-
         if (faceDown)
         {
             string[] backs = { "Card_Back_Red", "Card_Back_Blue" };
             string selectedBack = backs[Random.Range(0, backs.Length)];
-            cardPrefab = Resources.Load<GameObject>("Cards/" + selectedBack);
+            cardPrefab = Resources.Load<GameObject>("Cards/Backs/" + selectedBack);
         }
         else
         {
             string prefabName = $"Card_{CardFace(card.value)}_{card.suit}";
-            cardPrefab = Resources.Load<GameObject>("Cards/" + prefabName);
+            cardPrefab = Resources.Load<GameObject>("Cards/Sprites/" + prefabName);
         }
 
         if (cardPrefab != null)
         {
             GameObject cardGO = Instantiate(cardPrefab, area);
             cardGO.transform.localScale = Vector3.zero;
-
             float time = 0.2f;
             Vector3 targetScale = Vector3.one;
             while (time > 0)
@@ -138,18 +155,34 @@ public class BlackjackManager : MonoBehaviour
                     cv.SetHiddenCard(card);
             }
         }
-        else
-        {
-            Debug.LogWarning("Missing card prefab.");
-        }
 
+        UpdatePointsUI();
         yield return new WaitForSeconds(0.1f);
+    }
+    string CardFace(int value)
+    {
+        return value switch
+        {
+            1 => "A",
+            11 => "J",
+            12 => "Q",
+            13 => "K",
+            _ => value.ToString()
+        };
+    }
+    public void AddDebugCredits()
+    {
+        playerData.AddCredits(1000);
+        UpdateCreditsUI();
+        Debug.Log("Added 1000 credits via debug button.");
     }
 
     IEnumerator EndGame(bool playerWon, bool tie = false)
     {
         gameOver = true;
         DisableMainButtons();
+
+        yield return StartCoroutine(FlipAllDealerCards());
 
         if (tie)
         {
@@ -166,16 +199,15 @@ public class BlackjackManager : MonoBehaviour
             resultText.text = "You lose.";
         }
 
-        yield return StartCoroutine(FlipAllDealerCards());
-
+        UpdatePointsUI();
         UpdateCreditsUI();
-
         yield return new WaitForSeconds(2f);
 
         restartButton.interactable = true;
+        placeBetButton.interactable = true;
+        betInputField.interactable = true;
+        matchBetInputField.interactable = true;
     }
-
-
 
     void CheckMatchDealer()
     {
@@ -201,15 +233,23 @@ public class BlackjackManager : MonoBehaviour
     {
         if (gameOver) return;
         StartCoroutine(DealCard(playerHand, playerHandArea));
-        StartCoroutine(CheckBustAfterDelay());
+        StartCoroutine(CheckHitOutcome());
     }
 
-    IEnumerator CheckBustAfterDelay()
+    IEnumerator CheckHitOutcome()
     {
         yield return new WaitForSeconds(0.4f);
-        if (GetHandValue(playerHand) > 21)
+        int total = GetHandValue(playerHand);
+
+        if (total == 21)
         {
-            EndGame(false);
+            HighlightLastCard(Color.green);
+            yield return StartCoroutine(EndGame(true));
+        }
+        else if (total > 21)
+        {
+            HighlightLastCard(Color.red);
+            yield return StartCoroutine(EndGame(false));
         }
     }
 
@@ -250,7 +290,6 @@ public class BlackjackManager : MonoBehaviour
     {
         resultText.text = "Place your bets to begin.";
         matchResultText.text = "";
-
         currentBet = 0;
         matchBet = 0;
 
@@ -264,6 +303,7 @@ public class BlackjackManager : MonoBehaviour
         ClearHandArea(dealerHandArea);
 
         DisableMainButtons();
+        UpdatePointsUI();
         UpdateCreditsUI();
         restartButton.interactable = false;
     }
@@ -283,6 +323,11 @@ public class BlackjackManager : MonoBehaviour
     {
         foreach (Transform child in area)
         {
+            Image img = child.GetComponent<Image>();
+            if (img != null)
+            {
+                img.color = Color.white;
+            }
             Destroy(child.gameObject);
         }
     }
@@ -313,6 +358,19 @@ public class BlackjackManager : MonoBehaviour
         return card;
     }
 
+    void HighlightLastCard(Color color)
+    {
+        if (playerHandArea.childCount > 0)
+        {
+            Transform lastCard = playerHandArea.GetChild(playerHandArea.childCount - 1);
+            Image img = lastCard.GetComponent<Image>();
+            if (img != null)
+            {
+                img.color = color;
+            }
+        }
+    }
+
     int GetHandValue(List<Card> hand)
     {
         int total = 0, aces = 0;
@@ -329,14 +387,29 @@ public class BlackjackManager : MonoBehaviour
         return total;
     }
 
-    string CardFace(int value) => value switch
+    void UpdatePointsUI()
     {
-        1 => "A",
-        11 => "J",
-        12 => "Q",
-        13 => "K",
-        _ => value.ToString()
-    };
+        if (playerPointsText != null)
+            playerPointsText.text = "Player: " + GetHandValue(playerHand);
+
+        if (dealerPointsText != null)
+        {
+            if (gameOver)
+            {
+                dealerPointsText.text = "Dealer: " + GetHandValue(dealerHand);
+            }
+            else if (dealerHand.Count > 0)
+            {
+                int visible = Mathf.Min(dealerHand[0].value, 10);
+                if (dealerHand[0].value == 1) visible = 11;
+                dealerPointsText.text = "Dealer: " + visible + " + ?";
+            }
+            else
+            {
+                dealerPointsText.text = "Dealer: ?";
+            }
+        }
+    }
 
     void UpdateCreditsUI()
     {
@@ -348,7 +421,7 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator FlipAllDealerCards()
     {
-        for (int i = 0; i < dealerHandArea.childCount; i++)
+        for (int i = 0; i < dealerHandArea.childCount && i < dealerHand.Count; i++)
         {
             Transform cardObj = dealerHandArea.GetChild(i);
             CardVisual cv = cardObj.GetComponent<CardVisual>();
@@ -356,8 +429,11 @@ public class BlackjackManager : MonoBehaviour
             if (cv != null)
             {
                 cv.FlipToFront(dealerHand[i]);
-                yield return new WaitForSeconds(0.3f); // adjust for flip duration
+                yield return new WaitForSeconds(0.3f);
             }
         }
+
+        UpdatePointsUI();
     }
 }
+
