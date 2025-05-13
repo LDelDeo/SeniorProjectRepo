@@ -57,10 +57,7 @@ public class RideTheBusGameManager : MonoBehaviour
 
     private void SetGameState(GameState newState)
     {
-        currentState = newState;
-
-        if (newState == GameState.WaitingForBet)
-            feedbackText.text = "";
+        currentState = newState;    
 
         redButton.gameObject.SetActive(newState == GameState.RedOrBlack);
         blackButton.gameObject.SetActive(newState == GameState.RedOrBlack);
@@ -109,7 +106,8 @@ public class RideTheBusGameManager : MonoBehaviour
         drawnCards = deck.OrderBy(c => Random.value).Take(4).ToList();
 
         ResetCardBacks();
-        ClearAllCardMessages(); // <-- Clear messages at round start
+        ClearAllCardMessages();
+        feedbackText.text = "";
         SetGameState(GameState.RedOrBlack);
     }
 
