@@ -43,6 +43,9 @@ public class RideTheBusGameManager : MonoBehaviour
         UpdateCreditsUI();
         SetGameState(GameState.WaitingForBet);
         cashOutText.gameObject.SetActive(false);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Update()

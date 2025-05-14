@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OpenWorldScene/MainScene.unity
     guid: 9e8029f638c44f14a9a9cb4d604c1c77
+  - enabled: 1
+    path: Assets/Scenes/BuildingInteriorScenes/BlackJackScene.unity
+    guid: ef1a277abd0a0ab43ad24556f255a5a0
+  - enabled: 1
+    path: Assets/Scenes/BuildingInteriorScenes/RideTheBusScene.unity
+    guid: ed1fa15ca355a1c4cb56cb8f3e18476a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
