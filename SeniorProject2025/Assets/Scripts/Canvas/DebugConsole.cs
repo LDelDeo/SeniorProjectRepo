@@ -4,51 +4,38 @@ public class DebugConsole : MonoBehaviour
 {
     [Header("Debug Console Objects")]
     public GameObject debugConsoleObject;
-    private bool consoleOpen;
+    public GameObject consoleBG;
+    public bool consoleOpen;
 
     [Header("Script Grabs")]
     public FPShooting fPShooting;
     public FPController fPController;
     public PlayerData playerData;
     public PlayerHealth playerHealth;
+    public EnterCarScript enterCarScript;
 
     //Start & Update
     void Start()
     {
         consoleOpen = false;
+        consoleBG.SetActive(false);
         debugConsoleObject.SetActive(false);
     }
 
     void Update()
     {
         //F3 to Trigger Debug Console
-        if (Input.GetKeyDown(KeyCode.F3))
+        if (Input.GetKeyDown(KeyCode.F3) && !enterCarScript.isInCar)
         {
             if (consoleOpen)
             {
-                
                 CloseDebugConsole();
             }
             else if (!consoleOpen)
             {
-                
                 OpenDebugConsole();
             }
         } 
-
-        if (consoleOpen)
-        {
-            fPShooting.enabled = false;
-            fPController.enabled = false;
-            debugConsoleObject.SetActive(true);
-        }
-
-        if (!consoleOpen)
-        {
-            fPShooting.enabled = true;
-            fPController.enabled = true;
-            debugConsoleObject.SetActive(false);
-        }
     }
 
     //Open and Close Console 
@@ -60,6 +47,12 @@ public class DebugConsole : MonoBehaviour
         //Cursor
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        //Scripts & Objects
+        fPShooting.enabled = false;
+        fPController.enabled = false;
+        debugConsoleObject.SetActive(true);
+        consoleBG.SetActive(true);
     }
 
     public void CloseDebugConsole()
@@ -70,6 +63,12 @@ public class DebugConsole : MonoBehaviour
         //Cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        //Scripts & Objects
+        fPShooting.enabled = true;
+        fPController.enabled = true;
+        debugConsoleObject.SetActive(false);
+        consoleBG.SetActive(false);
     }
 
     //Button Functionality
