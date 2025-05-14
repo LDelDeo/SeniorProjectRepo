@@ -6,19 +6,14 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using TMPro;
 
-using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-
 public class RideTheBusGameManager : MonoBehaviour
 {
     [Header("Text & Inputs")]
     public TMP_InputField betInput;
     public TMP_Text creditsText;
     public TMP_Text feedbackText;
+    public TMP_Text cashOutText;
+    public TMP_Text initialBet;
     public TMP_Text[] cardMessages;
 
     [Header("Buttons")]
@@ -27,9 +22,13 @@ public class RideTheBusGameManager : MonoBehaviour
     public Button higherButton, lowerButton;
     public Button insideButton, outsideButton;
     public Button heartsButton, diamondsButton, clubsButton, spadesButton;
+    public Button cashOutButton;
 
     [Header("Images")]
     public Image[] cardImages;
+
+    [Header("Game Values")]
+    private float currentMultiplier = 1f;
 
     private enum GameState { WaitingForBet, RedOrBlack, HigherOrLower, InsideOrOutside, GuessSuit, GameOver }
     private GameState currentState = GameState.WaitingForBet;
@@ -43,11 +42,36 @@ public class RideTheBusGameManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("Credits")) PlayerPrefs.SetInt("Credits", 1000);
         UpdateCreditsUI();
         SetGameState(GameState.WaitingForBet);
+        cashOutText.gameObject.SetActive(false);
     }
 
     private void Update()
     {
         UpdateCreditsUI();
+        UpdateInstructions();
+    }
+
+    private void UpdateInstructions()
+    {
+        if (currentState == GameState.RedOrBlack)
+        {
+            feedbackText.text = "Will the First Card be Red or Black?";
+        }
+
+        if (currentState == GameState.HigherOrLower)
+        {
+            feedbackText.text = "Will the Second Card be Higher or Lower than " + drawnCards[0].value + "?";
+        }
+
+        if (currentState == GameState.InsideOrOutside)
+        {
+            feedbackText.text = "Will the Third Card be inside or outside the range " + drawnCards[0].value + " - " + drawnCards[1].value + "?";
+        }
+
+        if (currentState == GameState.GuessSuit)
+        {
+            feedbackText.text = "What Suit will the Final Card Be?";
+        }
     }
 
     private void UpdateCreditsUI()
@@ -58,6 +82,8 @@ public class RideTheBusGameManager : MonoBehaviour
     private void SetGameState(GameState newState)
     {
         currentState = newState;    
+
+        cashOutButton.gameObject.SetActive(newState != GameState.WaitingForBet && newState != GameState.GameOver);
 
         redButton.gameObject.SetActive(newState == GameState.RedOrBlack);
         blackButton.gameObject.SetActive(newState == GameState.RedOrBlack);
@@ -77,8 +103,18 @@ public class RideTheBusGameManager : MonoBehaviour
         bool isWaiting = newState == GameState.WaitingForBet;
         betInput.gameObject.SetActive(isWaiting);
         betButton.gameObject.SetActive(isWaiting);
-    }
 
+        cashOutButton.gameObject.SetActive(
+        newState == GameState.HigherOrLower ||
+        newState == GameState.InsideOrOutside ||
+        newState == GameState.GuessSuit);
+
+        initialBet.gameObject.SetActive(
+        newState == GameState.RedOrBlack ||
+        newState == GameState.HigherOrLower ||
+        newState == GameState.InsideOrOutside ||
+        newState == GameState.GuessSuit);
+    }
 
     public void OnPlaceBet()
     {
@@ -96,8 +132,22 @@ public class RideTheBusGameManager : MonoBehaviour
         }
 
         PlayerPrefs.SetInt("Credits", credits - betAmount);
+        UpdateInitialBetText();
         UpdateCreditsUI();
         StartNewRound();
+    }
+
+    public void OnCashOut()
+    {
+        int winnings = Mathf.RoundToInt(betAmount * currentMultiplier);
+        int credits = PlayerPrefs.GetInt("Credits");
+        PlayerPrefs.SetInt("Credits", credits + winnings);
+        cashOutButton.gameObject.SetActive(false);
+        cashOutText.gameObject.SetActive(false);
+        UpdateCreditsUI();
+
+        feedbackText.text = $"Cashed out for +{winnings} credits!";
+        SetGameState(GameState.WaitingForBet);
     }
 
     private void StartNewRound()
@@ -125,6 +175,17 @@ public class RideTheBusGameManager : MonoBehaviour
         }
     }
 
+    private void UpdateCashOutText()
+    {
+        int potentialWinnings = Mathf.RoundToInt(betAmount * currentMultiplier);
+        cashOutText.text = $"Cash Out: {potentialWinnings} credits";
+    }
+
+    private void UpdateInitialBetText()
+    {
+        initialBet.text = "Initial Bet: " + betAmount;
+    }
+
     public void OnRedOrBlackGuess(string guess)
     {
         Card firstCard = drawnCards[0];
@@ -133,8 +194,21 @@ public class RideTheBusGameManager : MonoBehaviour
 
         StartCoroutine(RevealCard(0, correct));
 
-        if (correct) SetGameState(GameState.HigherOrLower);
-        else EndGame("Wrong! Try again.");
+        if (correct)
+        {
+            SetGameState(GameState.HigherOrLower);
+            currentMultiplier = 2f;
+            cashOutButton.gameObject.SetActive(true);
+            cashOutText.gameObject.SetActive(true);
+            UpdateCashOutText();
+        }
+        else
+        {
+            EndGame("Wrong! Try again.");
+            cashOutButton.gameObject.SetActive(false);
+            cashOutText.gameObject.SetActive(false);
+        }
+
     }
 
     public void OnHigherLowerGuess(string guess)
@@ -146,8 +220,19 @@ public class RideTheBusGameManager : MonoBehaviour
 
         StartCoroutine(RevealCard(1, correct));
 
-        if (correct) SetGameState(GameState.InsideOrOutside);
-        else EndGame("Incorrect! Game over.");
+        if (correct)
+        {
+            SetGameState(GameState.InsideOrOutside);
+            currentMultiplier = 4f; 
+            UpdateCashOutText();
+        }
+        else
+        {
+            EndGame("Incorrect! Game over.");
+            cashOutButton.gameObject.SetActive(false);
+            cashOutText.gameObject.SetActive(false);
+        }
+
     }
 
     public void OnInsideOutsideGuess(string guess)
@@ -164,8 +249,19 @@ public class RideTheBusGameManager : MonoBehaviour
 
         StartCoroutine(RevealCard(2, correct));
 
-        if (correct) SetGameState(GameState.GuessSuit);
-        else EndGame("Nope! Try again.");
+        if (correct)
+        {
+            SetGameState(GameState.GuessSuit);
+            currentMultiplier = 8f; 
+            UpdateCashOutText();
+        }
+        else
+        {
+            EndGame("Nope! Try again.");
+            cashOutButton.gameObject.SetActive(false);
+            cashOutText.gameObject.SetActive(false);
+        }
+
     }
 
     public void OnSuitGuess(string guessSuit)
@@ -177,14 +273,16 @@ public class RideTheBusGameManager : MonoBehaviour
 
         if (correct)
         {
-            int winnings = betAmount * 20;
+            int winnings = betAmount * 35;
             PlayerPrefs.SetInt("Credits", PlayerPrefs.GetInt("Credits") + winnings);
             UpdateCreditsUI();
             feedbackText.text = "You won! +" + winnings + " credits.";
+            cashOutText.gameObject.SetActive(false);
         }
         else
         {
             feedbackText.text = "Wrong suit. Better luck next time.";
+            cashOutText.gameObject.SetActive(false);
         }
 
         SetGameState(GameState.WaitingForBet);
@@ -288,4 +386,3 @@ public class RideTheBusGameManager : MonoBehaviour
         public string suit;
     }
 }
-
