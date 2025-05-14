@@ -1,9 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class BlackjackManager : MonoBehaviour
 {
@@ -33,6 +33,10 @@ public class BlackjackManager : MonoBehaviour
     private List<Card> dealerHand;
 
     private bool gameOver = false;
+    private bool dealerHasHiddenCard = false;
+    private Card hiddenDealerCard;
+    private bool hasHiddenDealerCard = false;
+
     private int currentBet = 0;
     private int matchBet = 0;
 
@@ -86,15 +90,18 @@ public class BlackjackManager : MonoBehaviour
         playerHand = new List<Card>();
         dealerHand = new List<Card>();
 
-
-
         dealerPointsText.text = "Dealer: ?";
         playerPointsText.text = "Player: 0";
 
         yield return DealCard(playerHand, playerHandArea);
         yield return DealCard(dealerHand, dealerHandArea);
         yield return DealCard(playerHand, playerHandArea);
-        yield return DealCard(dealerHand, dealerHandArea, faceDown: true);
+        Card hiddenCard = DrawCard();
+        hiddenDealerCard = hiddenCard;
+        hasHiddenDealerCard = true;
+        yield return DealCard(null, dealerHandArea, faceDown: true);
+        dealerHasHiddenCard = true;
+
 
         gameOver = false;
         resultText.text = "";
@@ -114,7 +121,8 @@ public class BlackjackManager : MonoBehaviour
         int playerTotal = GetHandValue(playerHand);
         if (playerTotal == 21 && playerHand.Count == 2)
         {
-            HighlightLastCard(Color.green);
+            HighlightPlayerCards(Color.green); // blackjack
+
             yield return new WaitForSeconds(0.4f);
             yield return StartCoroutine(EndGame(true));
         }
@@ -122,8 +130,11 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator DealCard(List<Card> hand, Transform area, bool faceDown = false)
     {
-        Card card = DrawCard();
-        hand.Add(card);
+        Card card = faceDown && hand == null ? hiddenDealerCard : DrawCard();
+        if (hand != null)
+        {
+            hand.Add(card);
+        }
 
         GameObject cardPrefab = null;
         if (faceDown)
@@ -136,12 +147,7 @@ public class BlackjackManager : MonoBehaviour
         {
             string face = CardFace(card.value);
             string prefabName = $"Card_{face}_{card.suit}";
-            Debug.Log("Trying to load: " + prefabName);
             cardPrefab = Resources.Load<GameObject>("Cards/Sprites/" + prefabName);
-        }
-        if (cardPrefab == null)
-        {
-            Debug.LogWarning($"Missing prefab for: Card_{CardFace(card.value)}_{card.suit}");
         }
 
         if (cardPrefab != null)
@@ -169,6 +175,9 @@ public class BlackjackManager : MonoBehaviour
         UpdatePointsUI();
         yield return new WaitForSeconds(0.1f);
     }
+
+
+
     string CardFace(int value)
     {
         return value switch
@@ -254,12 +263,14 @@ public class BlackjackManager : MonoBehaviour
 
         if (total == 21)
         {
-            HighlightLastCard(Color.green);
+            HighlightPlayerCards(Color.green); // blackjack
+
             yield return StartCoroutine(EndGame(true));
         }
         else if (total > 21)
         {
-            HighlightLastCard(Color.red);
+            HighlightPlayerCards(Color.red);   // bust
+
             yield return StartCoroutine(EndGame(false));
         }
     }
@@ -272,30 +283,99 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator DealerPlay()
     {
-        yield return StartCoroutine(FlipAllDealerCards());
-        yield return new WaitForSeconds(0.5f);
-
-        while (GetHandValue(dealerHand) < 17)
+        // Reveal hidden card
+        if (hasHiddenDealerCard)
         {
-            yield return DealCard(dealerHand, dealerHandArea);
+            dealerHand.Add(hiddenDealerCard);
+            hasHiddenDealerCard = false;
+
+            // Flip visual card
+            if (dealerHandArea.childCount >= 2)
+            {
+                Transform secondCard = dealerHandArea.GetChild(1);
+                CardVisual cv = secondCard.GetComponent<CardVisual>();
+                if (cv != null)
+                {
+                    cv.FlipToFront(dealerHand[1]);
+                    yield return new WaitForSeconds(0.4f);
+                }
+            }
+
+            dealerHasHiddenCard = false;
+            UpdatePointsUI();
+            yield return new WaitForSeconds(0.1f);
         }
 
         int playerTotal = GetHandValue(playerHand);
         int dealerTotal = GetHandValue(dealerHand);
 
-        if (dealerTotal > 21 || playerTotal > dealerTotal)
+        // Dealer has blackjack
+        if (dealerHand.Count == 2 && dealerTotal == 21)
         {
+            HighlightDealerCards(Color.green);
+            yield return new WaitForSeconds(0.4f);
+            yield return StartCoroutine(EndGame(false));
+            yield break;
+        }
+
+        // Dealer already beats player without drawing
+        if (dealerTotal > playerTotal && dealerTotal <= 21)
+        {
+            yield return StartCoroutine(EndGame(false));
+            yield break;
+        }
+        yield return new WaitForSeconds(2f);
+        // Dealer hits on soft 17 or if under 17
+        while (GetHandValue(dealerHand) < 17 || IsSoft17(dealerHand))
+        {
+            yield return DealCard(dealerHand, dealerHandArea);
+            UpdatePointsUI();
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        dealerTotal = GetHandValue(dealerHand);
+
+        if (dealerTotal > 21)
+        {
+            HighlightDealerCards(Color.red); // dealer bust
+            yield return new WaitForSeconds(0.4f);
             yield return StartCoroutine(EndGame(true));
         }
         else if (dealerTotal == playerTotal)
         {
             yield return StartCoroutine(EndGame(false, true));
         }
+        else if (playerTotal > dealerTotal)
+        {
+            yield return StartCoroutine(EndGame(true));
+        }
         else
         {
             yield return StartCoroutine(EndGame(false));
         }
     }
+
+
+    bool IsSoft17(List<Card> hand)
+    {
+        int total = 0;
+        bool hasAce = false;
+
+        foreach (Card card in hand)
+        {
+            int value = Mathf.Min(card.value, 10);
+            total += value;
+            if (card.value == 1)
+            {
+                hasAce = true;
+            }
+        }
+
+        // If there's an Ace and counting it as 11 makes total == 17
+        return hasAce && (total + 10 == 17);
+    }
+
+
 
     public void OnRestart()
     {
@@ -338,8 +418,6 @@ public class BlackjackManager : MonoBehaviour
         }
     }
 
-
-
     List<Card> GenerateDeck()
     {
         List<Card> newDeck = new();
@@ -366,18 +444,19 @@ public class BlackjackManager : MonoBehaviour
         return card;
     }
 
-    void HighlightLastCard(Color color)
+    void HighlightPlayerCards(Color color)
     {
-        if (playerHandArea.childCount > 0)
+        for (int i = 0; i < playerHandArea.childCount; i++)
         {
-            Transform lastCard = playerHandArea.GetChild(playerHandArea.childCount - 1);
-            Image img = lastCard.GetComponent<Image>();
+            Transform card = playerHandArea.GetChild(i);
+            Image img = card.GetComponent<Image>();
             if (img != null)
             {
                 img.color = color;
             }
         }
     }
+
 
     int GetHandValue(List<Card> hand)
     {
@@ -402,7 +481,7 @@ public class BlackjackManager : MonoBehaviour
 
         if (dealerPointsText != null)
         {
-            if (gameOver)
+            if (gameOver || !dealerHasHiddenCard)
             {
                 dealerPointsText.text = "Dealer: " + GetHandValue(dealerHand);
             }
@@ -429,6 +508,14 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator FlipAllDealerCards()
     {
+        dealerHasHiddenCard = false;
+
+        if (hasHiddenDealerCard)
+        {
+            dealerHand.Add(hiddenDealerCard);
+            hasHiddenDealerCard = false;
+        }
+
         for (int i = 0; i < dealerHandArea.childCount && i < dealerHand.Count; i++)
         {
             Transform cardObj = dealerHandArea.GetChild(i);
@@ -443,5 +530,17 @@ public class BlackjackManager : MonoBehaviour
 
         UpdatePointsUI();
     }
-}
+    void HighlightDealerCards(Color color)
+    {
+        for (int i = 0; i < dealerHandArea.childCount; i++)
+        {
+            Transform card = dealerHandArea.GetChild(i);
+            Image img = card.GetComponent<Image>();
+            if (img != null)
+            {
+                img.color = color;
+            }
+        }
+    }
 
+}
