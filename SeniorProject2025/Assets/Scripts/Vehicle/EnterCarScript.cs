@@ -21,6 +21,7 @@ public class EnterCarScript : MonoBehaviour
     public Transform lookForwardTransform;
    public FPController playerMovement;
    public FPShooting fpShooting;
+   public DebugConsole debugConsole;
 
     void Start()
     {
@@ -54,7 +55,7 @@ public class EnterCarScript : MonoBehaviour
         }
         
         // If the player is in the trigger zone and presses the 'E' key
-        if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E))
+        if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E) && !debugConsole.consoleOpen)
         {
             if (!isInCar)
             {

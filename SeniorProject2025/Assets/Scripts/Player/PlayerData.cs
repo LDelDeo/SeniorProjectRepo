@@ -87,12 +87,12 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
         PlayerPrefs.Save();
 
-        Debug.Log("Added XP: " + amount);
-        Debug.Log("Current XP: " + xp + " XP to Next Level: " + xpToNextLevel);
+        //Debug.Log("Added XP: " + amount);
+        //Debug.Log("Current XP: " + xp + " XP to Next Level: " + xpToNextLevel);
         UpdateUI();
     }
 
-    private void CheckLevelUp()
+    public void CheckLevelUp()
     {
         while (xp >= xpToNextLevel)
         {
@@ -106,12 +106,10 @@ public class PlayerData : MonoBehaviour
             PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
             PlayerPrefs.Save();
 
-            Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
-
-
+            //Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
         }
     }
-    private void CheckCurrentLvl()
+    public void CheckCurrentLvl()
     {
         switch (level)
         {
@@ -140,7 +138,7 @@ public class PlayerData : MonoBehaviour
                 break;
         }
     }
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (creditsText != null)
             creditsText.text = "Credits: " + credits;
