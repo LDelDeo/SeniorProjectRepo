@@ -26,5 +26,7 @@ public class PlayerStats : MonoBehaviour
     [Header("Respawn")]
     public bool isRespawning = false;
 
-    
+    [Header("Upgrades")]
+    public int UpgradesAvailable = 0;
+
 }
