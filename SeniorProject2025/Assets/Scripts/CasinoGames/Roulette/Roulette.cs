@@ -1,17 +1,18 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Roulette : MonoBehaviour
 {
     [Header("References")]
     public Animator rouletteWheel;
-    public PlayerData playerData; // Reference to PlayerData script
+    public PlayerData playerData;
 
     [Header("UI")]
     public TMP_Text gameText;
     public TMP_Text currentBalanceDisplay;
-    public TMP_InputField betInputField; // Reference to input field for custom bets
+    public TMP_InputField betInputField; 
 
     private int betSize;
     private int wheelColor; // 0 = Black, 1 = Red
@@ -22,6 +23,14 @@ public class Roulette : MonoBehaviour
     {
         gameText.text = "Place Your Bets!";
         UpdateBalanceDisplay();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     public void BetBlack()
@@ -42,7 +51,6 @@ public class Roulette : MonoBehaviour
             return;
         }
 
-        // Parse the input bet amount
         if (!int.TryParse(betInputField.text, out betSize) || betSize <= 0)
         {
             gameText.text = "Invalid Bet Amount!";
@@ -73,13 +81,12 @@ public class Roulette : MonoBehaviour
         else
             playerData.SpendCredits(betSize);
 
-        UpdateBalanceDisplay();
         StartCoroutine(UpdateResultText());
     }
 
     private void UpdateBalanceDisplay()
     {
-        currentBalanceDisplay.text = "Balance: " + playerData.credits;
+        currentBalanceDisplay.text = "Credits: " + playerData.credits;
     }
 
     private IEnumerator UpdateResultText()
@@ -87,9 +94,16 @@ public class Roulette : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         if (betBlack)
+        {
             gameText.text = wheelColor == 0 ? "Black! You Win!" : "Red, You Lose";
+            UpdateBalanceDisplay();
+        }
         else
+        {
             gameText.text = wheelColor == 1 ? "Red! You Win!" : "Black, You Lose";
+            UpdateBalanceDisplay();
+        }
+            
 
         yield return new WaitForSeconds(3f);
         gameText.text = "Place Your Bets!";
