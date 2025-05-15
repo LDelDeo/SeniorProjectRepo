@@ -23,6 +23,7 @@ TagManager:
   - handcuffText
   - PlayerHUD
   - CasinoTable
+  - StreetLight
   layers:
   - Default
   - TransparentFX

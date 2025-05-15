@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 8117120232574217017}
   m_Layer: 0
   m_Name: Spot Light
-  m_TagString: Untagged
+  m_TagString: StreetLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 3313892858820579389}
   m_Layer: 0
   m_Name: Point Light
-  m_TagString: Untagged
+  m_TagString: StreetLight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
