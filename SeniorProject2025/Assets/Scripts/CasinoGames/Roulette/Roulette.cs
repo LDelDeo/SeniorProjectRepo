@@ -6,138 +6,93 @@ public class Roulette : MonoBehaviour
 {
     [Header("References")]
     public Animator rouletteWheel;
+    public PlayerData playerData; // Reference to PlayerData script
 
-    [Header("Values")]
-    private int currentBalance = 1000; //Temporary, Use Player Prefs Currency Here
-    private int betSize = 100; // Hardcoded for Testing, Allow a Slider or Input Field to Set This
-    private int wheelColor; // 0 for Black, 1 for Red
-    private bool betBlack;
-    private bool canPlaceABet;
-
-    [Header("Text")]
-    public TMP_Text currentBalanceDisplay;
+    [Header("UI")]
     public TMP_Text gameText;
+    public TMP_Text currentBalanceDisplay;
+    public TMP_InputField betInputField; // Reference to input field for custom bets
 
+    private int betSize;
+    private int wheelColor; // 0 = Black, 1 = Red
+    private bool betBlack;
+    private bool canPlaceABet = true;
 
-    public void Start()
+    void Start()
     {
         gameText.text = "Place Your Bets!";
-        currentBalanceDisplay.text = "Balance: " + currentBalance;
-        canPlaceABet = true;
+        UpdateBalanceDisplay();
     }
 
     public void BetBlack()
     {
-        if (canPlaceABet)
-        {
-            wheelColor = Random.Range(0, 2);
-            betBlack = true;
-
-            if (currentBalance >= betSize)
-            {
-                gameText.text = "You Bet " + betSize + " On Black, Good Luck!";
-                if (wheelColor == 0) // Will Land On Black
-                {
-                    rouletteWheel.SetTrigger("isBlackTrig");
-
-                    currentBalance = currentBalance + betSize; // Payout
-
-                    canPlaceABet = false;
-                }
-                else if (wheelColor == 1) // Will Land On Red
-                {
-                    rouletteWheel.SetTrigger("isRedTrig");
-
-                    currentBalance = currentBalance - betSize; // Take Bet Away
-
-                    canPlaceABet = false;
-                }
-
-                StartCoroutine(updateText());
-            }
-            else
-            {
-                gameText.text = "Insufficient Funds";
-            }
-        }
-        else
-        {
-            gameText.text = "Currently Spinning, Wait Until Round Is Over!";
-        }
-        
+        TryPlaceBet(true);
     }
 
     public void BetRed()
     {
-        if (canPlaceABet)
-        {
-            wheelColor = Random.Range(0, 2);
-            betBlack = false;
-
-            if (currentBalance >= betSize)
-            {
-                gameText.text = "You Bet " + betSize + " On Red, Good Luck!";
-                if (wheelColor == 0) // Will Land On Black
-                {
-                    rouletteWheel.SetTrigger("isBlackTrig");
-
-                    currentBalance = currentBalance - betSize; // Take Bet Away
-
-                    canPlaceABet = false;
-                }
-                else if (wheelColor == 1) // Will Land On Red
-                {
-                    rouletteWheel.SetTrigger("isRedTrig");
-
-                    currentBalance = currentBalance + betSize; // Payout
-
-                    canPlaceABet = false;
-                }
-
-                StartCoroutine(updateText());
-            }
-            else
-            {
-                gameText.text = "Insufficient Funds";
-            }
-        }
-        else
-        {
-            gameText.text = "Currently Spinning, Wait Until Round Is Over!";
-        } 
+        TryPlaceBet(false);
     }
 
-    public IEnumerator updateText()
+    private void TryPlaceBet(bool isBlack)
     {
-        yield return new WaitForSeconds(3.0f);
-        currentBalanceDisplay.text = "Balance: " + currentBalance;
-
-        if (betBlack == true) // Bet Black
+        if (!canPlaceABet)
         {
-            if (wheelColor == 0) // Landed On Black
-            {
-                gameText.text = "Black! You Win!";
-            }
-            else if (wheelColor == 1) // Landed On Red
-            {
-                gameText.text = "Red, You Lose";
-            }
-        }
-        else if (betBlack == false) // Bet Red
-        {
-            if (wheelColor == 0) // Landed On Black
-            {
-                gameText.text = "Black, You Lose";
-            }
-            else if (wheelColor == 1)  // Landed On Red
-            {
-                gameText.text = "Red! You Win";
-            }
+            gameText.text = "Currently Spinning, Wait Until Round Is Over!";
+            return;
         }
 
-        yield return new WaitForSeconds(3.0f);
+        // Parse the input bet amount
+        if (!int.TryParse(betInputField.text, out betSize) || betSize <= 0)
+        {
+            gameText.text = "Invalid Bet Amount!";
+            return;
+        }
+
+        if (playerData.credits < betSize)
+        {
+            gameText.text = "Insufficient Funds";
+            return;
+        }
+
+        wheelColor = Random.Range(0, 2); // 0 = black, 1 = red
+        betBlack = isBlack;
+        canPlaceABet = false;
+
+        gameText.text = $"You Bet {betSize} On {(isBlack ? "Black" : "Red")}, Good Luck!";
+
+        // Trigger animation
+        if (wheelColor == 0)
+            rouletteWheel.SetTrigger("isBlackTrig");
+        else
+            rouletteWheel.SetTrigger("isRedTrig");
+
+        // Win or lose
+        if ((isBlack && wheelColor == 0) || (!isBlack && wheelColor == 1))
+            playerData.AddCredits(betSize);
+        else
+            playerData.SpendCredits(betSize);
+
+        UpdateBalanceDisplay();
+        StartCoroutine(UpdateResultText());
+    }
+
+    private void UpdateBalanceDisplay()
+    {
+        currentBalanceDisplay.text = "Balance: " + playerData.credits;
+    }
+
+    private IEnumerator UpdateResultText()
+    {
+        yield return new WaitForSeconds(3f);
+
+        if (betBlack)
+            gameText.text = wheelColor == 0 ? "Black! You Win!" : "Red, You Lose";
+        else
+            gameText.text = wheelColor == 1 ? "Red! You Win!" : "Black, You Lose";
+
+        yield return new WaitForSeconds(3f);
         gameText.text = "Place Your Bets!";
         canPlaceABet = true;
-
     }
 }
