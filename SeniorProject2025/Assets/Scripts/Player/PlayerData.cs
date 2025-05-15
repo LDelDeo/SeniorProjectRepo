@@ -47,10 +47,7 @@ public class PlayerData : MonoBehaviour
         LoadPlayerPosition();
         LoadCarPosition();
 
-        UpdateUI();
-
-      
-        
+        UpdateUI();   
     }
 
     void Update()
