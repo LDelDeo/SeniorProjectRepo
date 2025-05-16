@@ -98,6 +98,7 @@ public class LightingManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     private void OnValidate()
     {
         if (DirectionalLight != null)

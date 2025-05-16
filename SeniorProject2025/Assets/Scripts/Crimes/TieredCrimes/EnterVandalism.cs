@@ -11,7 +11,7 @@ public class EnterVandalism : MonoBehaviour
 
     public void Update()
     {
-        crimeCompletion = FindObjectOfType<CrimeCompletion>();
+        crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
 
         int livingEnemies = 0;
 

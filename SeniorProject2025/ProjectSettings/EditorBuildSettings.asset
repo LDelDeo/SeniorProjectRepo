@@ -23,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CasinoGamesScene/RouletteScene.unity
     guid: 3e46362f97160e24caf98e1c0dbdfc9d
+  - enabled: 1
+    path: Assets/Scenes/UpgradesScene/UpgradeStoreScene.unity
+    guid: f01c9e35c9cb71c4ca1fa95066654c98
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

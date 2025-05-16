@@ -50,7 +50,7 @@ public class FPController : MonoBehaviour
 
     void Start()
     {
-        fpShooting = FindObjectOfType<FPShooting>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 

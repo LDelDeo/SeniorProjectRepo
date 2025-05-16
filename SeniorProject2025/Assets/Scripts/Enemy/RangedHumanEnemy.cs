@@ -8,7 +8,7 @@ public class RangedHumanEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 3f;
     private float attackDamage = 20.0f;
-    private float speed = 12.0f;
+    //private float speed = 12.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -44,8 +44,8 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
 
         AttackPlayer();
 
@@ -53,6 +53,9 @@ public class RangedHumanEnemy : MonoBehaviour
         {
             FacePlayer();
         }
+        if (isKnockedBack) return;
+
+
     }
 
     //Will Attack

@@ -36,8 +36,8 @@ public class WriteTicket : MonoBehaviour
 
     void Update()
     {
-        crimeCompletion = FindObjectOfType<CrimeCompletion>();
-        illegallyParkedCar = FindObjectOfType<IllegallyParkedCar>();
+        crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
+        illegallyParkedCar = FindFirstObjectByType<IllegallyParkedCar>();
 
         if (Input.GetMouseButton(0))
         {

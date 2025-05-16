@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
         resumeButton.onClick.AddListener(Resume);
         quitButton.onClick.AddListener(Quit);
 
-        inputModule = FindObjectOfType<InputSystemUIInputModule>();
+        inputModule = FindFirstObjectByType<InputSystemUIInputModule>();
     }
 
     void Update()

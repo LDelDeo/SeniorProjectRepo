@@ -27,13 +27,13 @@ public class EnterBombPlant : MonoBehaviour
     void Update()
     {
         if (crimeCompletion == null)
-            crimeCompletion = FindObjectOfType<CrimeCompletion>();
+            crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
 
         if (wireCut == null)
-            wireCut = FindObjectOfType<WireCut>();
+            wireCut = FindFirstObjectByType<WireCut>();
 
         if (playerHealth == null)
-            playerHealth = FindObjectOfType<PlayerHealth>();
+            playerHealth = FindFirstObjectByType<PlayerHealth>();
 
         if (timerStarted && !timerEnded)
         {
@@ -54,7 +54,6 @@ public class EnterBombPlant : MonoBehaviour
             {
                 if (wireCut.doneCorrectly)
                 {
-                    Debug.Log("Crime Stopped!");
                     crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits);
 
                     Destroy(exclamationPoint);

@@ -16,7 +16,7 @@ public class WeaponSway : MonoBehaviour
     void Start()
     {
         initialRotation = transform.localRotation;
-        player = FindObjectOfType<FPController>();
+        player = FindFirstObjectByType<FPController>();
     }
 
     void Update()

@@ -8,9 +8,9 @@ public class DestroyOnClick : MonoBehaviour
     private GameObject playerHUD;
     void Start()
     {
-        fPShooting = FindObjectOfType<FPShooting>();
-        fPController = FindObjectOfType<FPController>();
-        enterCarScript = FindObjectOfType<EnterCarScript>();
+        fPShooting = FindFirstObjectByType<FPShooting>();
+        fPController = FindFirstObjectByType<FPController>();
+        enterCarScript = FindFirstObjectByType<EnterCarScript>();
     }
 
     void Update()

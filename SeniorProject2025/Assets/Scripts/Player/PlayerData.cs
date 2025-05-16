@@ -6,6 +6,7 @@ using System.Collections;
 public class PlayerData : MonoBehaviour
 {
     [Header("Player Stats")]
+    public PlayerStats playerStats;
     public int credits;
     public int xp;
     public int level = 1;
@@ -84,8 +85,6 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
         PlayerPrefs.Save();
 
-        //Debug.Log("Added XP: " + amount);
-        //Debug.Log("Current XP: " + xp + " XP to Next Level: " + xpToNextLevel);
         UpdateUI();
     }
 
@@ -103,7 +102,6 @@ public class PlayerData : MonoBehaviour
             PlayerPrefs.SetInt("XPToNextLevel", xpToNextLevel);
             PlayerPrefs.Save();
 
-            //Debug.Log("Level Up! New Level: " + level + " XP to Next Level: " + xpToNextLevel);
         }
     }
     public void CheckCurrentLvl()
@@ -131,7 +129,7 @@ public class PlayerData : MonoBehaviour
             default:
                 int linearXP = 50;
                 xpToNextLevel = 1400 + (level - 6) * linearXP;
-                //Debug.Log(xpToNextLevel);
+               
                 break;
         }
     }
@@ -162,18 +160,25 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.DeleteKey("CarPosX");
         PlayerPrefs.DeleteKey("CarPosY");
         PlayerPrefs.DeleteKey("CarPosZ");
+        PlayerPrefs.DeleteKey("AmmoLevel");
         PlayerPrefs.DeleteKey("GunLevel");
         PlayerPrefs.DeleteKey("BatonLevel");
-        PlayerPrefs.DeleteKey("AmmoLevel");
-        PlayerPrefs.SetInt("ResetUpgrades", 1);
+        PlayerPrefs.DeleteKey("Bullets");
         PlayerPrefs.DeleteKey("HasStarted");
+
+        PlayerPrefs.Save();
+
         credits = 0;
         xp = 0;
         level = 1;
         xpToNextLevel = 100;
 
+        playerStats.bullets = 16;
+        playerStats.playerRangedDamage = 1f;
+        playerStats.playerMeleeDamage = 1f;
+        
+        PlayerPrefs.SetInt("ResetUpgrades", 1);
         PlayerPrefs.Save();
-
         UpdateUI();
     }
 

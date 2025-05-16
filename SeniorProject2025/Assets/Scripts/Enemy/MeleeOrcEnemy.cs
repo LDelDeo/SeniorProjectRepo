@@ -8,7 +8,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 6.5f;
     private float attackDamage = 35.0f;
-    private float speed = 12.0f;
+    //private float speed = 12.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -34,8 +34,8 @@ public class MeleeOrcEnemy : MonoBehaviour
     private void Update()
     {
         playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
         agent = GetComponent<NavMeshAgent>();
 
         if (!isKnockedBack)

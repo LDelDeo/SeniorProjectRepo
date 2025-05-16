@@ -40,13 +40,28 @@ public class UpgradeManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (PlayerPrefs.GetInt("ResetUpgrades", 0) == 1)
+        {
+            ResetUpgrades(); 
+            PlayerPrefs.SetInt("ResetUpgrades", 0); 
+            PlayerPrefs.Save();
+        }
+
         LoadUpgrades();
         UpdateUI();
     }
 
     public void UpgradeGunDamage()
     {
-        if (gunLevel >= maxUpgradeLevel) return;
+        if (gunLevel >= maxUpgradeLevel)
+        {
+            Destroy(gunUpgradeButton.gameObject);
+            gunCostText.text = "MAX";
+        }
+
 
         int cost = GetUpgradeCost(gunLevel);
         if (playerData.credits >= cost)
@@ -61,7 +76,12 @@ public class UpgradeManager : MonoBehaviour
 
     public void UpgradeBatonDamage()
     {
-        if (batonLevel >= maxUpgradeLevel) return;
+        if (batonLevel >= maxUpgradeLevel)
+        {
+            Destroy(batonUpgradeButton.gameObject);
+            batonCostText.text = "MAX";
+        }
+
 
         int cost = GetUpgradeCost(batonLevel);
         if (playerData.credits >= cost)
@@ -85,7 +105,7 @@ public class UpgradeManager : MonoBehaviour
             UpdateUI();
         }
     }
-    public void Exit()
+    public void OnExit()
     {
         SceneManager.LoadScene("MainScene");
     }
@@ -99,33 +119,61 @@ public class UpgradeManager : MonoBehaviour
     {
         creditsText.text = $"Credits: {playerData.credits}";
 
+        // Gun
         gunLevelText.text = $"Level: {gunLevel}";
         if (gunLevel >= maxUpgradeLevel)
         {
+            if (gunUpgradeButton != null)
+            {
+                Destroy(gunUpgradeButton.gameObject);
+                gunUpgradeButton = null;
+            }
             gunCostText.text = "MAX";
-            gunUpgradeButton.interactable = false;
         }
         else
         {
             gunCostText.text = $"Cost: {GetUpgradeCost(gunLevel)}";
-            gunUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(gunLevel);
+            if (gunUpgradeButton != null)
+                gunUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(gunLevel);
         }
 
+        // Baton
         batonLevelText.text = $"Level: {batonLevel}";
         if (batonLevel >= maxUpgradeLevel)
         {
+            if (batonUpgradeButton != null)
+            {
+                Destroy(batonUpgradeButton.gameObject);
+                batonUpgradeButton = null;
+            }
             batonCostText.text = "MAX";
-            batonUpgradeButton.interactable = false;
         }
         else
         {
             batonCostText.text = $"Cost: {GetUpgradeCost(batonLevel)}";
-            batonUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(batonLevel);
+            if (batonUpgradeButton != null)
+                batonUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(batonLevel);
         }
 
+
+        // Ammo
         ammoLevelText.text = $"Level: {ammoLevel}";
-        ammoCostText.text = ammoLevel >= 99 ? "MAX" : $"Cost: {GetUpgradeCost(ammoLevel)}";
-        ammoUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(ammoLevel);
+        if (ammoLevel >= 99)
+        {
+            if (ammoUpgradeButton != null)
+            {
+                Destroy(ammoUpgradeButton.gameObject);
+                ammoUpgradeButton = null;
+            }
+            ammoCostText.text = "MAX";
+        }
+        else
+        {
+            ammoCostText.text = $"Cost: {GetUpgradeCost(ammoLevel)}";
+            if (ammoUpgradeButton != null)
+                ammoUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(ammoLevel);
+        }
+
     }
 
     private void SaveUpgrades()
@@ -156,9 +204,17 @@ public class UpgradeManager : MonoBehaviour
         batonLevel = 0;
         ammoLevel = 0;
 
-        playerStats.playerRangedDamage = gunDamageLevels[0];
-        playerStats.playerMeleeDamage = batonDamageLevels[0];
+        PlayerPrefs.DeleteKey("GunLevel");
+        PlayerPrefs.DeleteKey("BatonLevel");
+        PlayerPrefs.DeleteKey("AmmoLevel");
+        PlayerPrefs.DeleteKey("Bullets");
 
+        playerStats.playerRangedDamage = 1f;
+        playerStats.playerMeleeDamage = 1f;
+        playerStats.bullets = 16;
+
+        PlayerPrefs.Save();
         UpdateUI();
     }
+
 }

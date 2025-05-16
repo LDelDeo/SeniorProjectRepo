@@ -23,10 +23,10 @@ public class WireCut : MonoBehaviour
     void Start()
     {
         if (playerHealth == null)
-            playerHealth = FindObjectOfType<PlayerHealth>();
+            playerHealth = FindFirstObjectByType<PlayerHealth>();
 
         if (playerStats == null)
-            playerStats = FindObjectOfType<PlayerStats>();
+            playerStats = FindFirstObjectByType<PlayerStats>();
     }
 
     private void Update()

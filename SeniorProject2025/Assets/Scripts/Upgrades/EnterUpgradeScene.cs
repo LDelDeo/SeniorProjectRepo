@@ -13,7 +13,7 @@ public class EnterUpgradeScene : MonoBehaviour
     public string gameScene;
 
     [Header("Booleans")]
-    public bool isInGameTrigger = false;
+    public bool isInTrigger = false;
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class EnterUpgradeScene : MonoBehaviour
 
     void Update()
     {
-        if (isInGameTrigger && Input.GetKeyDown(KeyCode.E))
+        if (isInTrigger && Input.GetKeyDown(KeyCode.E))
         {
             SceneManager.LoadScene(gameScene);
         }
@@ -34,7 +34,7 @@ public class EnterUpgradeScene : MonoBehaviour
         if (other.gameObject.tag == ("Player"))
         {
             pressEToUpgrade.SetActive(true);
-            isInGameTrigger = true;
+            isInTrigger = true;
         }
     }
 
@@ -43,7 +43,7 @@ public class EnterUpgradeScene : MonoBehaviour
         if (other.gameObject.tag == ("Player"))
         {
             pressEToUpgrade.SetActive(false);
-            isInGameTrigger = false;
+            isInTrigger = false;
         }
     }
 }

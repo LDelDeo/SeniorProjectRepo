@@ -10,7 +10,7 @@ public class EnterArmedRobbery : MonoBehaviour
 
     public void Update()
     {
-        crimeCompletion = FindObjectOfType<CrimeCompletion>();
+        crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
 
         int livingEnemies = 0;
 
@@ -22,7 +22,6 @@ public class EnterArmedRobbery : MonoBehaviour
 
         if (livingEnemies == 0)
         {
-            Debug.Log("Crime Stopped!");
 
             // Payout Player Credits
             crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits);

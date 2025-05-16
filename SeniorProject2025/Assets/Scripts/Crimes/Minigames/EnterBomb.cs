@@ -7,7 +7,7 @@ public class EnterBomb : MonoBehaviour
 
     void Update()
     {
-        enterCarScript = FindObjectOfType<EnterCarScript>();
+        enterCarScript = FindFirstObjectByType<EnterCarScript>();
 
         if (minigames == null && enterCarScript.isInCar == false)
         {

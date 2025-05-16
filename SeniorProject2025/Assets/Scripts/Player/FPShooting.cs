@@ -22,7 +22,7 @@ public class FPShooting : MonoBehaviour
     
 
     [Header("Shooting & Reloading")]
-    private float timeToReload = 2.5f;
+    //private float timeToReload = 2.5f;
     private bool hasAmmo;
     public TMP_Text bulletsText;
     public TMP_Text reloadText;
@@ -62,13 +62,16 @@ public class FPShooting : MonoBehaviour
         int defaultBullets = GetMaxBullets();
         playerStats.bullets = PlayerPrefs.GetInt("Bullets", defaultBullets);
 
+        playerStats.playerRangedDamage = LoadRangedDamage();
+        playerStats.playerMeleeDamage = LoadMeleeDamage();
+
         reloadText.text = "";
         hitmarkerImage.enabled = false;
         originalCamPosition = cam.transform.localPosition;
         shieldStatusText.text = "Shield Ready";
         shieldCooldownBar.fillAmount = 0f;
 
-        fpController = FindObjectOfType<FPController>();
+        fpController = FindFirstObjectByType<FPController>();
     }
 
 
@@ -99,10 +102,10 @@ public class FPShooting : MonoBehaviour
 
         if (enterAssault == null || enterDrugDeal == null || enterVandalism == null || enterGraffiti == null)
         {
-            enterAssault = FindObjectOfType<EnterAssault>();
-            enterDrugDeal = FindObjectOfType<EnterDrugDeal>();
-            enterVandalism = FindObjectOfType<EnterVandalism>();
-            enterGraffiti = FindObjectOfType<EnterGraffiti>();
+            enterAssault = FindFirstObjectByType<EnterAssault>();
+            enterDrugDeal = FindFirstObjectByType<EnterDrugDeal>();
+            enterVandalism = FindFirstObjectByType<EnterVandalism>();
+            enterGraffiti = FindFirstObjectByType<EnterGraffiti>();
         }
 
         UpdateReticle();    
@@ -265,6 +268,21 @@ public class FPShooting : MonoBehaviour
         int ammoLevel = PlayerPrefs.GetInt("AmmoLevel", 0); // from UpgradeManager
         return 16 + (ammoLevel * 2);
     }
+
+    private float LoadRangedDamage()
+    {
+        int gunLevel = PlayerPrefs.GetInt("GunLevel", 0);
+        float[] gunDamageLevels = { 1f, 1.5f, 2f, 2.5f };
+        return gunDamageLevels[Mathf.Clamp(gunLevel, 0, gunDamageLevels.Length - 1)];
+    }
+
+    private float LoadMeleeDamage()
+    {
+        int batonLevel = PlayerPrefs.GetInt("BatonLevel", 0);
+        float[] batonDamageLevels = { 1f, 2f, 3f, 4f };
+        return batonDamageLevels[Mathf.Clamp(batonLevel, 0, batonDamageLevels.Length - 1)];
+    }
+
 
     private void MeleeAttack()
     {

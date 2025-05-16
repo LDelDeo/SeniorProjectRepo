@@ -7,7 +7,7 @@ public class RangedOrcEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 4.5f;
     private float attackDamage = 35.0f;
-    private float speed = 8.0f;
+    //private float speed = 8.0f;
     public bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -38,8 +38,8 @@ public class RangedOrcEnemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
 
         AttackPlayer();
     }

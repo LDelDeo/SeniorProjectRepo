@@ -8,7 +8,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 4f;
     private float attackDamage = 15.0f;
-    private float speed = 18.0f;
+    //private float speed = 18.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -38,8 +38,8 @@ public class MeleeHumanEnemy : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindObjectOfType<PlayerHealth>();
-        fpShooting = FindObjectOfType<FPShooting>();
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
     }
 
     // Will Attack 

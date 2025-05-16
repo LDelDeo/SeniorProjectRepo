@@ -11,7 +11,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private NavMeshAgent agent;
     private bool isSpooked = false;
     private float runDistance = 10f;
-    private bool hasRunAway = false;
+    //private bool hasRunAway = false;
     private TMP_Text pressE;
     private bool canBeCuffed = false;
 
@@ -34,7 +34,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        enterCarScript = FindObjectOfType<EnterCarScript>();
+        enterCarScript = FindFirstObjectByType<EnterCarScript>();
         
         health = maxHealth;
 
@@ -49,12 +49,14 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         if (enterCarScript.isInCar == false)
         {
             policeOfficer = GameObject.FindGameObjectWithTag("Player");
-            fpShooting = FindObjectOfType<FPShooting>();
+            fpShooting = FindFirstObjectByType<FPShooting>();
             GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
             if (pressEObject != null)
             {
                 pressE = pressEObject.GetComponent<TMP_Text>();
             }
+
+            if (isKnockedBack) return;
         }
 
         

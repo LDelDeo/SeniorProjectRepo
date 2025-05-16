@@ -1046,6 +1046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562f403170d9fe24cac30f2690fee905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHostile: 0
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 4883786319280975909}
   projectilePrefab: {fileID: 6921560689362896180, guid: 1c98ef3fd66b873419865351734da5ca, type: 3}
@@ -7122,7 +7123,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2414542154108858237}
   - component: {fileID: 408428728059403705}
-  - component: {fileID: 5471877859238578288}
   m_Layer: 7
   m_Name: Warrok
   m_TagString: Untagged
@@ -7282,26 +7282,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000071525574, y: 0.19085634, z: -0.009812266}
     m_Extent: {x: 1.6455201, y: 1.2234942, z: 0.5242646}
   m_DirtyAABB: 0
---- !u!114 &5471877859238578288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6807689503286980358}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa38bd44e1321c84dbb17bb56cf8f926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 20
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  visibilityThreshold: 0.1
-  sphereRadius: 0.1
-  collidersToToggle:
-  - {fileID: 8513357649598406191}
 --- !u!1 &6948833708151458065
 GameObject:
   m_ObjectHideFlags: 0
