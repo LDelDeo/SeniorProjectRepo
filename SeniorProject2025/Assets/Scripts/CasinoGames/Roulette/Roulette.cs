@@ -19,6 +19,12 @@ public class Roulette : MonoBehaviour
     private bool betBlack;
     private bool canPlaceABet = true;
 
+    [Header("Sound Effects")]
+    [Header("Sound Effects")]
+    public AudioSource audioSource;
+    public AudioClip placeBetSFX;
+    public AudioClip winMoneySFX;
+
     void Start()
     {
         gameText.text = "Place Your Bets!";
@@ -67,6 +73,8 @@ public class Roulette : MonoBehaviour
         betBlack = isBlack;
         canPlaceABet = false;
 
+        audioSource.PlayOneShot(placeBetSFX);
+
         gameText.text = $"You Bet {betSize} On {(isBlack ? "Black" : "Red")}, Good Luck!";
 
         // Trigger animation
@@ -91,22 +99,40 @@ public class Roulette : MonoBehaviour
 
     private IEnumerator UpdateResultText()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f); // Wait for the wheel spin animation
 
         if (betBlack)
         {
-            gameText.text = wheelColor == 0 ? "Black! You Win!" : "Red, You Lose";
-            UpdateBalanceDisplay();
+            if (wheelColor == 0)
+            {
+                gameText.text = "Black! You Win!";
+                audioSource.PlayOneShot(winMoneySFX); 
+                audioSource.PlayOneShot(placeBetSFX);
+            }
+            else
+            {
+                gameText.text = "Red, You Lose";
+            }
         }
         else
         {
-            gameText.text = wheelColor == 1 ? "Red! You Win!" : "Black, You Lose";
-            UpdateBalanceDisplay();
+            if (wheelColor == 1)
+            {
+                gameText.text = "Red! You Win!";
+                audioSource.PlayOneShot(winMoneySFX);
+                audioSource.PlayOneShot(placeBetSFX);
+            }
+            else
+            {
+                gameText.text = "Black, You Lose";
+            }
         }
-            
+
+        UpdateBalanceDisplay();
 
         yield return new WaitForSeconds(3f);
         gameText.text = "Place Your Bets!";
         canPlaceABet = true;
     }
+
 }

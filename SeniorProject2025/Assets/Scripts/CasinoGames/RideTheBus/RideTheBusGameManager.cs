@@ -30,6 +30,12 @@ public class RideTheBusGameManager : MonoBehaviour
     [Header("Game Values")]
     private float currentMultiplier = 1f;
 
+    [Header("Sound Effects")]
+    public AudioSource audioSource;
+    public AudioClip placeBetSFX;
+    public AudioClip cardFlipSFX;
+    public AudioClip winMoneySFX;
+
     private enum GameState { WaitingForBet, RedOrBlack, HigherOrLower, InsideOrOutside, GuessSuit, GameOver }
     private GameState currentState = GameState.WaitingForBet;
 
@@ -134,6 +140,8 @@ public class RideTheBusGameManager : MonoBehaviour
             return;
         }
 
+        audioSource.PlayOneShot(placeBetSFX);
+
         PlayerPrefs.SetInt("Credits", credits - betAmount);
         UpdateInitialBetText();
         UpdateCreditsUI();
@@ -148,6 +156,9 @@ public class RideTheBusGameManager : MonoBehaviour
         cashOutButton.gameObject.SetActive(false);
         cashOutText.gameObject.SetActive(false);
         UpdateCreditsUI();
+
+        audioSource.PlayOneShot(winMoneySFX);
+        audioSource.PlayOneShot(placeBetSFX);
 
         feedbackText.text = $"Cashed out for +{winnings} credits!";
         SetGameState(GameState.WaitingForBet);
@@ -226,7 +237,7 @@ public class RideTheBusGameManager : MonoBehaviour
         if (correct)
         {
             SetGameState(GameState.InsideOrOutside);
-            currentMultiplier = 4f; 
+            currentMultiplier = 4f;
             UpdateCashOutText();
         }
         else
@@ -281,6 +292,9 @@ public class RideTheBusGameManager : MonoBehaviour
             UpdateCreditsUI();
             feedbackText.text = "You won! +" + winnings + " credits.";
             cashOutText.gameObject.SetActive(false);
+
+            audioSource.PlayOneShot(winMoneySFX);
+            audioSource.PlayOneShot(placeBetSFX);
         }
         else
         {
@@ -299,6 +313,8 @@ public class RideTheBusGameManager : MonoBehaviour
 
     private IEnumerator RevealCard(int index, bool? correct = null)
     {
+        audioSource.PlayOneShot(cardFlipSFX);
+
         if (cardImages == null || cardImages.Length <= index || cardImages[index] == null)
         {
             Debug.LogError("Invalid card image reference at index: " + index);

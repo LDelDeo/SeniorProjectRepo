@@ -40,6 +40,11 @@ public class BlackjackManager : MonoBehaviour
     private int currentBet = 0;
     private int matchBet = 0;
 
+    public AudioSource audioSource;
+    public AudioClip placeBetSFX;
+    public AudioClip cardFlipSFX;
+    public AudioClip winMoneySFX;
+
     void Start()
     {
         placeBetButton.onClick.AddListener(PlaceBet);
@@ -77,6 +82,7 @@ public class BlackjackManager : MonoBehaviour
         }
 
         playerData.SpendCredits(currentBet + matchBet);
+        audioSource.PlayOneShot(placeBetSFX);
         UpdateCreditsUI();
         StartCoroutine(DealInitialCards());
     }
@@ -133,6 +139,7 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator DealCard(List<Card> hand, Transform area, bool faceDown = false)
     {
+        audioSource.PlayOneShot(cardFlipSFX);
         Card card = faceDown && hand == null ? hiddenDealerCard : DrawCard();
         if (hand != null)
         {
@@ -216,6 +223,8 @@ public class BlackjackManager : MonoBehaviour
         {
             resultText.text = "You win! +" + (currentBet * 2);
             playerData.AddCredits(currentBet * 2);
+            audioSource.PlayOneShot(winMoneySFX);
+            audioSource.PlayOneShot(placeBetSFX);
         }
         else
         {
@@ -237,12 +246,22 @@ public class BlackjackManager : MonoBehaviour
         if (matchBet <= 0) return;
 
         int playerFirst = playerHand[0].value;
+        int playerSecond = playerHand[1].value;
         int dealerUp = dealerHand[0].value;
 
-        if (playerFirst == dealerUp)
+        if (playerFirst == dealerUp && playerSecond != dealerUp || playerSecond == dealerUp && playerFirst != dealerUp)
         {
-            matchResultText.text = "Match Dealer! +" + (matchBet * 2);
-            playerData.AddCredits(matchBet * 2);
+            matchResultText.text = "Match Dealer! +" + (matchBet * 11);
+            playerData.AddCredits(matchBet * 11);
+            audioSource.PlayOneShot(winMoneySFX);
+            audioSource.PlayOneShot(placeBetSFX);
+        }
+        else if (playerFirst == dealerUp && playerSecond == dealerUp)
+        {
+            matchResultText.text = "TRIPS!!! +" + (matchBet * 100);
+            playerData.AddCredits(matchBet * 100);
+            audioSource.PlayOneShot(winMoneySFX);
+            audioSource.PlayOneShot(placeBetSFX);
         }
         else
         {
@@ -511,6 +530,7 @@ public class BlackjackManager : MonoBehaviour
 
     IEnumerator FlipAllDealerCards()
     {
+        audioSource.PlayOneShot(cardFlipSFX);
         dealerHasHiddenCard = false;
 
         if (hasHiddenDealerCard)
