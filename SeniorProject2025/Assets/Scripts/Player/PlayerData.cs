@@ -162,11 +162,17 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.DeleteKey("CarPosX");
         PlayerPrefs.DeleteKey("CarPosY");
         PlayerPrefs.DeleteKey("CarPosZ");
-
+        PlayerPrefs.DeleteKey("GunLevel");
+        PlayerPrefs.DeleteKey("BatonLevel");
+        PlayerPrefs.DeleteKey("AmmoLevel");
+        PlayerPrefs.SetInt("ResetUpgrades", 1);
+        PlayerPrefs.DeleteKey("HasStarted");
         credits = 0;
         xp = 0;
         level = 1;
         xpToNextLevel = 100;
+
+        PlayerPrefs.Save();
 
         UpdateUI();
     }
@@ -216,7 +222,7 @@ public class PlayerData : MonoBehaviour
             carTransform.position = new Vector3(posX1, posY1, posZ1);
         }
     }
+   
 
-    
 }
 

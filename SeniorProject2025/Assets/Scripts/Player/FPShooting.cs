@@ -24,7 +24,6 @@ public class FPShooting : MonoBehaviour
     [Header("Shooting & Reloading")]
     private float timeToReload = 2.5f;
     private bool hasAmmo;
-    public int bullets;
     public TMP_Text bulletsText;
     public TMP_Text reloadText;
     public ParticleSystem muzzleFlash;
@@ -59,22 +58,27 @@ public class FPShooting : MonoBehaviour
     private void Start()
     {
         hasAmmo = true;
-        bullets = 16;
+
+        int defaultBullets = GetMaxBullets();
+        playerStats.bullets = PlayerPrefs.GetInt("Bullets", defaultBullets);
+
         reloadText.text = "";
         hitmarkerImage.enabled = false;
-        originalCamPosition = cam.transform.localPosition; // Store the camera's original position
+        originalCamPosition = cam.transform.localPosition;
         shieldStatusText.text = "Shield Ready";
         shieldCooldownBar.fillAmount = 0f;
 
         fpController = FindObjectOfType<FPController>();
     }
 
+
     private void Update()
     {
         if (currentWeapon == WeaponType.Gun)
         {
-            bulletsText.text = "" + bullets;
+            bulletsText.text = "" + playerStats.bullets;
         }
+
         else
         {
             bulletsText.text = "";
@@ -123,18 +127,19 @@ public class FPShooting : MonoBehaviour
         }
 
         // R to Reload
-        if (Input.GetKeyDown(KeyCode.R) && bullets != 16 && !isReloading)
+        if (Input.GetKeyDown(KeyCode.R) && currentWeapon == WeaponType.Gun && playerStats.bullets < GetMaxBullets() && !isReloading)
         {
-
             Reload();
         }
 
-        if (bullets == 0)
+
+
+        if (playerStats.bullets == 0)
         {
             hasAmmo = false;
         }
 
-        if (bullets <= 3)
+        if (playerStats.bullets <= 3)
         {
             reloadText.text = "R to Reload";
         }
@@ -142,6 +147,7 @@ public class FPShooting : MonoBehaviour
         {
             reloadText.text = "";
         }
+
     }
 
     private void UpdateReticle()
@@ -181,7 +187,7 @@ public class FPShooting : MonoBehaviour
     private void Shoot()
     {
 
-        if (bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking && !fpController.isSprinting)
+        if (playerStats.bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking && !fpController.isSprinting)
         {
             Reload();
         }
@@ -189,7 +195,7 @@ public class FPShooting : MonoBehaviour
         if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading && !fpController.isSprinting)
         {
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            bullets--;
+            playerStats.bullets--;
             muzzleFlash.Play();
 
             // Trigger Camera Shake
@@ -237,9 +243,27 @@ public class FPShooting : MonoBehaviour
     }
     public void RefillAmmo()
     {
-        hasAmmo = true;
-        bullets = 16;
-        isReloading = false;
+        int maxBullets = GetMaxBullets();
+
+        // Only refill if you're not already full
+        if (playerStats.bullets < maxBullets)
+        {
+            hasAmmo = true;
+            playerStats.bullets = maxBullets;
+            isReloading = false;
+            SaveBullets();
+        }
+    }
+
+    public void SaveBullets()
+    {
+        PlayerPrefs.SetInt("Bullets", playerStats.bullets);
+        PlayerPrefs.Save();
+    }
+    public int GetMaxBullets()
+    {
+        int ammoLevel = PlayerPrefs.GetInt("AmmoLevel", 0); // from UpgradeManager
+        return 16 + (ammoLevel * 2);
     }
 
     private void MeleeAttack()
@@ -280,12 +304,19 @@ public class FPShooting : MonoBehaviour
 
     private void Reload()
     {
-        // Play Reload Animation here
-        gunAnim.SetTrigger("ReloadTrigger"); // Trigger the reload animation
+        if (playerStats.bullets >= GetMaxBullets() ||
+            isReloading ||
+            currentWeapon != WeaponType.Gun)
+            return;
+
+        gunAnim.SetTrigger("ReloadTrigger");
         isReloading = true;
+
     }
 
-   
+
+
+
 
     private void Block()
     {

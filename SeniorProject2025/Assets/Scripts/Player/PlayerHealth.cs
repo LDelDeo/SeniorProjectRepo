@@ -298,7 +298,8 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthUI();
 
         // Reset Mag
-        fpsShooting.bullets = 16;
+        int defaultBullets = fpsShooting.GetMaxBullets();
+        playerStats.bullets = PlayerPrefs.GetInt("Bullets", defaultBullets); ;
 
         // Reset Shield
         fpsShooting.CancelShieldCooldown();

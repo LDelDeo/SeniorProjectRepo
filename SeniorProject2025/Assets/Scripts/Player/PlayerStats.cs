@@ -14,6 +14,9 @@ public class PlayerStats : MonoBehaviour
     public float maxHealth = 200f;
     public float health;
 
+    [Header("Ammo")]
+    public int bullets = 16;
+
     [Header("Shield")]
     public bool isBlocking = false;
     public bool canBlock = true;
