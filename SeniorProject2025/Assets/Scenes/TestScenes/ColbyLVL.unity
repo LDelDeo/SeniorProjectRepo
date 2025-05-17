@@ -3174,14 +3174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d56ea27645d1fc408333a75d269a9cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 330585545}
-  walkSpeed: 6
-  runSpeed: 12
-  jumpPower: 7
-  gravity: 10
-  lookSpeed: 2
-  lookXLimit: 45
-  canMove: 1
 --- !u!143 &1063715693
 CharacterController:
   m_ObjectHideFlags: 0
