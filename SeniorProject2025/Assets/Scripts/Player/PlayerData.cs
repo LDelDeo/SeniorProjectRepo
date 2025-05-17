@@ -145,7 +145,7 @@ public class PlayerData : MonoBehaviour
         }
 
         if (levelText != null)
-            levelText.text = "" + level;
+            levelText.text = "Level" + level;
     }
 
     public void ResetData()
