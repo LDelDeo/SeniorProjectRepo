@@ -26,4 +26,14 @@ public class NPCCarSpawner : MonoBehaviour
             }
         }
     }
+
+    public void SpawnOneMoreCar()
+    {
+        if (carPrefabs.Length == 0) return;
+
+        int randomIndex = Random.Range(0, carPrefabs.Length);
+        GameObject randomCar = carPrefabs[randomIndex];
+        Instantiate(randomCar);
+    }
+
 }

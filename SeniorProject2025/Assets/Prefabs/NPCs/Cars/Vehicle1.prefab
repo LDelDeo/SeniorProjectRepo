@@ -425,7 +425,7 @@ MonoBehaviour:
   rotationSpeed: 1
   arrivalThreshold: 0.1
   hasToBeRotated: 0
-  pullOverDistance: 6
+  pullOverDistance: 4
   pullOverSpeed: 4
   pullOverTurnAngle: 30
   turnSlowdownAngleThreshold: 30
@@ -445,10 +445,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 719dc88e985344b43aab893e3a956281, type: 2}
   - {fileID: 2100000, guid: 10cf725d6e229234ca1577cc3f620126, type: 2}
   - {fileID: 2100000, guid: b93145a54a128164f9a1b987e654311c, type: 2}
+  carPrefab: {fileID: 3190407161450779733}
   enterCarScript: {fileID: 0}
   crashSFX: {fileID: 7177291822978569369}
   smoke: {fileID: 198000011441735220, guid: 85a8865d1bf4a63478038fae23776de8, type: 3}
   smokePosition: {fileID: 4781737715512758384}
+  currentNode: {fileID: 0}
 --- !u!135 &1973676685842378916
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -687,7 +689,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

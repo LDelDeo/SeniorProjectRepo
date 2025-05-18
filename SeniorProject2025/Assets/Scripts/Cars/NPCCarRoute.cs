@@ -22,9 +22,11 @@ public class NPCCarRoute : MonoBehaviour
 
     [Header("Random Materials")]
     public List<Material> possibleMaterials = new List<Material>();
+    public GameObject carPrefab;
 
     [Header("Script Grabs")]
     public EnterCarScript enterCarScript;
+    private NPCCarSpawner npcCarSpawner;
 
     [Header("Audio")]
     public AudioSource crashSFX;
@@ -33,7 +35,7 @@ public class NPCCarRoute : MonoBehaviour
     public ParticleSystem smoke;
     public Transform smokePosition;
 
-    private WaypointNode currentNode;
+    public WaypointNode currentNode;
     private WaypointNode previousNode;
     private bool isPulledOver = false;
     private bool isPullingOver = false;
@@ -47,10 +49,15 @@ public class NPCCarRoute : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+    
         rb.isKinematic = false;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        if (npcCarSpawner == null)
+        {
+            npcCarSpawner = FindObjectOfType<NPCCarSpawner>();
+        }
 
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer renderer in meshRenderers)
@@ -63,37 +70,31 @@ public class NPCCarRoute : MonoBehaviour
         }
 
         WaypointNode[] allNodes = FindObjectsOfType<WaypointNode>();
-        if (allNodes.Length == 0)
+        List<WaypointNode> availableNodes = new List<WaypointNode>();
+        foreach (var node in allNodes)
         {
-            Debug.LogError("No WaypointNodes found in the scene!");
+            if (!node.isOccupied)
+                availableNodes.Add(node);
+        }
+
+        if (availableNodes.Count == 0)
+        {
+            Debug.LogError("No unoccupied WaypointNodes available!");
+            Destroy(gameObject);
             return;
         }
+
+        currentNode = availableNodes[Random.Range(0, availableNodes.Count)];
+        currentNode.isOccupied = true;
+        transform.position = currentNode.transform.position;
 
         if (enterCarScript == null)
             enterCarScript = FindObjectOfType<EnterCarScript>();
 
-        // Choose an unoccupied node
-        List<WaypointNode> unoccupiedNodes = new List<WaypointNode>();
-        foreach (var node in allNodes)
-        {
-            if (!node.isOccupied)
-                unoccupiedNodes.Add(node);
-        }
-
-        if (unoccupiedNodes.Count == 0)
-        {
-            Debug.LogError("No unoccupied nodes available for spawning!");
-            return;
-        }
-
-        currentNode = unoccupiedNodes[Random.Range(0, unoccupiedNodes.Count)];
-        currentNode.isOccupied = true;
-        transform.position = currentNode.transform.position;
-
         PickNextNode();
     }
 
-    void FixedUpdate()
+     void FixedUpdate()
     {
         if (currentNode == null || isPulledOver || hasCrashed) return;
 
@@ -145,6 +146,14 @@ public class NPCCarRoute : MonoBehaviour
             PickNextNode();
     }
 
+
+    private IEnumerator RespawnAfterCrash(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Destroy(gameObject);
+    }
+
     void PickNextNode()
     {
         if (currentNode.neighbors == null || currentNode.neighbors.Length == 0)
@@ -157,15 +166,10 @@ public class NPCCarRoute : MonoBehaviour
         do
         {
             nextNode = currentNode.neighbors[Random.Range(0, currentNode.neighbors.Length)];
-        } while ((nextNode == previousNode || nextNode.isOccupied) && currentNode.neighbors.Length > 1);
-
-        // Release the current node
-        if (currentNode != null)
-            currentNode.isOccupied = false;
+        } while (nextNode == previousNode && currentNode.neighbors.Length > 1);
 
         previousNode = currentNode;
         currentNode = nextNode;
-        currentNode.isOccupied = true;
     }
 
     void OnTriggerEnter(Collider other)
@@ -200,15 +204,13 @@ public class NPCCarRoute : MonoBehaviour
             hasCrashed = true;
 
             crashSFX.Play();
-            Instantiate(smoke, smokePosition.position, Quaternion.Euler(-90f, 0f, 0f));
+            ParticleSystem smokeInstance = Instantiate(smoke, smokePosition.position, Quaternion.Euler(-90f, 0f, 0f), transform);
 
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
 
-            // Free the current node on crash
-            if (currentNode != null)
-                currentNode.isOccupied = false;
+            StartCoroutine(RespawnAfterCrash(15f));
         }
     }
 }

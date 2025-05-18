@@ -31,6 +31,9 @@ public class EnterCarScript : MonoBehaviour
         if (isInCar)
         {
             EnterCar();
+
+            siren.Play();
+
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
