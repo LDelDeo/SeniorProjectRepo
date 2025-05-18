@@ -5,6 +5,7 @@ public class WaypointNode : MonoBehaviour
 {
     [Tooltip("Neighboring nodes the car can travel to from this node")]
     public WaypointNode[] neighbors;
+    public bool isOccupied = false;
 
     private void OnDrawGizmos()
     {

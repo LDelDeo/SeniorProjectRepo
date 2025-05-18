@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(Rigidbody))]
 public class NPCCarRoute : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -29,7 +30,8 @@ public class NPCCarRoute : MonoBehaviour
     public AudioSource crashSFX;
 
     [Header("Particles")]
-    public GameObject smoke;
+    public ParticleSystem smoke;
+    public Transform smokePosition;
 
     private WaypointNode currentNode;
     private WaypointNode previousNode;
@@ -40,9 +42,15 @@ public class NPCCarRoute : MonoBehaviour
     private Quaternion originalRotation;
     private Quaternion pullOverRotation;
 
+    private Rigidbody rb;
+
     void Start()
     {
-        smoke.SetActive(false);
+        rb = GetComponent<Rigidbody>();
+
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer renderer in meshRenderers)
@@ -64,21 +72,40 @@ public class NPCCarRoute : MonoBehaviour
         if (enterCarScript == null)
             enterCarScript = FindObjectOfType<EnterCarScript>();
 
-        currentNode = allNodes[Random.Range(0, allNodes.Length)];
+        // Choose an unoccupied node
+        List<WaypointNode> unoccupiedNodes = new List<WaypointNode>();
+        foreach (var node in allNodes)
+        {
+            if (!node.isOccupied)
+                unoccupiedNodes.Add(node);
+        }
+
+        if (unoccupiedNodes.Count == 0)
+        {
+            Debug.LogError("No unoccupied nodes available for spawning!");
+            return;
+        }
+
+        currentNode = unoccupiedNodes[Random.Range(0, unoccupiedNodes.Count)];
+        currentNode.isOccupied = true;
         transform.position = currentNode.transform.position;
+
         PickNextNode();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (currentNode == null || isPulledOver || hasCrashed) return;
 
         if (isPullingOver)
         {
-            transform.position = Vector3.MoveTowards(transform.position, pullOverTarget, pullOverSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Slerp(transform.rotation, pullOverRotation, rotationSpeed * Time.deltaTime);
+            Vector3 newPos = Vector3.MoveTowards(rb.position, pullOverTarget, pullOverSpeed * Time.fixedDeltaTime);
+            Quaternion newRot = Quaternion.Slerp(rb.rotation, pullOverRotation, rotationSpeed * Time.fixedDeltaTime);
 
-            if (Vector3.Distance(transform.position, pullOverTarget) < 0.1f)
+            rb.MovePosition(newPos);
+            rb.MoveRotation(newRot);
+
+            if (Vector3.Distance(rb.position, pullOverTarget) < 0.1f)
             {
                 isPullingOver = false;
                 isPulledOver = true;
@@ -87,33 +114,31 @@ public class NPCCarRoute : MonoBehaviour
         }
 
         Vector3 targetPos = currentNode.transform.position;
-        targetPos.y = transform.position.y;
+        targetPos.y = rb.position.y;
 
-        Vector3 direction = (targetPos - transform.position).normalized;
+        Vector3 direction = (targetPos - rb.position).normalized;
         float angleToTarget = Vector3.Angle(transform.forward, direction);
 
-        // Slow down for sharp turns
         float adjustedSpeed = moveSpeed;
         if (angleToTarget > 70f)
             adjustedSpeed = moveSpeed * 0.3f;
         else if (angleToTarget > 30f)
             adjustedSpeed = moveSpeed * 0.5f;
 
-        // Move forward
-        transform.position += transform.forward * adjustedSpeed * Time.deltaTime;
+        Vector3 move = rb.position + transform.forward * adjustedSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(move);
 
-        // Rotate smoothly toward the target
         if (direction.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             if (hasToBeRotated)
                 targetRotation *= Quaternion.Euler(0, 90f, 0);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime * 100f);
+            Quaternion smoothedRotation = Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime * 100f);
+            rb.MoveRotation(smoothedRotation);
         }
 
-        // Check for arrival
-        Vector3 flatPos = transform.position; flatPos.y = 0;
+        Vector3 flatPos = rb.position; flatPos.y = 0;
         Vector3 flatTarget = targetPos; flatTarget.y = 0;
 
         if (Vector3.Distance(flatPos, flatTarget) <= arrivalThreshold)
@@ -132,10 +157,15 @@ public class NPCCarRoute : MonoBehaviour
         do
         {
             nextNode = currentNode.neighbors[Random.Range(0, currentNode.neighbors.Length)];
-        } while (nextNode == previousNode && currentNode.neighbors.Length > 1);
+        } while ((nextNode == previousNode || nextNode.isOccupied) && currentNode.neighbors.Length > 1);
+
+        // Release the current node
+        if (currentNode != null)
+            currentNode.isOccupied = false;
 
         previousNode = currentNode;
         currentNode = nextNode;
+        currentNode.isOccupied = true;
     }
 
     void OnTriggerEnter(Collider other)
@@ -170,15 +200,15 @@ public class NPCCarRoute : MonoBehaviour
             hasCrashed = true;
 
             crashSFX.Play();
-            smoke.SetActive(true);
+            Instantiate(smoke, smokePosition.position, Quaternion.Euler(-90f, 0f, 0f));
 
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-                rb.isKinematic = true;
-            }
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+
+            // Free the current node on crash
+            if (currentNode != null)
+                currentNode.isOccupied = false;
         }
     }
 }
