@@ -25,6 +25,7 @@ TagManager:
   - CasinoTable
   - StreetLight
   - Cop
+  - NPCCar
   layers:
   - Default
   - TransparentFX

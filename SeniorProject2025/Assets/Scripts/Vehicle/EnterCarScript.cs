@@ -15,13 +15,14 @@ public class EnterCarScript : MonoBehaviour
     private bool playerInTriggerZone = false;
     public bool isInCar = false;
     public GameObject carLights;
-    private bool areLightsOn;
+    public bool areLightsOn;
     public Transform playerInCarTransform;
     public Transform exitCarTransform;
     public Transform lookForwardTransform;
    public FPController playerMovement;
    public FPShooting fpShooting;
    public DebugConsole debugConsole;
+    public AudioSource siren;
 
     void Start()
     {
@@ -30,6 +31,8 @@ public class EnterCarScript : MonoBehaviour
         if (isInCar)
         {
             EnterCar();
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
@@ -45,7 +48,7 @@ public class EnterCarScript : MonoBehaviour
     void Update()
     {
 
-        if (!isInCar) 
+        if (!isInCar)
         {
             carControllerScript.rb.linearVelocity = new Vector3(0, 0, 0);
         }
@@ -53,7 +56,7 @@ public class EnterCarScript : MonoBehaviour
         {
             player.transform.position = playerInCarTransform.position;
         }
-        
+
         // If the player is in the trigger zone and presses the 'E' key
         if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E) && !debugConsole.consoleOpen)
         {
@@ -75,7 +78,6 @@ public class EnterCarScript : MonoBehaviour
         {
             areLightsOn = false;
         }
-        
 
         CarLights();
     }
@@ -84,20 +86,24 @@ public class EnterCarScript : MonoBehaviour
     {
         if (isInCar && Input.GetKeyDown(KeyCode.P))
         {
-            if (!areLightsOn)
+            carLights.SetActive(!carLights.activeSelf);
+
+            areLightsOn = carLights.activeSelf;
+
+            if (areLightsOn)
             {
-                carLights.SetActive(true);
+                siren.Play();
             }
             else
             {
-                carLights.SetActive(false);
+                siren.Stop();
             }
         }
     }
 
+
     private void EnterCar()
     {
-
         // Disable Player Movement Script and Character Controller
         playerMovement.enabled = false;
         // Set Player Pos to Under Map Car Transform
@@ -108,7 +114,7 @@ public class EnterCarScript : MonoBehaviour
         playerCamera.gameObject.SetActive(false);
         // Disbale Player HUD
         playerCanvas.gameObject.SetActive(false);
-        
+
         // Disable Player Shoot Script
         fpShooting.enabled = false;
         // Enable the car's camera and canvas
@@ -124,11 +130,20 @@ public class EnterCarScript : MonoBehaviour
         isInCar = true; // Player is now in the car
         enterText.SetActive(false); // Hide the 'Enter' text
         PlayerPrefs.SetInt("IsInCar", isInCar ? 1 : 0);
+
+        if (areLightsOn)
+        {
+            siren.Play();
+        }
+        else
+        {
+            siren.Stop();
+        }
     }
 
     private void ExitCar()
     {
-        
+        siren.Stop();
 
         // Enable Player Camera
         playerCamera.gameObject.SetActive(true);
