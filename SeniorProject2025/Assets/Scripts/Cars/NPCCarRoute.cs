@@ -200,17 +200,47 @@ public class NPCCarRoute : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("NPCCar") || collision.gameObject.CompareTag("Cop"))
         {
-            moveSpeed = 0;
-            hasCrashed = true;
+            if (IsObjectVisibleToMainCamera(collision.gameObject))
+            {
+                moveSpeed = 0;
+                hasCrashed = true;
 
-            crashSFX.Play();
-            ParticleSystem smokeInstance = Instantiate(smoke, smokePosition.position, Quaternion.Euler(-90f, 0f, 0f), transform);
+                if (crashSFX != null)
+                    crashSFX.Play();
 
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
+                if (smoke != null && smokePosition != null)
+                    Instantiate(smoke, smokePosition.position, Quaternion.Euler(-90f, 0f, 0f), transform);
 
-            StartCoroutine(RespawnAfterCrash(15f));
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+
+                StartCoroutine(RespawnAfterCrash(15f));
+            }
         }
     }
+
+    bool IsObjectVisibleToMainCamera(GameObject obj)
+    {
+        Renderer objRenderer = obj.GetComponentInChildren<Renderer>();
+        if (objRenderer == null)
+            return false; // No renderer, so assume not visible
+
+        // Get all cameras tagged "MainCamera"
+        Camera[] cameras = Camera.allCameras; // Or use: GameObject.FindGameObjectsWithTag("MainCamera") and get cameras from them
+
+        foreach (Camera cam in cameras)
+        {
+            if (cam.CompareTag("MainCamera"))
+            {
+                Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
+                if (GeometryUtility.TestPlanesAABB(planes, objRenderer.bounds))
+                {
+                    return true; // Visible in this camera
+                }
+            }
+        }
+        return false; // Not visible in any camera tagged "MainCamera"
+    }
+
 }

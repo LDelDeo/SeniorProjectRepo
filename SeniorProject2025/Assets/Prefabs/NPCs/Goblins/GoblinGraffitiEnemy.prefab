@@ -877,7 +877,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4355731103548513518}
   - component: {fileID: 101792084324949199}
-  - component: {fileID: 3038776076479846778}
   m_Layer: 7
   m_Name: Warrok
   m_TagString: Untagged
@@ -1037,26 +1036,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000071525574, y: 0.19085634, z: -0.009812266}
     m_Extent: {x: 1.6455201, y: 1.2234942, z: 0.5242646}
   m_DirtyAABB: 0
---- !u!114 &3038776076479846778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3015335465965041224}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa38bd44e1321c84dbb17bb56cf8f926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 20
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  visibilityThreshold: 0.1
-  sphereRadius: 0.1
-  collidersToToggle:
-  - {fileID: 601759701585310470}
 --- !u!1 &3050230757586200173
 GameObject:
   m_ObjectHideFlags: 0

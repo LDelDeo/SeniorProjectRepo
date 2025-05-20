@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4781737715512758384}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SmokePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,6 +99,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightTimePointLight
       objectReference: {fileID: 0}
+    - target: {fileID: 7552198665694346396, guid: 3c40fe992fcf2eb4da59656431a6d6b5, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -128,6 +132,10 @@ PrefabInstance:
     - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_Name
       value: Wheel (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8266400126374902837, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_LocalScale.x
@@ -253,7 +261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8513424388201257645, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -6067185528594298527, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_Enabled
@@ -263,6 +271,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 078dc0482dd092c4bbd58583e6111920, type: 2}
+    - target: {fileID: -5731229141766309534, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: -4003092854873392710, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.0744
@@ -270,6 +282,14 @@ PrefabInstance:
     - target: {fileID: -4003092854873392710, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -3957782524123411102, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -2793727289926329592, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -425565630206218756, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_ProbeAnchor
@@ -281,7 +301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       propertyPath: m_IsActive
@@ -337,6 +357,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1973676685842378916}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5555917134754652721}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bb494f53ebec1864ab64c915883eac4e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4043345198857222046}
@@ -472,6 +495,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &5555917134754652721
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3190407161450779733}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.30225882, y: 0.10795041, z: 0.48502776}
+  m_Center: {x: -0.023328949, y: 0.07540961, z: -0.011127023}
 --- !u!82 &4043345198857222046
 AudioSource:
   m_ObjectHideFlags: 0
@@ -761,6 +805,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightTimeSpotLight
       objectReference: {fileID: 0}
+    - target: {fileID: 6642983103097410049, guid: 8e3040bfee153364b970f9c345adfff3, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -839,6 +887,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightTimePointLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7552198665694346396, guid: 3c40fe992fcf2eb4da59656431a6d6b5, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -868,6 +920,10 @@ PrefabInstance:
     - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_Name
       value: Wheel (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8266400126374902837, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_LocalScale.x
@@ -950,6 +1006,10 @@ PrefabInstance:
     - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_Name
       value: Wheel (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8266400126374902837, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_LocalScale.x
@@ -1081,6 +1141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NightTimeSpotLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6642983103097410049, guid: 8e3040bfee153364b970f9c345adfff3, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1110,6 +1174,10 @@ PrefabInstance:
     - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_Name
       value: Wheel (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625723976229688552, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8266400126374902837, guid: 67fd3af8d3ae0d546821e32f3eb6214d, type: 3}
       propertyPath: m_LocalScale.x
