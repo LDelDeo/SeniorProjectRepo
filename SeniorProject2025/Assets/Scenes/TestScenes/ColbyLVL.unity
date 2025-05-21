@@ -2841,7 +2841,6 @@ Transform:
   m_PrefabInstance: {fileID: 483041902}
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
 --- !u!1 &487446762 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1858028556109925196, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
@@ -3109,8 +3108,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1394881039}
   m_SourcePrefab: {fileID: 100100000, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
-=======
->>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1001 &496231375
@@ -14745,7 +14742,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bbb1403d49ee043449d71c6d8dfeb6ca, type: 3}
   m_PrefabInstance: {fileID: 2119671195}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 --- !u!1 &2120379116 stripped
 GameObject:
@@ -27355,8 +27351,6 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 =======
-=======
->>>>>>> Stashed changes
 --- !u!1001 &4763855891101480632
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27414,9 +27408,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
 >>>>>>> Stashed changes
 --- !u!1001 &7324582084291724529
 PrefabInstance:
