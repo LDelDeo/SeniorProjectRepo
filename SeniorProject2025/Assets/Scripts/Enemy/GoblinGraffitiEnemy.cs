@@ -25,6 +25,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
     private EnterCarScript enterCarScript;
+    public Animator anim;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -70,8 +71,19 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         if (canBeCuffed && Input.GetKeyDown(KeyCode.E))
         {
             pressE.text = "";
-            Destroy(gameObject);
+            canBeCuffed = false;
+            agent.isStopped = true;
+
+            anim.SetBool("gotCaught", true);
+
+            StartCoroutine(Despawn());
         }
+    }
+
+    public IEnumerator Despawn()
+    {
+        yield return new WaitForSeconds(8f);
+        Destroy(gameObject);
     }
 
     public void BecomeSpooked()
@@ -90,6 +102,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         Vector3 directionAwayFromThreat = (transform.position - policeOfficer.transform.position).normalized;
         Vector3 randomOffset = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
         Vector3 runToPosition = transform.position + directionAwayFromThreat * runDistance + randomOffset;
+
+        anim.SetBool("isSpooked", true);
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(runToPosition, out hit, 3f, NavMesh.AllAreas))

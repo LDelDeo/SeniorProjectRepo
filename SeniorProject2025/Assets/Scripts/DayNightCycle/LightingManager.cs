@@ -83,19 +83,24 @@ public class LightingManager : MonoBehaviour
         // Daytime between 6 AM (0.25) and 6 PM (0.75)
         bool isDay = timePercent >= 0.25f && timePercent < 0.75f;
 
-        foreach (Light light in streetLights)
+        if (!isDay)
         {
-            if (light == null) continue;
-
-            if (isDay)
-            {
-                light.intensity = 0f;
-            }
-            else
-            {
-                light.intensity = light.type == LightType.Point ? 2f : 100f;
-            }
+            CacheStreetLights();
         }
+
+        foreach (Light light in streetLights)
+            {
+                if (light == null) continue;
+
+                if (isDay)
+                {
+                    light.intensity = 0f;
+                }
+                else
+                {
+                    light.intensity = light.type == LightType.Point ? 2f : 100f;
+                }
+            }
     }
 
     [System.Obsolete]
