@@ -36,7 +36,7 @@ public class UpgradeManager : MonoBehaviour
     private int batonLevel;
     private int ammoLevel;
 
-    private int baseCost = 3000;
+    private int baseCost = 300;
 
     void Start()
     {
@@ -112,7 +112,7 @@ public class UpgradeManager : MonoBehaviour
 
     private int GetUpgradeCost(int level)
     {
-        return baseCost + (level * 1000);
+        return baseCost + (level * 100);
     }
 
     private void UpdateUI()
