@@ -8,7 +8,6 @@ public class PlayerHealth : MonoBehaviour
     [Header("Script Grabs")]
     public PlayerStats playerStats;
     public FPShooting fpsShooting;
-    public FPController fPController;
 
     [Header("Health Effects")]
     public TMP_Text HealthText;
@@ -40,7 +39,6 @@ public class PlayerHealth : MonoBehaviour
     public GameObject car;
     private GameObject crime;
     public GameObject player;
-    public GameObject medicalBill;
 
     private bool wasBlocking = false;
 
@@ -319,7 +317,7 @@ public class PlayerHealth : MonoBehaviour
         DestroyCrime("crimeSix");
         DestroyCrime("crimeSeven");
         DestroyCrime("crimeEight");
-
+        
         // Fade back in
         t = 0f;
         while (t < fadeDuration)
@@ -330,13 +328,6 @@ public class PlayerHealth : MonoBehaviour
             yield return null;
         }
         playerStats.isRespawning = false;
-        medicalBill.SetActive(true);
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
-        fPController.enabled = false;
-        fpsShooting.enabled = false;
     }
 
     public void DestroyCrime(string crimeTag)
