@@ -2840,7 +2840,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7996179137157206160, guid: 8f906eb3da62831419810caf37f60af1, type: 3}
   m_PrefabInstance: {fileID: 483041902}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1 &487446762 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1858028556109925196, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
@@ -3108,8 +3107,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1394881039}
   m_SourcePrefab: {fileID: 100100000, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
-=======
->>>>>>> Stashed changes
 --- !u!1001 &496231375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14742,7 +14739,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bbb1403d49ee043449d71c6d8dfeb6ca, type: 3}
   m_PrefabInstance: {fileID: 2119671195}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1 &2120379116 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5880216206334871795, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
@@ -27350,65 +27346,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-=======
---- !u!1001 &4763855891101480632
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -167.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.61
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -399.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 2740379387628669223, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3264010373771596701, guid: 13a9a2fa77101354396f42877070082b, type: 3}
-      propertyPath: m_Name
-      value: Casino
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 13a9a2fa77101354396f42877070082b, type: 3}
->>>>>>> Stashed changes
 --- !u!1001 &7324582084291724529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29549,6 +29486,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 7324582084291724529}
   - {fileID: 1554173540}
-  - {fileID: 4763855891101480632}
+  - {fileID: 493720221}
   - {fileID: 980373407}
   - {fileID: 3180817509498434219}
