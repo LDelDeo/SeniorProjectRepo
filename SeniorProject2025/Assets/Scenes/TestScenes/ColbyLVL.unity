@@ -2840,11 +2840,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7996179137157206160, guid: 8f906eb3da62831419810caf37f60af1, type: 3}
   m_PrefabInstance: {fileID: 483041902}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-=======
->>>>>>> parent of 4f66542 (Medical Bill)
 --- !u!1 &487446762 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1858028556109925196, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
@@ -3112,13 +3109,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1394881039}
   m_SourcePrefab: {fileID: 100100000, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
-<<<<<<< HEAD
 =======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
-=======
->>>>>>> parent of 4f66542 (Medical Bill)
 --- !u!1001 &496231375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14751,11 +14745,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bbb1403d49ee043449d71c6d8dfeb6ca, type: 3}
   m_PrefabInstance: {fileID: 2119671195}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-=======
->>>>>>> parent of 4f66542 (Medical Bill)
 --- !u!1 &2120379116 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5880216206334871795, guid: 84f82e941d4fb404c8d3b411e459d3c9, type: 3}
@@ -27363,7 +27354,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< HEAD
 =======
 =======
 >>>>>>> Stashed changes
