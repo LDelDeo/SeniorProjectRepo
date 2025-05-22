@@ -143,7 +143,6 @@ public class CarShopUI : MonoBehaviour
     {
         creditsAMT.text = "Credits: " + playerData.credits;
 
-        // Also update purchase button colors live based on credits (optional)
         foreach (Transform item in carListContainer)
         {
             Button purchaseButton = item.Find("PurchaseButton")?.GetComponent<Button>();
@@ -155,12 +154,16 @@ public class CarShopUI : MonoBehaviour
                 string carName = carNameText.text;
                 int price = 100; // default price
                 int index = System.Array.FindIndex(purchaseableCars, c => c.name == carName);
-                if (index >= 0 && carPrices.Length > index) price = carPrices[index];
+                if (index >= 0 && carPrices.Length > index)
+                    price = carPrices[index];
 
-                UpdatePurchaseButtonColor(purchaseButton, playerData.credits >= price);
+                bool canAfford = playerData.credits >= price;
+                purchaseButton.interactable = canAfford; // <-- Added line
+                UpdatePurchaseButtonColor(purchaseButton, canAfford);
             }
         }
     }
+
 
     private void DisplayCar(GameObject carPrefab)
     {
