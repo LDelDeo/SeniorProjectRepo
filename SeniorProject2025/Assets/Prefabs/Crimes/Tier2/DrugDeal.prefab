@@ -327,7 +327,6 @@ GameObject:
   m_Component:
   - component: {fileID: 630426895957842908}
   - component: {fileID: 9001228091484144592}
-  - component: {fileID: 4768067632801944093}
   m_Layer: 7
   m_Name: Warrok
   m_TagString: Untagged
@@ -487,26 +486,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000071525574, y: 0.19085634, z: -0.009812266}
     m_Extent: {x: 1.6455201, y: 1.2234942, z: 0.5242646}
   m_DirtyAABB: 0
---- !u!114 &4768067632801944093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554408208372429525}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa38bd44e1321c84dbb17bb56cf8f926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 20
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  visibilityThreshold: 0.1
-  sphereRadius: 0.1
-  collidersToToggle:
-  - {fileID: 3944616583780247659}
 --- !u!1 &558547245105954069
 GameObject:
   m_ObjectHideFlags: 0
@@ -1894,6 +1873,7 @@ GameObject:
   - component: {fileID: 4852056871105248371}
   - component: {fileID: 3343635909243554662}
   - component: {fileID: 597459414702388338}
+  - component: {fileID: 3627209331994013843}
   m_Layer: 10
   m_Name: CrimeMapMarker
   m_TagString: Untagged
@@ -1910,7 +1890,7 @@ Transform:
   m_GameObject: {fileID: 2057376145641183796}
   serializedVersion: 2
   m_LocalRotation: {x: 0.539635, y: 0.45693988, z: -0.45693988, w: 0.539635}
-  m_LocalPosition: {x: -2.5, y: 21, z: 0.5}
+  m_LocalPosition: {x: -2.5, y: 40, z: 0.5}
   m_LocalScale: {x: 23.2895, y: 23.289501, z: 23.289501}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1960,7 +1940,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0f500fd37f5ea8c469c0950c1d8c5a1f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 005cd7dccba6c8645a08564658af44f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1998,6 +1978,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3627209331994013843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057376145641183796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7ed9eb95d0cd244a472f157c569e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeSpeed: 1
 --- !u!1 &2059200639604262341
 GameObject:
   m_ObjectHideFlags: 0
@@ -14377,7 +14370,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2414542154108858237}
   - component: {fileID: 408428728059403705}
-  - component: {fileID: 5471877859238578288}
   m_Layer: 7
   m_Name: Warrok
   m_TagString: Untagged
@@ -14537,26 +14529,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000071525574, y: 0.19085634, z: -0.009812266}
     m_Extent: {x: 1.6455201, y: 1.2234942, z: 0.5242646}
   m_DirtyAABB: 0
---- !u!114 &5471877859238578288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6807689503286980358}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa38bd44e1321c84dbb17bb56cf8f926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 20
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  visibilityThreshold: 0.1
-  sphereRadius: 0.1
-  collidersToToggle:
-  - {fileID: 8513357649598406191}
 --- !u!1 &6858633991473538337
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8338487216107348204}
   - component: {fileID: 5732037838811798629}
   - component: {fileID: 4971953039173309697}
+  - component: {fileID: 1005075441069366917}
   m_Layer: 10
   m_Name: CrimeMapMarker
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2740787315370588191}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.5, y: 21, z: 0.5}
+  m_LocalPosition: {x: -1.5, y: 40, z: 0.5}
   m_LocalScale: {x: 23.2895, y: 23.289497, z: 23.289497}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 59a31bd7fb59358408c5fc1b6732a5ef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b836bdf18b066a24aa1b9ea571c0b8b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -115,6 +116,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1005075441069366917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740787315370588191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7ed9eb95d0cd244a472f157c569e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeSpeed: 1
 --- !u!1 &4383837330959369445
 GameObject:
   m_ObjectHideFlags: 0
@@ -4960,6 +4974,7 @@ GameObject:
   - component: {fileID: 3854610431690265083}
   - component: {fileID: 2649456296198841855}
   - component: {fileID: 8550618678823100164}
+  - component: {fileID: 1947581990634134958}
   m_Layer: 0
   m_Name: IllegallyParkedCar
   m_TagString: crimeOne
@@ -5045,6 +5060,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5d6e6ac96f0ae4479724b4b41fb9727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1947581990634134958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360630378930190057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7ed9eb95d0cd244a472f157c569e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeSpeed: 1
 --- !u!1001 &2175448765368590981
 PrefabInstance:
   m_ObjectHideFlags: 0

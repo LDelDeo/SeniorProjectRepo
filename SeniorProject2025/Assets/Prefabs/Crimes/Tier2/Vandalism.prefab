@@ -10535,6 +10535,7 @@ GameObject:
   - component: {fileID: 8486732858546469617}
   - component: {fileID: 7289006135895862649}
   - component: {fileID: 8451004120625895571}
+  - component: {fileID: 6916061518436087392}
   m_Layer: 10
   m_Name: CrimeMapMarker
   m_TagString: Untagged
@@ -10551,7 +10552,7 @@ Transform:
   m_GameObject: {fileID: 3451571766480761624}
   serializedVersion: 2
   m_LocalRotation: {x: 0.539635, y: 0.45693988, z: -0.45693988, w: 0.539635}
-  m_LocalPosition: {x: 4.2, y: 21, z: 1.4}
+  m_LocalPosition: {x: 4.2, y: 40, z: 1.4}
   m_LocalScale: {x: 23.2895, y: 23.289501, z: 23.289501}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10601,7 +10602,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d752093b1a2f6f042a585e9576937d89, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a7668643c7a0687419de518419463aab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -10639,6 +10640,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &6916061518436087392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3451571766480761624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7ed9eb95d0cd244a472f157c569e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeSpeed: 1
 --- !u!1 &3504038370892964809
 GameObject:
   m_ObjectHideFlags: 0
@@ -12067,7 +12081,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8343793392069921796}
   - component: {fileID: 5679059888003075109}
-  - component: {fileID: 7319008003539863952}
   m_Layer: 7
   m_Name: Warrok
   m_TagString: Untagged
@@ -12227,26 +12240,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.00000071525574, y: 0.19085634, z: -0.009812266}
     m_Extent: {x: 1.6455201, y: 1.2234942, z: 0.5242646}
   m_DirtyAABB: 0
---- !u!114 &7319008003539863952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7377228365873211042}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa38bd44e1321c84dbb17bb56cf8f926, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistance: 20
-  occlusionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  visibilityThreshold: 0.1
-  sphereRadius: 0.1
-  collidersToToggle:
-  - {fileID: 5179228628505224172}
 --- !u!1 &7631830850960198799
 GameObject:
   m_ObjectHideFlags: 0

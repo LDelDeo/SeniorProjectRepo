@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8338487216107348204}
   - component: {fileID: 5732037838811798629}
   - component: {fileID: 4971953039173309697}
+  - component: {fileID: 8370395803935376667}
   m_Layer: 10
   m_Name: CrimeMapMarker
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2740787315370588191}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.5, y: 21, z: 0.5}
+  m_LocalPosition: {x: -1.5, y: 40, z: 0.5}
   m_LocalScale: {x: 23.2895, y: 23.289497, z: 23.289497}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c5d961b6cc37a1a4c80ce7778dd35c3d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 16ef91a3da25ed8479ab9a39ee310e59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -115,6 +116,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &8370395803935376667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740787315370588191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b7ed9eb95d0cd244a472f157c569e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeSpeed: 1
 --- !u!1 &4383837330959369445
 GameObject:
   m_ObjectHideFlags: 0
