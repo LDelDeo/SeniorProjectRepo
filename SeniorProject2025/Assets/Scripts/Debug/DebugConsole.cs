@@ -129,5 +129,6 @@ public class DebugConsole : MonoBehaviour
     public void ResetProgress()
     {
         playerData.ResetData();
+        //Clears Everything Except for Purchased Cars & Camos
     }
 }
