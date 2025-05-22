@@ -29,6 +29,9 @@ public class FPShooting : MonoBehaviour
     public ParticleSystem muzzleFlash;
     private bool isReloading = false;
     public Image reticle;
+    public AudioSource gunAudio;
+    public AudioClip gunShot;
+    public AudioClip reloadSound;
     
 
     [Header("Camera Shake Settings")]
@@ -41,6 +44,9 @@ public class FPShooting : MonoBehaviour
     private Coroutine shieldCooldownRoutine;
     public TMP_Text shieldStatusText;
     public Image shieldCooldownBar;
+    public AudioSource shieldAudio;
+    public AudioClip shieldOpen;
+    public AudioClip shieldClose;
 
     [Header("Hitmarker Settings")]
     public Image hitmarkerImage;
@@ -207,6 +213,9 @@ public class FPShooting : MonoBehaviour
             // Play the shooting animation
             gunAnim.SetTrigger("ShootTrigger");
 
+            // Shoot Sound
+            gunAudio.PlayOneShot(gunShot);
+
             if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerRangedRange))
             {
                 //Goblins
@@ -226,20 +235,20 @@ public class FPShooting : MonoBehaviour
                 {
                     hit.collider.GetComponent<RangedOrcEnemy>().TakeDamage(playerStats.playerRangedDamage);
                 }
-                
+
                 //Humans
-                if(hit.collider.tag == "MeleeHumanEnemy")
+                if (hit.collider.tag == "MeleeHumanEnemy")
                 {
                     hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromGun();
                     enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                     enterVandalism.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
-                if(hit.collider.tag == "RangedHumanEnemy")
+                if (hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromGun();
                     enterDrugDeal.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
-                
+
             }
         }
        
@@ -330,6 +339,9 @@ public class FPShooting : MonoBehaviour
         gunAnim.SetTrigger("ReloadTrigger");
         isReloading = true;
 
+        gunAudio.clip = reloadSound;
+        gunAudio.Play();
+
     }
 
 
@@ -340,6 +352,9 @@ public class FPShooting : MonoBehaviour
     {
         if (playerStats.canBlock && !playerStats.isBlocking)
         {
+            shieldAudio.clip = shieldOpen;
+            shieldAudio.Play();
+
             playerStats.isBlocking = true;
             playerStats.canBlock = false;
             shieldAnim.SetBool("shieldUp", true);
@@ -352,6 +367,9 @@ public class FPShooting : MonoBehaviour
     {
         if (!playerStats.isBlocking)
             return;
+        
+        shieldAudio.clip = shieldClose;
+        shieldAudio.Play();
 
         playerStats.isBlocking = false;
         shieldAnim.SetBool("shieldUp", false);
