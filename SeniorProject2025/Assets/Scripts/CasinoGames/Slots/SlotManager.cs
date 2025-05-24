@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SlotMachineManager : MonoBehaviour
 {
@@ -44,7 +45,15 @@ public class SlotMachineManager : MonoBehaviour
         increaseBetButton.onClick.AddListener(() => AdjustBet(+10));
         decreaseBetButton.onClick.AddListener(() => AdjustBet(-10));
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         UpdateUI();
+    }
+
+    public void ExitGame()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 
     void AdjustBet(int delta)
