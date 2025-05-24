@@ -395,7 +395,7 @@ public class RideTheBusGameManager : MonoBehaviour
 
     public void OnExit()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneHelper.SaveAndLoadScene("MainScene");
     }
 
     [System.Serializable]

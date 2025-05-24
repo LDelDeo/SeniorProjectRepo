@@ -26,25 +26,29 @@ public class EnterCasinoGame : MonoBehaviour
     {
         if (isInGameTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            SceneManager.LoadScene(gameScene);
+            SceneHelper.SaveAndLoadScene(gameScene);
+
         }
     }
 
-    private void OnTriggerEnter(Collider other) 
+  
+
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == ("Player"))
+        if (other.CompareTag("Player"))
         {
             pressEToPlay.SetActive(true);
             isInGameTrigger = true;
-        }   
+        }
     }
 
-    private void OnTriggerExit(Collider other) 
+    private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == ("Player"))
+        if (other.CompareTag("Player"))
         {
             pressEToPlay.SetActive(false);
             isInGameTrigger = false;
-        }   
+        }
     }
 }
+

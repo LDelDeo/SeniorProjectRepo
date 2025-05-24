@@ -36,7 +36,7 @@ public class Roulette : MonoBehaviour
 
     public void Exit()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneHelper.SaveAndLoadScene("MainScene");
     }
 
     public void BetBlack()

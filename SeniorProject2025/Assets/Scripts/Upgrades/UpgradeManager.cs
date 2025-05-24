@@ -107,7 +107,8 @@ public class UpgradeManager : MonoBehaviour
     }
     public void OnExit()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneHelper.SaveAndLoadScene("MainScene");
+
     }
 
     private int GetUpgradeCost(int level)

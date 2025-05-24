@@ -423,7 +423,7 @@ public class BlackjackManager : MonoBehaviour
 
     public void OnExit()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneHelper.SaveAndLoadScene("MainScene");
     }
 
     void DisableMainButtons()

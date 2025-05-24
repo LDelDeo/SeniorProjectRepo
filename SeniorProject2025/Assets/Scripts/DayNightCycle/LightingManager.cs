@@ -23,6 +23,8 @@ public class LightingManager : MonoBehaviour
 
     private void Start()
     {
+        TimeOfDay = PlayerPrefs.GetFloat("TimeOfDay", 0.3f);
+
         CacheStreetLights();
     }
 
@@ -33,6 +35,10 @@ public class LightingManager : MonoBehaviour
             CacheStreetLights();
     }
 #endif
+    public float GetCurrentTimeOfDay()
+    {
+        return TimeOfDay;
+    }
 
     private void CacheStreetLights()
     {

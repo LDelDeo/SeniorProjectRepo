@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
@@ -24,36 +24,23 @@ public class PlayerData : MonoBehaviour
     public TMP_Text levelText;
 
 
-    void Start()
+    IEnumerator Start()
     {
         credits = PlayerPrefs.GetInt("Credits", 0);
         xp = PlayerPrefs.GetInt("XP", 0);
         level = PlayerPrefs.GetInt("Level", 1);
         xpToNextLevel = PlayerPrefs.GetInt("XPToNextLevel", 100);
 
-        float posX = PlayerPrefs.GetFloat("PlayerPosX", 0f);
-        float posY = PlayerPrefs.GetFloat("PlayerPosY", 0f); 
-        float posZ = PlayerPrefs.GetFloat("PlayerPosZ", 0f);
-
-        float posX1 = PlayerPrefs.GetFloat("CarPosX", 0f);
-        float posY1 = PlayerPrefs.GetFloat("CarPosY", 0f);
-        float posZ1 = PlayerPrefs.GetFloat("CarPosZ", 0f);
-
-        if (playerTransform != null)
-            playerTransform.position = new Vector3(posX, posY, posZ);
-
-        if (carTransform != null)
-        carTransform.position = new Vector3(posX1, posY1, posZ1); 
+        yield return null;
 
         LoadPlayerPosition();
         LoadCarPosition();
-
-        UpdateUI();   
+        UpdateUI();
     }
 
     void Update()
     {
-        SavePlayerPosition();
+       
         SaveCarPosition();
         CheckCurrentLvl();
     }
@@ -165,6 +152,7 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.DeleteKey("BatonLevel");
         PlayerPrefs.DeleteKey("Bullets");
         PlayerPrefs.DeleteKey("HasStarted");
+        PlayerPrefs.DeleteKey("TimeOfDay");
 
         PlayerPrefs.Save();
 
@@ -198,12 +186,20 @@ public class PlayerData : MonoBehaviour
     {
         if (playerTransform != null)
         {
-            float posX = PlayerPrefs.GetFloat("PlayerPosX", -.53f);
-            float posY = PlayerPrefs.GetFloat("PlayerPosY", .13f);
+            float posX = PlayerPrefs.GetFloat("PlayerPosX", -0.53f);
+            float posY = PlayerPrefs.GetFloat("PlayerPosY", 0.13f);
             float posZ = PlayerPrefs.GetFloat("PlayerPosZ", -11.45f);
-            playerTransform.position = new Vector3(posX, posY, posZ);
+            Vector3 loadedPos = new Vector3(posX, posY, posZ);
+            playerTransform.position = loadedPos;
+
+            Debug.Log("Loaded player position: " + loadedPos);
+        }
+        else
+        {
+            Debug.LogError("❌ PlayerTransform is NOT ASSIGNED in the inspector.");
         }
     }
+
 
     public void SaveCarPosition()
     {

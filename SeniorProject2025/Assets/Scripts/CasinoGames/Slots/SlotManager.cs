@@ -53,7 +53,7 @@ public class SlotMachineManager : MonoBehaviour
 
     public void ExitGame()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneHelper.SaveAndLoadScene("MainScene");
     }
 
     void AdjustBet(int delta)

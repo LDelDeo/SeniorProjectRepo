@@ -25,13 +25,16 @@ public class EnterUpgradeScene : MonoBehaviour
     {
         if (isInTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            SceneManager.LoadScene(gameScene);
+            SceneHelper.SaveAndLoadScene(gameScene);
+
         }
     }
 
+  
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == ("Player"))
+        if (other.CompareTag("Player"))
         {
             pressEToUpgrade.SetActive(true);
             isInTrigger = true;
@@ -40,7 +43,7 @@ public class EnterUpgradeScene : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == ("Player"))
+        if (other.CompareTag("Player"))
         {
             pressEToUpgrade.SetActive(false);
             isInTrigger = false;
