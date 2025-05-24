@@ -5182,6 +5182,7 @@ GameObject:
   - component: {fileID: 1754253195}
   - component: {fileID: 1754253194}
   - component: {fileID: 1754253199}
+  - component: {fileID: 1754253200}
   - component: {fileID: 1754253198}
   m_Layer: 5
   m_Name: Canvas
@@ -5291,7 +5292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4463436e97131b34ab023e0d5c5426ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 0}
+  playerStats: {fileID: 1754253200}
   credits: 0
   xp: 0
   level: 1
@@ -5321,6 +5322,34 @@ MonoBehaviour:
   playTutorial: {fileID: 1943799920}
   newGameButton: {fileID: 1018657297}
   continueButton: {fileID: 1800888460}
+--- !u!114 &1754253200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754253193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c195c48117b882c47b77bb11a1ad25b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRangedDamage: 1
+  playerMeleeDamage: 1
+  playerRangedRange: 10
+  playerMeleeRange: 2
+  maxHealth: 200
+  health: 0
+  bullets: 16
+  isBlocking: 0
+  canBlock: 1
+  shieldUpTime: 3
+  shieldDownTime: 3
+  isShieldCooldown: 0
+  blockAmt: 0
+  maxBlockAmt: 3
+  isRespawning: 0
+  UpgradesAvailable: 0
 --- !u!1 &1763857057
 GameObject:
   m_ObjectHideFlags: 0
