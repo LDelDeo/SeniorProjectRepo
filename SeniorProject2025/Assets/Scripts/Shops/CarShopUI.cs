@@ -7,11 +7,19 @@ using System.Linq;
 
 public class CarShopUI : MonoBehaviour
 {
+    public enum CarRequirementType
+    {
+        None,
+        PlayBlackjack,
+        CompleteTier1Crimes
+    }
+
     [Header("Car Settings")]
     public GameObject[] purchaseableCars;
     public GameObject carItemPrefab;
     public Transform carListContainer;
     public int[] carPrices;
+    public CarRequirementType[] carRequirements; 
 
     [Header("UI Elements")]
     public TMP_Text creditsAMT;
@@ -36,6 +44,7 @@ public class CarShopUI : MonoBehaviour
         {
             GameObject car = purchaseableCars[i];
             int carPrice = carPrices.Length > i ? carPrices[i] : 100;
+            CarRequirementType requirement = carRequirements.Length > i ? carRequirements[i] : CarRequirementType.None;
 
             GameObject item = Instantiate(carItemPrefab, carListContainer);
 
@@ -51,6 +60,9 @@ public class CarShopUI : MonoBehaviour
 
             carNameText.text = car.name;
 
+            int handsPlayedBJ = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
+            int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+
             if (isPurchased)
             {
                 carPriceText.gameObject.SetActive(false);
@@ -59,23 +71,88 @@ public class CarShopUI : MonoBehaviour
             else
             {
                 carPriceText.gameObject.SetActive(true);
-                carPriceText.text = "Price: " + carPrice;
+
+                if (requirement == CarRequirementType.PlayBlackjack)
+                {
+                    if (handsPlayedBJ < 100)
+                    {
+                        int handsRemaining = 100 - handsPlayedBJ;
+                        carPriceText.text = $"Play {handsRemaining} more blackjack hands to unlock";
+                        purchaseButton.interactable = false;
+                        UpdatePurchaseButtonColor(purchaseButton, false);
+                    }
+                    else
+                    {
+                        carPriceText.text = "Price: " + carPrice;
+                        bool canAfford = playerData.credits >= carPrice;
+                        purchaseButton.interactable = canAfford;
+                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    }
+                }
+                else if (requirement == CarRequirementType.CompleteTier1Crimes)
+                {
+                    if (tier1Completed < 25)
+                    {
+                        int remaining = 25 - tier1Completed;
+                        carPriceText.text = $"Complete {remaining} more Tier 1 Crimes to unlock";
+                        purchaseButton.interactable = false;
+                        UpdatePurchaseButtonColor(purchaseButton, false);
+                    }
+                    else
+                    {
+                        carPriceText.text = "Price: " + carPrice;
+                        bool canAfford = playerData.credits >= carPrice;
+                        purchaseButton.interactable = canAfford;
+                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    }
+                }
+                else
+                {
+                    carPriceText.text = "Price: " + carPrice;
+                    bool canAfford = playerData.credits >= carPrice;
+                    purchaseButton.interactable = canAfford;
+                    UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                }
+
+
+
                 purchaseButton.gameObject.SetActive(true);
             }
 
-            if (!isPurchased)
+            selectButton.gameObject.SetActive(isPurchased);
+            selectButton.interactable = isPurchased && !isSelected;
+            selectButton.GetComponentInChildren<TMP_Text>().text = isSelected ? "Selected" : "Select";
+
+            if (isSelected)
             {
-                selectButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                selectButton.gameObject.SetActive(true);
+                var colors = selectButton.colors;
+                colors.normalColor = Color.gray;
+                colors.highlightedColor = Color.gray;
+                colors.pressedColor = Color.gray;
+                selectButton.colors = colors;
             }
 
             GameObject currentCar = car;
 
             purchaseButton.onClick.AddListener(() =>
             {
+                int handsPlayed = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
+                int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+
+                if (requirement == CarRequirementType.PlayBlackjack && handsPlayed < 100)
+                {
+                    Debug.Log($"You need to play {100 - handsPlayed} more blackjack hands to unlock {currentCar.name}");
+                    // Optionally open blackjack mini-game here
+                    return;
+                }
+
+                if (requirement == CarRequirementType.CompleteTier1Crimes && tier1Completed < 15)
+                {
+                    Debug.Log($"You need to complete {15 - tier1Completed} more Tier 1 crimes to unlock {currentCar.name}");
+                    // Optionally open Tier 1 crime missions here
+                    return;
+                }
+
                 if (playerData.credits >= carPrice)
                 {
                     playerData.SpendCredits(carPrice);
@@ -101,19 +178,6 @@ public class CarShopUI : MonoBehaviour
                 RefreshSelectButtons();
                 DisplayCar(currentCar);
             });
-
-            purchaseButton.interactable = !isPurchased;
-            selectButton.interactable = isPurchased && !isSelected;
-            selectButton.GetComponentInChildren<TMP_Text>().text = isSelected ? "Selected" : "Select";
-
-            if (isSelected)
-            {
-                var colors = selectButton.colors;
-                colors.normalColor = Color.gray;
-                colors.highlightedColor = Color.gray;
-                colors.pressedColor = Color.gray;
-                selectButton.colors = colors;
-            }
 
             EventTrigger trigger = item.GetComponent<EventTrigger>();
             if (trigger == null) trigger = item.AddComponent<EventTrigger>();
@@ -143,6 +207,9 @@ public class CarShopUI : MonoBehaviour
     {
         creditsAMT.text = "Credits: " + playerData.credits;
 
+        int handsPlayedBJ = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
+        int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+
         foreach (Transform item in carListContainer)
         {
             Button purchaseButton = item.Find("PurchaseButton")?.GetComponent<Button>();
@@ -152,18 +219,57 @@ public class CarShopUI : MonoBehaviour
             if (purchaseButton != null && carPriceText != null && carNameText != null && purchaseButton.gameObject.activeSelf)
             {
                 string carName = carNameText.text;
-                int price = 100; // default price
                 int index = System.Array.FindIndex(purchaseableCars, c => c.name == carName);
-                if (index >= 0 && carPrices.Length > index)
-                    price = carPrices[index];
+                if (index < 0) continue;
 
-                bool canAfford = playerData.credits >= price;
-                purchaseButton.interactable = canAfford; // <-- Added line
-                UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                int price = carPrices.Length > index ? carPrices[index] : 100;
+                CarRequirementType requirement = carRequirements.Length > index ? carRequirements[index] : CarRequirementType.None;
+
+                if (requirement == CarRequirementType.PlayBlackjack)
+                {
+                    if (handsPlayedBJ < 100)
+                    {
+                        int handsRemaining = 100 - handsPlayedBJ;
+                        carPriceText.text = $"Play {handsRemaining} more blackjack hands to unlock";
+                        purchaseButton.interactable = false;
+                        UpdatePurchaseButtonColor(purchaseButton, false);
+                    }
+                    else
+                    {
+                        carPriceText.text = "Price: " + price;
+                        bool canAfford = playerData.credits >= price;
+                        purchaseButton.interactable = canAfford;
+                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    }
+                }
+                else if (requirement == CarRequirementType.CompleteTier1Crimes)
+                {
+                    if (tier1Completed < 25)
+                    {
+                        int remaining = 25 - tier1Completed;
+                        carPriceText.text = $"Complete {remaining} more Tier 1 Crimes to unlock";
+                        purchaseButton.interactable = false;
+                        UpdatePurchaseButtonColor(purchaseButton, false);
+                    }
+                    else
+                    {
+                        carPriceText.text = "Price: " + price;
+                        bool canAfford = playerData.credits >= price;
+                        purchaseButton.interactable = canAfford;
+                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    }
+                }
+                else
+                {
+                    carPriceText.text = "Price: " + price;
+                    bool canAfford = playerData.credits >= price;
+                    purchaseButton.interactable = canAfford;
+                    UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                }
+
             }
         }
     }
-
 
     private void DisplayCar(GameObject carPrefab)
     {

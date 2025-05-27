@@ -107,6 +107,10 @@ public class WriteTicket : MonoBehaviour
         
         crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
 
+        int current = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+        PlayerPrefs.SetInt("Tier1CrimesCompleted", current + 1);
+
+
         illegallyParkedCar.ParkedCarGone();
     }
 }

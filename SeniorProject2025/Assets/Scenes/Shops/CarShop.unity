@@ -754,7 +754,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: -200
+  m_Spacing: -150
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -852,7 +852,8 @@ MonoBehaviour:
   - {fileID: 3188887054091708852, guid: a31227f49f74a3149b5a40ae06128764, type: 3}
   carItemPrefab: {fileID: 284719669169596099, guid: b52205f764193a34dbf1f87c42e16875, type: 3}
   carListContainer: {fileID: 582915592}
-  carPrices: c80000009001000058020000e8030000
+  carPrices: 58020000e8030000d0070000be0a0000
+  carRequirements: 00000000000000000200000001000000
   creditsAMT: {fileID: 393689502}
   playerData: {fileID: 693556146}
   displayAnchor: {fileID: 686770257}

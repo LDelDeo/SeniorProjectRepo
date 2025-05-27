@@ -81,6 +81,11 @@ public class BlackjackManager : MonoBehaviour
             return;
         }
 
+        int handsPlayed = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
+        handsPlayed++;
+        PlayerPrefs.SetInt("HandsPlayedBJ", handsPlayed);
+        PlayerPrefs.Save();
+
         playerData.SpendCredits(currentBet + matchBet);
         audioSource.PlayOneShot(placeBetSFX);
         UpdateCreditsUI();

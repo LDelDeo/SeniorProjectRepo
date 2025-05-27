@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerData : MonoBehaviour
 {
@@ -38,10 +39,18 @@ public class PlayerData : MonoBehaviour
         UpdateUI();
     }
 
+    private void OnApplicationQuit()
+    {
+        SavePlayerPosition();
+        SaveCarPosition();
+        PlayerPrefs.Save();
+    }
+
+
     void Update()
     {
        
-        SaveCarPosition();
+        //SaveCarPosition();
         CheckCurrentLvl();
     }
 
@@ -153,6 +162,10 @@ public class PlayerData : MonoBehaviour
         PlayerPrefs.DeleteKey("Bullets");
         PlayerPrefs.DeleteKey("HasStarted");
         PlayerPrefs.DeleteKey("TimeOfDay");
+        PlayerPrefs.DeleteKey("SelectedCar");
+        PlayerPrefs.DeleteKey("SelectedCamo");
+        PlayerPrefs.DeleteKey("HandsPlayedBJ");
+        PlayerPrefs.DeleteKey("Tier1CrimesCompleted");
 
         PlayerPrefs.Save();
 
@@ -164,10 +177,12 @@ public class PlayerData : MonoBehaviour
         playerStats.bullets = 16;
         playerStats.playerRangedDamage = 1f;
         playerStats.playerMeleeDamage = 1f;
-        
+
         PlayerPrefs.SetInt("ResetUpgrades", 1);
         PlayerPrefs.Save();
         UpdateUI();
+        
+        SceneManager.LoadScene("MainScene");
     }
 
     public void SavePlayerPosition()
@@ -194,10 +209,6 @@ public class PlayerData : MonoBehaviour
 
             Debug.Log("Loaded player position: " + loadedPos);
         }
-        else
-        {
-            Debug.LogError("❌ PlayerTransform is NOT ASSIGNED in the inspector.");
-        }
     }
 
 
@@ -220,7 +231,10 @@ public class PlayerData : MonoBehaviour
             float posX1 = PlayerPrefs.GetFloat("CarPosX", 2.5f);
             float posY1 = PlayerPrefs.GetFloat("CarPosY", -1f);
             float posZ1 = PlayerPrefs.GetFloat("CarPosZ", -3f);
-            carTransform.position = new Vector3(posX1, posY1, posZ1);
+            Vector3 loadedPosCar = new Vector3(posX1, posY1, posZ1);
+            carTransform.position = loadedPosCar;
+
+            Debug.Log("Loaded car position: " + loadedPosCar);
         }
     }
    
