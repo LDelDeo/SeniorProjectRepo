@@ -206,8 +206,6 @@ public class PlayerData : MonoBehaviour
             float posZ = PlayerPrefs.GetFloat("PlayerPosZ", -11.45f);
             Vector3 loadedPos = new Vector3(posX, posY, posZ);
             playerTransform.position = loadedPos;
-
-            Debug.Log("Loaded player position: " + loadedPos);
         }
     }
 
@@ -233,8 +231,6 @@ public class PlayerData : MonoBehaviour
             float posZ1 = PlayerPrefs.GetFloat("CarPosZ", -3f);
             Vector3 loadedPosCar = new Vector3(posX1, posY1, posZ1);
             carTransform.position = loadedPosCar;
-
-            Debug.Log("Loaded car position: " + loadedPosCar);
         }
     }
    

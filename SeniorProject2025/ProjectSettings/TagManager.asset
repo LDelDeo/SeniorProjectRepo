@@ -26,6 +26,10 @@ TagManager:
   - StreetLight
   - Cop
   - NPCCar
+  - suburbsTrigger
+  - hoodTrigger
+  - richTrigger
+  - industrialTrigger
   layers:
   - Default
   - TransparentFX
