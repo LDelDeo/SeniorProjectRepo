@@ -105,7 +105,7 @@ TextureImporter:
         width: 441
         height: 204
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -127,7 +127,7 @@ TextureImporter:
         width: 441
         height: 204
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -136,28 +136,6 @@ TextureImporter:
       bones: []
       spriteID: d7448edf8a7941143bb8c19d0c3bd249
       internalID: -492542474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Button1_5
-      rect:
-        serializedVersion: 2
-        x: 567
-        y: 93
-        width: 8
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ed1161f8d15864741be1e8fdabd1055d
-      internalID: 1671956844
       vertices: []
       indices: 
       edges: []

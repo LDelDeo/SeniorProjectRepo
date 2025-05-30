@@ -26,7 +26,7 @@ public class EnterUpgradeScene : MonoBehaviour
         if (isInTrigger && Input.GetKeyDown(KeyCode.E))
         {
             SceneHelper.SaveAndLoadScene(gameScene);
-
+            //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen(gameScene);
         }
     }
 

@@ -53,15 +53,17 @@ public class Menu : MonoBehaviour
 
     public void NewGame()
     {
-        
+
 
         if (playTutorial.isOn)
         {
-            SceneManager.LoadScene("TutorialScene");
+            //SceneManager.LoadScene("TutorialScene");
+            LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("TutorialScene");
         }
         else
         {
-            SceneManager.LoadScene("MainScene");
+            //SceneManager.LoadScene("MainScene");
+            LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
         }
     }
 

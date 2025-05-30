@@ -23,7 +23,8 @@ public static class SceneHelper
         PlayerPrefs.Save();
 
         // Load new scene
-        SceneManager.LoadScene(sceneName);
+        //SceneManager.LoadScene(sceneName);
+        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen(sceneName);
     }
 }
 

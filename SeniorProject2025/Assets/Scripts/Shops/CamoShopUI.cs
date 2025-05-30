@@ -259,5 +259,6 @@ public class CamoShopUI : MonoBehaviour
     public void ExitCamoShop()
     {
         SceneManager.LoadScene("MainScene");
+        //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 }

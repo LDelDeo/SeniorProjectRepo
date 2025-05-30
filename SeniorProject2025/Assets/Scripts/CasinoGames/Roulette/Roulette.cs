@@ -29,14 +29,22 @@ public class Roulette : MonoBehaviour
     {
         gameText.text = "Place Your Bets!";
         UpdateBalanceDisplay();
+        StartCoroutine(BalanceOnStart());
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
+    public IEnumerator BalanceOnStart()
+    {
+        yield return new WaitForSeconds(0.5f);
+        UpdateBalanceDisplay();
+    }
+
     public void Exit()
     {
         SceneHelper.SaveAndLoadScene("MainScene");
+        //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 
     public void BetBlack()

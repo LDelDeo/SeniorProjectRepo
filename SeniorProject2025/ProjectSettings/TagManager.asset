@@ -30,6 +30,7 @@ TagManager:
   - hoodTrigger
   - richTrigger
   - industrialTrigger
+  - LoadingScreen
   layers:
   - Default
   - TransparentFX

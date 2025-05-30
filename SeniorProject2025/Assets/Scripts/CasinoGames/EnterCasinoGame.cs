@@ -27,7 +27,7 @@ public class EnterCasinoGame : MonoBehaviour
         if (isInGameTrigger && Input.GetKeyDown(KeyCode.E))
         {
             SceneHelper.SaveAndLoadScene(gameScene);
-
+            //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen(gameScene);
         }
     }
 

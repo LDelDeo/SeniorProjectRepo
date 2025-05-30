@@ -337,5 +337,6 @@ public class CarShopUI : MonoBehaviour
     public void ExitGarage()
     {
         SceneManager.LoadScene("MainScene");
+        //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 }
