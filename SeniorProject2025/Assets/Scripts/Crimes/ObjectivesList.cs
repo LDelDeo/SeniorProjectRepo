@@ -25,13 +25,13 @@ public class ObjectivesList : MonoBehaviour
 
     void Update()
     {
-       AttachObjective(illegalPark, objectiveIP, "crimeOne");
-       AttachObjective(graffiti, objectiveG, "crimeTwo");
-       AttachObjective(assault, objectiveA, "crimeThree");
-       AttachObjective(drugDeal, objectiveDD, "crimeFour");
-       AttachObjective(vandalism, objectiveV, "crimeSeven");
-       AttachObjective(armedRobbery, objectiveAR, "crimeFive");
-       AttachObjective(bombPlant, objectiveBP, "crimeSix");
+        AttachObjective(illegalPark, objectiveIP, "crimeOne");
+        AttachObjective(graffiti, objectiveG, "crimeTwo");
+        AttachObjective(assault, objectiveA, "crimeThree");
+        AttachObjective(drugDeal, objectiveDD, "crimeFour");
+        AttachObjective(vandalism, objectiveV, "crimeSeven");
+        AttachObjective(armedRobbery, objectiveAR, "crimeFive");
+        AttachObjective(bombPlant, objectiveBP, "crimeSix");
     }
 
     public void AttachObjective(GameObject crime, GameObject objectiveText, string crimeTag)
