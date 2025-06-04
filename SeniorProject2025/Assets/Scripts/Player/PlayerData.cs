@@ -132,7 +132,7 @@ public class PlayerData : MonoBehaviour
     public void UpdateUI()
     {
         if (creditsText != null)
-            creditsText.text = "Credits: " + credits;
+            creditsText.text = "" + credits;
 
         if (xpBar != null)
         {

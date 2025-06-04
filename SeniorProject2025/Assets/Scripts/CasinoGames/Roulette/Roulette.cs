@@ -102,7 +102,7 @@ public class Roulette : MonoBehaviour
 
     private void UpdateBalanceDisplay()
     {
-        currentBalanceDisplay.text = "Credits: " + playerData.credits;
+        currentBalanceDisplay.text = "" + playerData.credits;
     }
 
     private IEnumerator UpdateResultText()

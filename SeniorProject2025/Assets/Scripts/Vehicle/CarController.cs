@@ -10,11 +10,11 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
 
     [Header("Car Settings")]
-    [SerializeField] public float motorForce = 1000f;
+    [SerializeField] public float motorForce = 5000f;
     [SerializeField] public float breakForce = 1500f;
     [SerializeField] public float maxSteerAngle = 28f;
     [SerializeField] public float decelerationSpeed = 2.5f;
-    [SerializeField] private float maxSpeed = 22.35f; // ~50 mph
+    [SerializeField] private float maxSpeed = 18f; // ~39 mph
     [SerializeField] private float downforce = 100f;
 
     [Header("Wheel Colliders")]
@@ -130,7 +130,15 @@ public class CarController : MonoBehaviour
     {
         frontLeftWheelCollider.motorTorque = 0f;
         frontRightWheelCollider.motorTorque = 0f;
+
+        // Apply mild braking to simulate natural deceleration
+        float decelBrake = breakForce * 0.4f; // You can tweak 0.4f for stronger/weaker coasting drag
+        frontLeftWheelCollider.brakeTorque = decelBrake;
+        frontRightWheelCollider.brakeTorque = decelBrake;
+        rearLeftWheelCollider.brakeTorque = decelBrake;
+        rearRightWheelCollider.brakeTorque = decelBrake;
     }
+
 
     private void HandleSteering()
     {

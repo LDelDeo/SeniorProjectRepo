@@ -165,7 +165,7 @@ public class CamoShopUI : MonoBehaviour
 
     private void Update()
     {
-        creditsAMT.text = "Credits: " + playerData.credits;
+        creditsAMT.text = "" + playerData.credits;
         int playerLevel = PlayerPrefs.GetInt("Level", 1);
         levelAMT.text = "Level: " + playerData.level;
 
@@ -258,7 +258,7 @@ public class CamoShopUI : MonoBehaviour
 
     public void ExitCamoShop()
     {
-        SceneManager.LoadScene("MainScene");
-        //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
+        //SceneManager.LoadScene("MainScene");
+        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 }

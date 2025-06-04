@@ -85,7 +85,7 @@ public class RideTheBusGameManager : MonoBehaviour
 
     private void UpdateCreditsUI()
     {
-        creditsText.text = "Credits: " + PlayerPrefs.GetInt("Credits");
+        creditsText.text = "" + PlayerPrefs.GetInt("Credits");
     }
 
     private void SetGameState(GameState newState)

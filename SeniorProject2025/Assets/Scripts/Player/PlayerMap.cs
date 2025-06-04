@@ -4,6 +4,7 @@ public class PlayerMap : MonoBehaviour
 {
     [Header("Map")]
     public GameObject map;
+    public GameObject miniMap;
     public bool isMapOpen;
     [Header("Canvas' / UI / HUD")]
     public GameObject playerHUD;
@@ -33,13 +34,15 @@ public class PlayerMap : MonoBehaviour
             map.SetActive(true);
             carHUD.SetActive(false);
             playerHUD.SetActive(false);
+            miniMap.SetActive(false);
 
         }
         else
         {
             map.SetActive(false);
+            miniMap.SetActive(true);
 
-            if(enterCarScript.isInCar)
+            if (enterCarScript.isInCar)
             {
                 carHUD.SetActive(true);
             }

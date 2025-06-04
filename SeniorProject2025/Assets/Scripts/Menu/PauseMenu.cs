@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenu;
     public Button resumeButton;
     public Button quitButton;
+    public FPShooting fPShooting;
+    public FPController fPMovement;
 
     private bool isPaused = false;
     private InputSystemUIInputModule inputModule;
@@ -38,13 +40,16 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-     public void Resume()
+    public void Resume()
     {
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        
+        fPShooting.enabled = true;
+        fPMovement.enabled = true;
     }
 
     void Pause()
@@ -54,6 +59,9 @@ public class PauseMenu : MonoBehaviour
         isPaused = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        fPShooting.enabled = false;
+        fPMovement.enabled = false;
     }
 
     public void Quit()

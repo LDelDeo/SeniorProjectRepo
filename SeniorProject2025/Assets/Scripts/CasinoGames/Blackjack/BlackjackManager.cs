@@ -530,7 +530,7 @@ public class BlackjackManager : MonoBehaviour
     {
         if (playerCreditsText != null && playerData != null)
         {
-            playerCreditsText.text = "Credits: " + playerData.credits;
+            playerCreditsText.text = "" + playerData.credits;
         }
     }
 

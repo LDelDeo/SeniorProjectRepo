@@ -69,7 +69,8 @@ public class Menu : MonoBehaviour
 
     public void ContinueGame()
     {
-        SceneManager.LoadScene("MainScene");
+        //SceneManager.LoadScene("MainScene");
+        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 
     public void Options()
