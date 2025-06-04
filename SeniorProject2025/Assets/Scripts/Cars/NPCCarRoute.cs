@@ -56,7 +56,7 @@ public class NPCCarRoute : MonoBehaviour
 
         if (npcCarSpawner == null)
         {
-            npcCarSpawner = FindObjectOfType<NPCCarSpawner>();
+            npcCarSpawner = Object.FindFirstObjectByType<NPCCarSpawner>();
         }
 
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
@@ -69,7 +69,7 @@ public class NPCCarRoute : MonoBehaviour
             }
         }
 
-        WaypointNode[] allNodes = FindObjectsOfType<WaypointNode>();
+        WaypointNode[] allNodes = Object.FindObjectsByType<WaypointNode>(FindObjectsSortMode.None);
         List<WaypointNode> availableNodes = new List<WaypointNode>();
         foreach (var node in allNodes)
         {
@@ -89,7 +89,8 @@ public class NPCCarRoute : MonoBehaviour
         transform.position = currentNode.transform.position;
 
         if (enterCarScript == null)
-            enterCarScript = FindObjectOfType<EnterCarScript>();
+            enterCarScript = Object.FindFirstObjectByType<EnterCarScript>();
+
 
         PickNextNode();
     }

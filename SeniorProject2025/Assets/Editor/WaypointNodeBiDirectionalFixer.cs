@@ -7,7 +7,7 @@ public class WaypointNodeBidirectionalFixer
     [MenuItem("Tools/Fix Bidirectional Waypoint Links")]
     public static void FixAllNodes()
     {
-        WaypointNode[] allNodes = GameObject.FindObjectsOfType<WaypointNode>();
+        WaypointNode[] allNodes = Object.FindObjectsByType<WaypointNode>(FindObjectsSortMode.None);
         foreach (var node in allNodes)
         {
             node.EnsureBidirectionalNeighbors();
