@@ -17,13 +17,22 @@ public class OptionsMenuManager : MonoBehaviour
     void Start()
     {
         float sensitivity = PlayerPrefs.GetFloat("Sensitivity", 1f);
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
-        audioSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
         sensitivitySlider.value = sensitivity;
+        musicSlider.value = musicVolume;
+        audioSlider.value = sfxVolume;
 
-        
+        sensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
+        musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
+        audioSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
+
+        // Apply initial volume based on loaded prefs
+        OnMusicVolumeChanged(musicVolume);
+        OnSFXVolumeChanged(sfxVolume);
     }
+
     void Update()
     {
         if (fpController == null)
@@ -34,9 +43,12 @@ public class OptionsMenuManager : MonoBehaviour
 
     public void OnMusicVolumeChanged(float value)
     {
+        PlayerPrefs.SetFloat("MusicVolume", value);
+
         if (musicSource != null)
             musicSource.volume = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(value, 2f));
     }
+
 
 
     public void OnSFXVolumeChanged(float value)

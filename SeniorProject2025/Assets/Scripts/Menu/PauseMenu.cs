@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        
+
         fPShooting.enabled = true;
         fPMovement.enabled = true;
     }
@@ -71,8 +71,8 @@ public class PauseMenu : MonoBehaviour
     }
     void Options()
     {
-        pauseButtonsGroup.SetActive(false); 
-        optionSliders.SetActive(true);      
+        pauseButtonsGroup.SetActive(false);
+        optionSliders.SetActive(true);
     }
 
     public void BackToPauseMenu()
@@ -83,11 +83,17 @@ public class PauseMenu : MonoBehaviour
     public void Quit()
     {
         Time.timeScale = 1f;
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-    #else
+#else
         Application.Quit();
-    #endif
+#endif
+    }
+
+    public void MainMenu()
+    {
+        Time.timeScale = 1f;
+        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainMenu");
     }
 }
 
