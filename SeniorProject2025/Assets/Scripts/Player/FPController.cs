@@ -54,6 +54,8 @@ public class FPController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
+        mouseSensitivity = PlayerPrefs.GetFloat("Sensitivity", 2f);
+
         if (cameraTransform != null)
             cameraStartPos = cameraTransform.localPosition;
 
@@ -68,15 +70,22 @@ public class FPController : MonoBehaviour
         HandleCameraEffects();
         HandleSprint();
     }
+    public void UpdateSensitivityFromPrefs()
+    {
+        mouseSensitivity = PlayerPrefs.GetFloat("Sensitivity", 2f);
+    }
+
 
     void GroundCheck()
     {
+       
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (isGrounded && verticalVelocity < 0)
-        {
-            verticalVelocity = -2f;
-        }
+            if (isGrounded && verticalVelocity < 0)
+            {
+                verticalVelocity = -2f;
+            }
+        
     }
 
     void HandleMouseLook()
@@ -86,7 +95,7 @@ public class FPController : MonoBehaviour
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
+        
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
     }

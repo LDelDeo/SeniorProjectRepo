@@ -9,7 +9,11 @@ public class PauseMenu : MonoBehaviour
     [Header("UI")]
     public GameObject pauseMenu;
     public Button resumeButton;
+    public Button optionsButton;
+    public Button backButton;
     public Button quitButton;
+    public GameObject optionSliders;
+    public GameObject pauseButtonsGroup;
     public FPShooting fPShooting;
     public FPController fPMovement;
 
@@ -21,6 +25,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
 
         resumeButton.onClick.AddListener(Resume);
+        optionsButton.onClick.AddListener(Options);
+        backButton.onClick.AddListener(BackToPauseMenu);
         quitButton.onClick.AddListener(Quit);
 
         inputModule = FindFirstObjectByType<InputSystemUIInputModule>();
@@ -63,7 +69,17 @@ public class PauseMenu : MonoBehaviour
         fPShooting.enabled = false;
         fPMovement.enabled = false;
     }
+    void Options()
+    {
+        pauseButtonsGroup.SetActive(false); 
+        optionSliders.SetActive(true);      
+    }
 
+    public void BackToPauseMenu()
+    {
+        optionSliders.SetActive(false);
+        pauseButtonsGroup.SetActive(true);
+    }
     public void Quit()
     {
         Time.timeScale = 1f;

@@ -56,6 +56,9 @@ public class FPShooting : MonoBehaviour
     private Coroutine hitmarkerRoutine;
     private Coroutine deathmarkerRoutine;
 
+    [Header("SFX Settings")]
+    private float sfxVolume;
+
     //Weapon Types
     public enum WeaponType { Gun, Melee, None }
     public WeaponType currentWeapon = WeaponType.Gun;
@@ -78,6 +81,8 @@ public class FPShooting : MonoBehaviour
         shieldCooldownBar.fillAmount = 0f;
 
         fpController = FindFirstObjectByType<FPController>();
+
+        
     }
 
 
@@ -93,6 +98,8 @@ public class FPShooting : MonoBehaviour
             bulletsText.text = "";
         }
         
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        ApplySFXVolume();
 
         // Button to Switch Weapons
         if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
@@ -158,6 +165,11 @@ public class FPShooting : MonoBehaviour
         }
 
     }
+    public void UpdateSFXVolumeFromPrefs()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        ApplySFXVolume();
+    }
 
     private void UpdateReticle()
     {
@@ -191,6 +203,16 @@ public class FPShooting : MonoBehaviour
 
         // Default color when not over a valid target
         reticle.color = Color.white;
+    }
+
+    private void ApplySFXVolume()
+    {
+        if (gunAudio != null)
+            gunAudio.volume = sfxVolume;
+
+        if (shieldAudio != null)
+            shieldAudio.volume = sfxVolume;
+
     }
 
     private void Shoot()
