@@ -1,5 +1,4 @@
 using TMPro;
-//using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -9,6 +8,12 @@ public class UpgradeManager : MonoBehaviour
     [Header("References")]
     public PlayerData playerData;
     public PlayerStats playerStats;
+
+    [Header("Progress Bars")]
+    public Slider gunDamageSlider;
+    public Slider batonDamageSlider;
+    public Slider ammoSlider;
+
 
     [Header("UI - Credits")]
     public TMP_Text creditsText;
@@ -129,7 +134,8 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(gunUpgradeButton.gameObject);
                 gunUpgradeButton = null;
             }
-            gunCostText.text = "MAX";
+            gunLevelText.text = "MAX";
+            Destroy(gunCostText.gameObject);
         }
         else
         {
@@ -147,7 +153,8 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(batonUpgradeButton.gameObject);
                 batonUpgradeButton = null;
             }
-            batonCostText.text = "MAX";
+            batonLevelText.text = "MAX";
+            Destroy(batonCostText.gameObject);
         }
         else
         {
@@ -166,7 +173,8 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(ammoUpgradeButton.gameObject);
                 ammoUpgradeButton = null;
             }
-            ammoCostText.text = "MAX";
+            ammoLevelText.text = "MAX";
+            Destroy(ammoCostText.gameObject);
         }
         else
         {
@@ -174,6 +182,15 @@ public class UpgradeManager : MonoBehaviour
             if (ammoUpgradeButton != null)
                 ammoUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(ammoLevel);
         }
+
+        gunDamageSlider.maxValue = maxUpgradeLevel;
+        gunDamageSlider.value = gunLevel;
+
+        batonDamageSlider.maxValue = maxUpgradeLevel;
+        batonDamageSlider.value = batonLevel;
+
+        ammoSlider.maxValue = 99;
+        ammoSlider.value = ammoLevel;
 
     }
 
