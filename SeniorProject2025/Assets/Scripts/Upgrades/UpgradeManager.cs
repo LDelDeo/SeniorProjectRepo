@@ -1,7 +1,7 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -13,7 +13,6 @@ public class UpgradeManager : MonoBehaviour
     public Slider gunDamageSlider;
     public Slider batonDamageSlider;
     public Slider ammoSlider;
-
 
     [Header("UI - Credits")]
     public TMP_Text creditsText;
@@ -33,6 +32,13 @@ public class UpgradeManager : MonoBehaviour
     public TMP_Text ammoLevelText;
     public Button ammoUpgradeButton;
 
+    [Header("Upgrade Effects")]
+    public AudioSource upgradeSoundEffects;
+    public AudioClip upgradeSound;
+    public Animator animGun;
+    public Animator animBaton;
+    public Animator animAmmo;
+
     private readonly float[] gunDamageLevels = { 1f, 1.5f, 2f, 2.5f };
     private readonly float[] batonDamageLevels = { 1f, 2f, 3f, 4f };
     private int maxUpgradeLevel = 3;
@@ -50,8 +56,8 @@ public class UpgradeManager : MonoBehaviour
 
         if (PlayerPrefs.GetInt("ResetUpgrades", 0) == 1)
         {
-            ResetUpgrades(); 
-            PlayerPrefs.SetInt("ResetUpgrades", 0); 
+            ResetUpgrades();
+            PlayerPrefs.SetInt("ResetUpgrades", 0);
             PlayerPrefs.Save();
         }
 
@@ -62,11 +68,7 @@ public class UpgradeManager : MonoBehaviour
     public void UpgradeGunDamage()
     {
         if (gunLevel >= maxUpgradeLevel)
-        {
-            Destroy(gunUpgradeButton.gameObject);
-            gunCostText.text = "MAX";
-        }
-
+            return;
 
         int cost = GetUpgradeCost(gunLevel);
         if (playerData.credits >= cost)
@@ -74,6 +76,8 @@ public class UpgradeManager : MonoBehaviour
             playerData.credits -= cost;
             gunLevel++;
             playerStats.playerRangedDamage = gunDamageLevels[gunLevel];
+            upgradeSoundEffects.PlayOneShot(upgradeSound);
+            animGun.SetTrigger("upgrade");
             SaveUpgrades();
             UpdateUI();
         }
@@ -82,11 +86,7 @@ public class UpgradeManager : MonoBehaviour
     public void UpgradeBatonDamage()
     {
         if (batonLevel >= maxUpgradeLevel)
-        {
-            Destroy(batonUpgradeButton.gameObject);
-            batonCostText.text = "MAX";
-        }
-
+            return;
 
         int cost = GetUpgradeCost(batonLevel);
         if (playerData.credits >= cost)
@@ -94,6 +94,8 @@ public class UpgradeManager : MonoBehaviour
             playerData.credits -= cost;
             batonLevel++;
             playerStats.playerMeleeDamage = batonDamageLevels[batonLevel];
+            upgradeSoundEffects.PlayOneShot(upgradeSound);
+            animBaton.SetTrigger("upgrade");
             SaveUpgrades();
             UpdateUI();
         }
@@ -101,19 +103,24 @@ public class UpgradeManager : MonoBehaviour
 
     public void UpgradeGunAmmo()
     {
+        if (ammoLevel >= 99)
+            return;
+
         int cost = GetUpgradeCost(ammoLevel);
         if (playerData.credits >= cost)
         {
             playerData.credits -= cost;
             ammoLevel++;
+            upgradeSoundEffects.PlayOneShot(upgradeSound);
+            animAmmo.SetTrigger("upgrade");
             SaveUpgrades();
             UpdateUI();
         }
     }
+
     public void OnExit()
     {
         SceneHelper.SaveAndLoadScene("MainScene");
-
     }
 
     private int GetUpgradeCost(int level)
@@ -123,10 +130,25 @@ public class UpgradeManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        creditsText.text = $"Credits: {playerData.credits}";
+        if (creditsText != null)
+            creditsText.text = $"Credits: {playerData.credits}";
 
         // Gun
-        gunLevelText.text = $"Level: {gunLevel}";
+        if (gunLevelText != null)
+        {
+            if (gunLevel >= maxUpgradeLevel)
+            {
+                gunLevelText.text = "MAX";
+                gunLevelText.color = Color.green; //This color wont change because of the animator forcing it white
+            }
+            else
+            {
+                gunLevelText.text = $"Level: {gunLevel}";
+                gunLevelText.color = Color.white;
+            }
+        }
+
+
         if (gunLevel >= maxUpgradeLevel)
         {
             if (gunUpgradeButton != null)
@@ -134,18 +156,36 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(gunUpgradeButton.gameObject);
                 gunUpgradeButton = null;
             }
-            gunLevelText.text = "MAX";
-            Destroy(gunCostText.gameObject);
+            if (gunCostText != null)
+            {
+                Destroy(gunCostText.gameObject);
+                gunCostText = null;
+            }
         }
         else
         {
-            gunCostText.text = $"Cost: {GetUpgradeCost(gunLevel)}";
+            if (gunCostText != null)
+                gunCostText.text = $"Cost: {GetUpgradeCost(gunLevel)}";
             if (gunUpgradeButton != null)
                 gunUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(gunLevel);
         }
 
         // Baton
-        batonLevelText.text = $"Level: {batonLevel}";
+        if (batonLevelText != null)
+        {
+            if (batonLevel >= maxUpgradeLevel)
+            {
+                batonLevelText.text = "MAX";
+                batonLevelText.color = Color.green;
+            }
+            else
+            {
+                batonLevelText.text = $"Level: {batonLevel}";
+                batonLevelText.color = Color.white;
+            }
+        }
+
+
         if (batonLevel >= maxUpgradeLevel)
         {
             if (batonUpgradeButton != null)
@@ -153,19 +193,36 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(batonUpgradeButton.gameObject);
                 batonUpgradeButton = null;
             }
-            batonLevelText.text = "MAX";
-            Destroy(batonCostText.gameObject);
+            if (batonCostText != null)
+            {
+                Destroy(batonCostText.gameObject);
+                batonCostText = null;
+            }
         }
         else
         {
-            batonCostText.text = $"Cost: {GetUpgradeCost(batonLevel)}";
+            if (batonCostText != null)
+                batonCostText.text = $"Cost: {GetUpgradeCost(batonLevel)}";
             if (batonUpgradeButton != null)
                 batonUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(batonLevel);
         }
 
-
         // Ammo
-        ammoLevelText.text = $"Level: {ammoLevel}";
+        if (ammoLevelText != null)
+        {
+            if (ammoLevel >= 99)
+            {
+                ammoLevelText.text = "MAX";
+                ammoLevelText.color = Color.green;
+            }
+            else
+            {
+                ammoLevelText.text = $"Level: {ammoLevel}";
+                ammoLevelText.color = Color.white;
+            }
+        }
+
+
         if (ammoLevel >= 99)
         {
             if (ammoUpgradeButton != null)
@@ -173,25 +230,37 @@ public class UpgradeManager : MonoBehaviour
                 Destroy(ammoUpgradeButton.gameObject);
                 ammoUpgradeButton = null;
             }
-            ammoLevelText.text = "MAX";
-            Destroy(ammoCostText.gameObject);
+            if (ammoCostText != null)
+            {
+                Destroy(ammoCostText.gameObject);
+                ammoCostText = null;
+            }
         }
         else
         {
-            ammoCostText.text = $"Cost: {GetUpgradeCost(ammoLevel)}";
+            if (ammoCostText != null)
+                ammoCostText.text = $"Cost: {GetUpgradeCost(ammoLevel)}";
             if (ammoUpgradeButton != null)
                 ammoUpgradeButton.interactable = playerData.credits >= GetUpgradeCost(ammoLevel);
         }
 
-        gunDamageSlider.maxValue = maxUpgradeLevel;
-        gunDamageSlider.value = gunLevel;
+        if (gunDamageSlider != null)
+        {
+            gunDamageSlider.maxValue = maxUpgradeLevel;
+            gunDamageSlider.value = gunLevel;
+        }
 
-        batonDamageSlider.maxValue = maxUpgradeLevel;
-        batonDamageSlider.value = batonLevel;
+        if (batonDamageSlider != null)
+        {
+            batonDamageSlider.maxValue = maxUpgradeLevel;
+            batonDamageSlider.value = batonLevel;
+        }
 
-        ammoSlider.maxValue = 99;
-        ammoSlider.value = ammoLevel;
-
+        if (ammoSlider != null)
+        {
+            ammoSlider.maxValue = 99;
+            ammoSlider.value = ammoLevel;
+        }
     }
 
     private void SaveUpgrades()
@@ -200,7 +269,6 @@ public class UpgradeManager : MonoBehaviour
         PlayerPrefs.SetInt("BatonLevel", batonLevel);
         PlayerPrefs.SetInt("AmmoLevel", ammoLevel);
         PlayerPrefs.SetInt("Credits", playerData.credits);
-
         PlayerPrefs.Save();
     }
 
@@ -215,7 +283,6 @@ public class UpgradeManager : MonoBehaviour
         playerStats.playerMeleeDamage = batonDamageLevels[Mathf.Clamp(batonLevel, 0, maxUpgradeLevel)];
     }
 
-    // Call this to reset everything (e.g., button on main menu)
     public void ResetUpgrades()
     {
         gunLevel = 0;
@@ -234,5 +301,4 @@ public class UpgradeManager : MonoBehaviour
         PlayerPrefs.Save();
         UpdateUI();
     }
-
 }
