@@ -40,7 +40,7 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.1f, 0);
+        rb.centerOfMass = new Vector3(0, -0.5f, 0);
 
         AdjustWheelFriction(frontLeftWheelCollider);
         AdjustWheelFriction(frontRightWheelCollider);
@@ -57,7 +57,10 @@ public class CarController : MonoBehaviour
         DisplaySpeed();
         CapMaxSpeedWithFriction();
         ApplyDownforce();
+        UpdateDriftFriction();
         UpdateWheelFrictionSmoothly();
+        ApplyAntiRoll(frontLeftWheelCollider, frontRightWheelCollider);
+        ApplyAntiRoll(rearLeftWheelCollider, rearRightWheelCollider);
     }
 
     private void LateUpdate()
@@ -68,55 +71,60 @@ public class CarController : MonoBehaviour
     private void GetInput()
     {
         horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        verticalInput = -Input.GetAxis("Vertical");
         isBreaking = Input.GetKey(KeyCode.Space);
     }
 
     private void HandleMotor()
     {
         float velocityZ = transform.InverseTransformDirection(rb.linearVelocity).z;
+        bool switchingDirection = (verticalInput > 0 && velocityZ < -0.1f) || (verticalInput < 0 && velocityZ > 0.1f);
 
-        if (verticalInput != 0)
+        float torqueMultiplier = switchingDirection ? 0f : 1f; // prevent torque during switch
+        float torque = Mathf.Abs(verticalInput) * motorForce * Mathf.Sign(verticalInput);
+
+        if (verticalInput > 0)
         {
-            bool switchingDirection = (verticalInput > 0 && velocityZ < -0.5f) || (verticalInput < 0 && velocityZ > 0.5f);
-            float torqueMultiplier = switchingDirection ? 1.75f : 1f;
-
-            float torque = -verticalInput * motorForce * torqueMultiplier;
             frontLeftWheelCollider.motorTorque = torque;
             frontRightWheelCollider.motorTorque = torque;
+        }
+        else if (verticalInput < 0)
+        {
+            frontLeftWheelCollider.motorTorque = torque * 1.5f;
+            frontRightWheelCollider.motorTorque = torque * 1.5f;
+        }
 
-            if (switchingDirection)
-            {
-                targetForwardStiffness = 1.5f;
-                targetSidewaysStiffness = 2.0f;
-            }
-            else
-            {
-                targetForwardStiffness = 2.0f;
-                targetSidewaysStiffness = 2.5f;
-            }
+        // Apply torque only when not switching direction
+        frontLeftWheelCollider.motorTorque = torque;
+        frontRightWheelCollider.motorTorque = torque;
+
+        if (switchingDirection)
+        {
+            // Apply a little brake to stop before switching
+            currentbreakForce = breakForce * 0.6f;
+        }
+        else if (Mathf.Abs(verticalInput) < 0.1f)
+        {
+            // Natural deceleration
+            ApplyDeceleration();
+            return;
         }
         else
         {
-            ApplyDeceleration();
-            targetForwardStiffness = 2.0f;
-            targetSidewaysStiffness = 2.5f;
+            currentbreakForce = 0f;
         }
 
-        // Extra brake force if player is holding forward/reverse and braking
-        if (isBreaking && Mathf.Abs(verticalInput) > 0.1f)
+        // Apply brake if space is pressed
+        if (isBreaking)
         {
-            currentbreakForce = breakForce * 1.5f; // Stronger brake while accelerating
+            currentbreakForce = breakForce;
             frontLeftWheelCollider.motorTorque = 0f;
             frontRightWheelCollider.motorTorque = 0f;
         }
-        else
-        {
-            currentbreakForce = isBreaking ? breakForce : 0f;
-        }
-        ApplyBraking();
 
+        ApplyBraking();
     }
+
 
     private void ApplyBraking()
     {
@@ -219,6 +227,48 @@ public class CarController : MonoBehaviour
         SetWheelFriction(frontRightWheelCollider, forwardStiffness, sidewaysStiffness);
         SetWheelFriction(rearLeftWheelCollider, forwardStiffness, sidewaysStiffness);
         SetWheelFriction(rearRightWheelCollider, forwardStiffness, sidewaysStiffness);
+    }
+
+    private void ApplyAntiRoll(WheelCollider leftWheel, WheelCollider rightWheel)
+    {
+        WheelHit hit;
+        float travelLeft = 1.0f;
+        float travelRight = 1.0f;
+
+        bool groundedLeft = leftWheel.GetGroundHit(out hit);
+        if (groundedLeft)
+            travelLeft = (-leftWheel.transform.InverseTransformPoint(hit.point).y - leftWheel.radius) / leftWheel.suspensionDistance;
+
+        bool groundedRight = rightWheel.GetGroundHit(out hit);
+        if (groundedRight)
+            travelRight = (-rightWheel.transform.InverseTransformPoint(hit.point).y - rightWheel.radius) / rightWheel.suspensionDistance;
+
+        float antiRollForce = (travelLeft - travelRight) * 5000f;
+
+        if (groundedLeft)
+            rb.AddForceAtPosition(leftWheel.transform.up * -antiRollForce, leftWheel.transform.position);
+        if (groundedRight)
+            rb.AddForceAtPosition(rightWheel.transform.up * antiRollForce, rightWheel.transform.position);
+    }
+
+
+    private void UpdateDriftFriction()
+    {
+        float speed = rb.linearVelocity.magnitude;
+        float turnAmount = Mathf.Abs(horizontalInput);
+
+        bool drifting = speed > 6f && turnAmount > 0.5f;
+
+        if (drifting)
+        {
+            targetForwardStiffness = 1.0f;
+            targetSidewaysStiffness = 1.2f;
+        }
+        else
+        {
+            targetForwardStiffness = 2.0f;
+            targetSidewaysStiffness = 2.5f;
+        }
     }
 
     private void SetWheelFriction(WheelCollider wheel, float forwardStiffness, float sidewaysStiffness)
