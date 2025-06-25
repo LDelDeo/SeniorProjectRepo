@@ -76,13 +76,13 @@ public class FPShooting : MonoBehaviour
 
         reloadText.text = "";
         hitmarkerImage.enabled = false;
-        originalCamPosition = cam.transform.localPosition;
+        
         shieldStatusText.text = "Shield Ready";
         shieldCooldownBar.fillAmount = 0f;
 
         fpController = FindFirstObjectByType<FPController>();
 
-        
+        originalCamPosition = cam.transform.localPosition;
     }
 
 
@@ -466,22 +466,24 @@ public class FPShooting : MonoBehaviour
 
     private IEnumerator ShakeCamera()
     {
-        float elapsed = 0.0f;
+        float elapsed = 0f;
 
-        // While the shake duration is still active, shake the camera
         while (elapsed < shakeDuration)
         {
             float shakeX = Random.Range(-shakeMagnitude, shakeMagnitude);
             float shakeY = Random.Range(-shakeMagnitude, shakeMagnitude);
-            cam.transform.localPosition = originalCamPosition + new Vector3(shakeX, shakeY, 0);
+
+            if (fpController != null)
+                fpController.externalShakeOffset = new Vector3(shakeX, shakeY, 0);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // After the shake, reset the camera position back to its original position
-        cam.transform.localPosition = originalCamPosition;
+        if (fpController != null)
+            fpController.externalShakeOffset = Vector3.zero;
     }
+
 
     private IEnumerator ShieldRoutine()
     {

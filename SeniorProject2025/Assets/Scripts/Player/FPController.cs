@@ -16,6 +16,8 @@ public class FPController : MonoBehaviour
     public float jumpHeight = 1.5f;
     public bool isMoving;
     public bool isSprinting = false;
+    private bool hasJumped = false;
+    private bool wasGrounded = false;
 
 
     [Header("Camera Settings")]
@@ -48,6 +50,10 @@ public class FPController : MonoBehaviour
     private Vector3 lastPosition;
     public Vector3 moveDirection;
 
+    [Header("Offsets")]
+    public Vector3 bobAndSwayOffset = Vector3.zero;
+    public Vector3 externalShakeOffset = Vector3.zero;
+
     void Start()
     {
         fpShooting = FindFirstObjectByType<FPShooting>();
@@ -69,6 +75,7 @@ public class FPController : MonoBehaviour
         HandleMovement();
         HandleCameraEffects();
         HandleSprint();
+
     }
     public void UpdateSensitivityFromPrefs()
     {
@@ -78,15 +85,15 @@ public class FPController : MonoBehaviour
 
     void GroundCheck()
     {
-       
+        wasGrounded = isGrounded;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-            if (isGrounded && verticalVelocity < 0)
-            {
-                verticalVelocity = -2f;
-            }
-        
+        if (isGrounded && !wasGrounded)
+        {
+            hasJumped = false;
+        }
     }
+
 
     void HandleMouseLook()
     {
@@ -102,70 +109,101 @@ public class FPController : MonoBehaviour
 
     void HandleMovement()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
+        float moveX = Input.GetAxisRaw("Horizontal"); 
+        float moveZ = Input.GetAxisRaw("Vertical");
 
-        moveDirection = transform.right * moveX + transform.forward * moveZ;
-        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+        Vector3 inputDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        Vector3 worldDirection = transform.TransformDirection(inputDirection);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        moveDirection = worldDirection;
+
+        verticalVelocity += gravity * gravityMultiplier * Time.deltaTime;
+
+        // Jump
+        if (controller.isGrounded)
         {
-            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            if (verticalVelocity < 0f)
+            {
+                verticalVelocity = -2f; 
+            }
+
+            if (Input.GetButtonDown("Jump") && !hasJumped)
+            {
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                hasJumped = true;
+            }
         }
 
-        verticalVelocity += (gravity * gravityMultiplier) * Time.deltaTime;
-        controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
-    } 
-   
+        Vector3 velocity = moveDirection * moveSpeed;
+        velocity.y = verticalVelocity;
+
+        controller.Move(velocity * Time.deltaTime);
+
+        if (controller.isGrounded)
+        {
+            hasJumped = false;
+
+            if (moveX == 0 && moveZ == 0)
+            {
+                moveDirection = Vector3.zero;
+            }
+        }
+    }
+
 
     void HandleCameraEffects()
     {
         Vector3 targetPosition = cameraStartPos;
+        bobAndSwayOffset = Vector3.zero;
 
-        // Only do effects if we're moving and grounded
         isMoving = moveDirection.magnitude > 0.1f && isGrounded;
 
         if (isMoving)
         {
             bobTimer += Time.deltaTime * currentBobSpeed;
             float bobOffset = Mathf.Sin(bobTimer) * bobAmount;
-
             float swayOffset = Mathf.Sin(bobTimer) * swayAmount;
 
-            targetPosition += new Vector3(swayOffset, bobOffset, 0f);
-        }
-        else
-        {
-            //bobTimer = 0f; // reset for consistent sin wave
+            bobAndSwayOffset = new Vector3(swayOffset, bobOffset, 0f);
         }
 
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPosition, Time.deltaTime * currentSwaySpeed);
+        // Final camera position = base + sway/bob + shake
+        cameraTransform.localPosition = Vector3.Lerp(
+            cameraTransform.localPosition,
+            cameraStartPos + bobAndSwayOffset + externalShakeOffset,
+            Time.deltaTime * currentSwaySpeed
+        );
     }
+
     void HandleSprint()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
         {
-            controller.Move(moveDirection * sprintSpeed * Time.deltaTime);
             isSprinting = true;
             currentBobSpeed = sprintBobSpeed;
             currentSwaySpeed = sprintSwaySpeed;
+
+            moveSpeed = sprintSpeed;
+
             if (!fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
             {
                 fpShooting.gunAnim.SetBool("IsSprintingBool", true);
             }
-
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift) && isSprinting)
         {
             isSprinting = false;
             currentBobSpeed = bobSpeed;
             currentSwaySpeed = swaySpeed;
-            controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+
+            moveSpeed = 5f; 
+
             if (fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("SprintPose") || fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsName("Sprinting"))
             {
                 fpShooting.gunAnim.SetBool("IsSprintingBool", false);
             }
         }
+        
     }
     void OnEnable()
     {
