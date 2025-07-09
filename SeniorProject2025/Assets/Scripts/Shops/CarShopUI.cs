@@ -99,6 +99,8 @@ public class CarShopUI : MonoBehaviour
                         if (handsPlayedBJ < 100)
                         {
                             carPriceText.text = $"Play {100 - handsPlayedBJ} more blackjack hands to unlock";
+                            purchaseButton.gameObject.SetActive(false); // HIDE
+                            break;
                         }
                         else
                         {
@@ -111,6 +113,8 @@ public class CarShopUI : MonoBehaviour
                         if (tier1Completed < 25)
                         {
                             carPriceText.text = $"Complete {25 - tier1Completed} more Tier 1 Crimes to unlock";
+                            purchaseButton.gameObject.SetActive(false);
+                            break;
                         }
                         else
                         {
@@ -123,6 +127,8 @@ public class CarShopUI : MonoBehaviour
                         if (orcsDefeated < 10)
                         {
                             carPriceText.text = $"Defeat {10 - orcsDefeated} more ranged orcs to unlock";
+                            purchaseButton.gameObject.SetActive(false);
+                            break;
                         }
                         else
                         {
@@ -135,6 +141,8 @@ public class CarShopUI : MonoBehaviour
                         if (driveDistance < 5000f)
                         {
                             carPriceText.text = $"Drive {Mathf.CeilToInt(5000f - driveDistance)} more meters to unlock";
+                            purchaseButton.gameObject.SetActive(false);
+                            break;
                         }
                         else
                         {
@@ -149,12 +157,15 @@ public class CarShopUI : MonoBehaviour
                         break;
                 }
 
-                bool canAfford = playerData.credits >= carPrice;
-                purchaseButton.interactable = canUnlock && canAfford;
-                UpdatePurchaseButtonColor(purchaseButton, canUnlock && canAfford);
-
-                purchaseButton.gameObject.SetActive(true);
+                if (canUnlock)
+                {
+                    bool canAfford = playerData.credits >= carPrice;
+                    purchaseButton.interactable = canAfford;
+                    UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    purchaseButton.gameObject.SetActive(true);
+                }
             }
+
 
             selectButton.gameObject.SetActive(isPurchased);
             selectButton.interactable = isPurchased && !isSelected;
@@ -229,7 +240,7 @@ public class CarShopUI : MonoBehaviour
 
     private void Update()
     {
-        creditsAMT.text = "Credits: " + playerData.credits;
+        creditsAMT.text = "" + playerData.credits;
 
         int handsPlayedBJ = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
         int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
