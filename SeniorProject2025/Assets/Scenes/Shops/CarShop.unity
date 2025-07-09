@@ -710,14 +710,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   purchaseableCars:
+  - {fileID: 919132149155446097, guid: f89363c3e5e39c243bbd50d1ba290299, type: 3}
   - {fileID: 4806979267700107649, guid: 5aa3b138b4d4dd141a3e8b1c1b25370c, type: 3}
   - {fileID: 3365964616837895147, guid: 72affedeeeef4c14aabf2725fb49d2c8, type: 3}
   - {fileID: 8163176922697471242, guid: 6f8b53ef81d39d743bb0ab0ebc93ead4, type: 3}
   - {fileID: 3188887054091708852, guid: a31227f49f74a3149b5a40ae06128764, type: 3}
   carItemPrefab: {fileID: 284719669169596099, guid: b52205f764193a34dbf1f87c42e16875, type: 3}
   carListContainer: {fileID: 582915592}
-  carPrices: 58020000e8030000d0070000be0a0000
-  carRequirements: 00000000000000000200000001000000
+  carPrices: 0000000058020000e8030000d0070000be0a0000
+  carRequirements: 0000000004000000030000000200000001000000
+  defaultCarIndex: 0
   creditsAMT: {fileID: 806512113}
   playerData: {fileID: 693556146}
   displayAnchor: {fileID: 686770257}

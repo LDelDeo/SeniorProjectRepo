@@ -76,6 +76,9 @@ public class RangedOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            int orcsDefeated = PlayerPrefs.GetInt("RangedOrcsDefeated", 0);
+            PlayerPrefs.SetInt("RangedOrcsDefeated", orcsDefeated + 1);
+            
             fpShooting.Deathmarker();
             if (alertIconInstance != null)
             {

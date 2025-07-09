@@ -11,7 +11,9 @@ public class CarShopUI : MonoBehaviour
     {
         None,
         PlayBlackjack,
-        CompleteTier1Crimes
+        CompleteTier1Crimes,
+        DefeatRangedOrcs,  
+        DriveDistance
     }
 
     [Header("Car Settings")]
@@ -19,7 +21,10 @@ public class CarShopUI : MonoBehaviour
     public GameObject carItemPrefab;
     public Transform carListContainer;
     public int[] carPrices;
-    public CarRequirementType[] carRequirements; 
+    public CarRequirementType[] carRequirements;
+
+    [Header("Default Car Settings")]
+    public int defaultCarIndex = 0;
 
     [Header("UI Elements")]
     public TMP_Text creditsAMT;
@@ -37,8 +42,21 @@ public class CarShopUI : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
+        // Ensure default car is unlocked
+        if (defaultCarIndex >= 0 && defaultCarIndex < purchaseableCars.Length)
+        {
+            string defaultCarKey = "Car_Purchased_" + purchaseableCars[defaultCarIndex].name;
+            PlayerPrefs.SetInt(defaultCarKey, 1);
+        }
+
         string currentlySelectedCar = PlayerPrefs.GetString("SelectedCar", "");
-        GameObject defaultCar = purchaseableCars[0];
+        if (string.IsNullOrEmpty(currentlySelectedCar))
+        {
+            currentlySelectedCar = purchaseableCars[0].name;
+            PlayerPrefs.SetString("SelectedCar", currentlySelectedCar);
+        }
+
+        GameObject defaultCar = purchaseableCars[defaultCarIndex];
 
         for (int i = 0; i < purchaseableCars.Length; i++)
         {
@@ -54,7 +72,7 @@ public class CarShopUI : MonoBehaviour
             Button selectButton = item.transform.Find("SelectButton").GetComponent<Button>();
 
             string carKey = "Car_Purchased_" + car.name;
-            bool isPurchased = PlayerPrefs.GetInt(carKey, 0) == 1;
+            bool isPurchased = PlayerPrefs.GetInt(carKey, 0) == 1 || car.name == purchaseableCars[defaultCarIndex].name;
             bool isSelected = (currentlySelectedCar == car.name);
             if (isSelected) defaultCar = car;
 
@@ -62,6 +80,8 @@ public class CarShopUI : MonoBehaviour
 
             int handsPlayedBJ = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
             int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+            int orcsDefeated = PlayerPrefs.GetInt("RangedOrcsDefeated", 0);
+            float driveDistance = PlayerPrefs.GetFloat("TotalDriveDistance", 0f);
 
             if (isPurchased)
             {
@@ -71,50 +91,67 @@ public class CarShopUI : MonoBehaviour
             else
             {
                 carPriceText.gameObject.SetActive(true);
+                bool canUnlock = false;
 
-                if (requirement == CarRequirementType.PlayBlackjack)
+                switch (requirement)
                 {
-                    if (handsPlayedBJ < 100)
-                    {
-                        int handsRemaining = 100 - handsPlayedBJ;
-                        carPriceText.text = $"Play {handsRemaining} more blackjack hands to unlock";
-                        purchaseButton.interactable = false;
-                        UpdatePurchaseButtonColor(purchaseButton, false);
-                    }
-                    else
-                    {
-                        carPriceText.text = "Price: " + carPrice;
-                        bool canAfford = playerData.credits >= carPrice;
-                        purchaseButton.interactable = canAfford;
-                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
-                    }
-                }
-                else if (requirement == CarRequirementType.CompleteTier1Crimes)
-                {
-                    if (tier1Completed < 25)
-                    {
-                        int remaining = 25 - tier1Completed;
-                        carPriceText.text = $"Complete {remaining} more Tier 1 Crimes to unlock";
-                        purchaseButton.interactable = false;
-                        UpdatePurchaseButtonColor(purchaseButton, false);
-                    }
-                    else
-                    {
-                        carPriceText.text = "Price: " + carPrice;
-                        bool canAfford = playerData.credits >= carPrice;
-                        purchaseButton.interactable = canAfford;
-                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
-                    }
-                }
-                else
-                {
-                    carPriceText.text = "Price: " + carPrice;
-                    bool canAfford = playerData.credits >= carPrice;
-                    purchaseButton.interactable = canAfford;
-                    UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                    case CarRequirementType.PlayBlackjack:
+                        if (handsPlayedBJ < 100)
+                        {
+                            carPriceText.text = $"Play {100 - handsPlayedBJ} more blackjack hands to unlock";
+                        }
+                        else
+                        {
+                            carPriceText.text = $"Price: {carPrice}";
+                            canUnlock = true;
+                        }
+                        break;
+
+                    case CarRequirementType.CompleteTier1Crimes:
+                        if (tier1Completed < 25)
+                        {
+                            carPriceText.text = $"Complete {25 - tier1Completed} more Tier 1 Crimes to unlock";
+                        }
+                        else
+                        {
+                            carPriceText.text = $"Price: {carPrice}";
+                            canUnlock = true;
+                        }
+                        break;
+
+                    case CarRequirementType.DefeatRangedOrcs:
+                        if (orcsDefeated < 10)
+                        {
+                            carPriceText.text = $"Defeat {10 - orcsDefeated} more ranged orcs to unlock";
+                        }
+                        else
+                        {
+                            carPriceText.text = $"Price: {carPrice}";
+                            canUnlock = true;
+                        }
+                        break;
+
+                    case CarRequirementType.DriveDistance:
+                        if (driveDistance < 5000f)
+                        {
+                            carPriceText.text = $"Drive {Mathf.CeilToInt(5000f - driveDistance)} more meters to unlock";
+                        }
+                        else
+                        {
+                            carPriceText.text = $"Price: {carPrice}";
+                            canUnlock = true;
+                        }
+                        break;
+
+                    default:
+                        carPriceText.text = $"Price: {carPrice}";
+                        canUnlock = true;
+                        break;
                 }
 
-
+                bool canAfford = playerData.credits >= carPrice;
+                purchaseButton.interactable = canUnlock && canAfford;
+                UpdatePurchaseButtonColor(purchaseButton, canUnlock && canAfford);
 
                 purchaseButton.gameObject.SetActive(true);
             }
@@ -136,22 +173,7 @@ public class CarShopUI : MonoBehaviour
 
             purchaseButton.onClick.AddListener(() =>
             {
-                int handsPlayed = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
-                int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
-
-                if (requirement == CarRequirementType.PlayBlackjack && handsPlayed < 100)
-                {
-                    Debug.Log($"You need to play {100 - handsPlayed} more blackjack hands to unlock {currentCar.name}");
-                    // Optionally open blackjack mini-game here
-                    return;
-                }
-
-                if (requirement == CarRequirementType.CompleteTier1Crimes && tier1Completed < 15)
-                {
-                    Debug.Log($"You need to complete {15 - tier1Completed} more Tier 1 crimes to unlock {currentCar.name}");
-                    // Optionally open Tier 1 crime missions here
-                    return;
-                }
+                if (!purchaseButton.interactable) return;
 
                 if (playerData.credits >= carPrice)
                 {
@@ -179,15 +201,18 @@ public class CarShopUI : MonoBehaviour
                 DisplayCar(currentCar);
             });
 
-            EventTrigger trigger = item.GetComponent<EventTrigger>();
-            if (trigger == null) trigger = item.AddComponent<EventTrigger>();
+            EventTrigger trigger = item.GetComponent<EventTrigger>() ?? item.AddComponent<EventTrigger>();
 
-            EventTrigger.Entry entryEnter = new EventTrigger.Entry();
-            entryEnter.eventID = EventTriggerType.PointerEnter;
+            EventTrigger.Entry entryEnter = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerEnter
+            };
             entryEnter.callback.AddListener((data) => { DisplayCar(currentCar); });
 
-            EventTrigger.Entry entryExit = new EventTrigger.Entry();
-            entryExit.eventID = EventTriggerType.PointerExit;
+            EventTrigger.Entry entryExit = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerExit
+            };
             entryExit.callback.AddListener((data) =>
             {
                 string selectedName = PlayerPrefs.GetString("SelectedCar", "");
@@ -199,7 +224,6 @@ public class CarShopUI : MonoBehaviour
             trigger.triggers.Add(entryExit);
         }
 
-        // Show selected/default car on start
         DisplayCar(defaultCar);
     }
 
@@ -209,6 +233,8 @@ public class CarShopUI : MonoBehaviour
 
         int handsPlayedBJ = PlayerPrefs.GetInt("HandsPlayedBJ", 0);
         int tier1Completed = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
+        int orcsDefeated = PlayerPrefs.GetInt("RangedOrcsDefeated", 0);
+        float driveDistance = PlayerPrefs.GetFloat("TotalDriveDistance", 0f);
 
         foreach (Transform item in carListContainer)
         {
@@ -216,58 +242,69 @@ public class CarShopUI : MonoBehaviour
             TMP_Text carPriceText = item.Find("CarPriceText")?.GetComponent<TMP_Text>();
             TMP_Text carNameText = item.Find("CarNameText")?.GetComponent<TMP_Text>();
 
-            if (purchaseButton != null && carPriceText != null && carNameText != null && purchaseButton.gameObject.activeSelf)
+            if (purchaseButton == null || carPriceText == null || carNameText == null || !purchaseButton.gameObject.activeSelf)
+                continue;
+
+            string carName = carNameText.text;
+            int index = System.Array.FindIndex(purchaseableCars, c => c.name == carName);
+            if (index < 0) continue;
+
+            int price = carPrices.Length > index ? carPrices[index] : 100;
+            CarRequirementType requirement = carRequirements.Length > index ? carRequirements[index] : CarRequirementType.None;
+
+            bool canUnlock = false;
+
+            switch (requirement)
             {
-                string carName = carNameText.text;
-                int index = System.Array.FindIndex(purchaseableCars, c => c.name == carName);
-                if (index < 0) continue;
-
-                int price = carPrices.Length > index ? carPrices[index] : 100;
-                CarRequirementType requirement = carRequirements.Length > index ? carRequirements[index] : CarRequirementType.None;
-
-                if (requirement == CarRequirementType.PlayBlackjack)
-                {
+                case CarRequirementType.PlayBlackjack:
                     if (handsPlayedBJ < 100)
-                    {
-                        int handsRemaining = 100 - handsPlayedBJ;
-                        carPriceText.text = $"Play {handsRemaining} more blackjack hands to unlock";
-                        purchaseButton.interactable = false;
-                        UpdatePurchaseButtonColor(purchaseButton, false);
-                    }
+                        carPriceText.text = $"Play {100 - handsPlayedBJ} more blackjack hands to unlock";
                     else
                     {
-                        carPriceText.text = "Price: " + price;
-                        bool canAfford = playerData.credits >= price;
-                        purchaseButton.interactable = canAfford;
-                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
+                        carPriceText.text = $"Price: {price}";
+                        canUnlock = true;
                     }
-                }
-                else if (requirement == CarRequirementType.CompleteTier1Crimes)
-                {
-                    if (tier1Completed < 25)
-                    {
-                        int remaining = 25 - tier1Completed;
-                        carPriceText.text = $"Complete {remaining} more Tier 1 Crimes to unlock";
-                        purchaseButton.interactable = false;
-                        UpdatePurchaseButtonColor(purchaseButton, false);
-                    }
-                    else
-                    {
-                        carPriceText.text = "Price: " + price;
-                        bool canAfford = playerData.credits >= price;
-                        purchaseButton.interactable = canAfford;
-                        UpdatePurchaseButtonColor(purchaseButton, canAfford);
-                    }
-                }
-                else
-                {
-                    carPriceText.text = "Price: " + price;
-                    bool canAfford = playerData.credits >= price;
-                    purchaseButton.interactable = canAfford;
-                    UpdatePurchaseButtonColor(purchaseButton, canAfford);
-                }
+                    break;
 
+                case CarRequirementType.CompleteTier1Crimes:
+                    if (tier1Completed < 25)
+                        carPriceText.text = $"Complete {25 - tier1Completed} more Tier 1 Crimes to unlock";
+                    else
+                    {
+                        carPriceText.text = $"Price: {price}";
+                        canUnlock = true;
+                    }
+                    break;
+
+                case CarRequirementType.DefeatRangedOrcs:
+                    if (orcsDefeated < 10)
+                        carPriceText.text = $"Defeat {10 - orcsDefeated} more ranged orcs to unlock";
+                    else
+                    {
+                        carPriceText.text = $"Price: {price}";
+                        canUnlock = true;
+                    }
+                    break;
+
+                case CarRequirementType.DriveDistance:
+                    if (driveDistance < 5000f)
+                        carPriceText.text = $"Drive {Mathf.CeilToInt(5000f - driveDistance)} more meters to unlock";
+                    else
+                    {
+                        carPriceText.text = $"Price: {price}";
+                        canUnlock = true;
+                    }
+                    break;
+
+                default:
+                    carPriceText.text = $"Price: {price}";
+                    canUnlock = true;
+                    break;
             }
+
+            bool canAfford = playerData.credits >= price;
+            purchaseButton.interactable = canUnlock && canAfford;
+            UpdatePurchaseButtonColor(purchaseButton, canUnlock && canAfford);
         }
     }
 
@@ -284,14 +321,19 @@ public class CarShopUI : MonoBehaviour
     private void RefreshSelectButtons()
     {
         string selectedCarName = PlayerPrefs.GetString("SelectedCar", "");
+        
         foreach (Transform item in carListContainer)
         {
             Button selectButton = item.Find("SelectButton").GetComponent<Button>();
             TMP_Text buttonText = selectButton.GetComponentInChildren<TMP_Text>();
             TMP_Text carNameText = item.Find("CarNameText").GetComponent<TMP_Text>();
+
             string carName = carNameText.text;
+
+            // Treat default car (index 0) as purchased always
+            bool isDefaultCar = carName == purchaseableCars[0].name;
+            bool isPurchased = PlayerPrefs.GetInt("Car_Purchased_" + carName, 0) == 1 || isDefaultCar;
             bool isSelected = (selectedCarName == carName);
-            bool isPurchased = PlayerPrefs.GetInt("Car_Purchased_" + carName, 0) == 1;
 
             if (!isPurchased)
             {
@@ -300,12 +342,14 @@ public class CarShopUI : MonoBehaviour
             else
             {
                 selectButton.gameObject.SetActive(true);
+
                 if (isSelected)
                 {
+                    // Gray out and disable interaction like all other selected cars
                     selectButton.interactable = false;
                     buttonText.text = "Selected";
 
-                    var colors = selectButton.colors;
+                    ColorBlock colors = selectButton.colors;
                     colors.normalColor = Color.gray;
                     colors.highlightedColor = Color.gray;
                     colors.pressedColor = Color.gray;
@@ -316,7 +360,7 @@ public class CarShopUI : MonoBehaviour
                     selectButton.interactable = true;
                     buttonText.text = "Select";
 
-                    var colors = selectButton.colors;
+                    ColorBlock colors = selectButton.colors;
                     colors.normalColor = Color.white;
                     colors.highlightedColor = new Color(0.78f, 0.78f, 0.78f);
                     colors.pressedColor = new Color(0.58f, 0.58f, 0.58f);
@@ -325,6 +369,7 @@ public class CarShopUI : MonoBehaviour
             }
         }
     }
+
 
     private void UpdatePurchaseButtonColor(Button purchaseButton, bool canAfford)
     {
@@ -336,7 +381,6 @@ public class CarShopUI : MonoBehaviour
 
     public void ExitGarage()
     {
-        SceneManager.LoadScene("MainScene");
-        //LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
+        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
     }
 }

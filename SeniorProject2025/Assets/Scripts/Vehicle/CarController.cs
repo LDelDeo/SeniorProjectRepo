@@ -37,10 +37,15 @@ public class CarController : MonoBehaviour
     private float targetSidewaysStiffness = 2.5f;
     private float frictionLerpSpeed = 3f;
 
+    // Distance Tracking
+    private Vector3 lastPosition;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
+
+        lastPosition = transform.position;
 
         AdjustWheelFriction(frontLeftWheelCollider);
         AdjustWheelFriction(frontRightWheelCollider);
@@ -61,6 +66,17 @@ public class CarController : MonoBehaviour
         UpdateWheelFrictionSmoothly();
         ApplyAntiRoll(frontLeftWheelCollider, frontRightWheelCollider);
         ApplyAntiRoll(rearLeftWheelCollider, rearRightWheelCollider);
+        TrackDriveDistance();
+    }
+
+    private void TrackDriveDistance()
+    {
+        float distanceThisFrame = Vector3.Distance(transform.position, lastPosition);
+        lastPosition = transform.position;
+
+        float currentDistance = PlayerPrefs.GetFloat("TotalDriveDistance", 0f);
+        currentDistance += distanceThisFrame;
+        PlayerPrefs.SetFloat("TotalDriveDistance", currentDistance);
     }
 
     private void LateUpdate()
