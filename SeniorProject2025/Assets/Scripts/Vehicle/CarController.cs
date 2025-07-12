@@ -9,6 +9,8 @@ public class CarController : MonoBehaviour
     public float currentSteerAngle, currentbreakForce;
     private bool isBreaking;
 
+    private EnterCarScript enterCarScript;
+
     [Header("Car Settings")]
     [SerializeField] public float motorForce = 5000f;
     [SerializeField] public float breakForce = 1500f;
@@ -16,6 +18,13 @@ public class CarController : MonoBehaviour
     [SerializeField] public float decelerationSpeed = 2.5f;
     [SerializeField] private float maxSpeed = 18f; // ~39 mph
     [SerializeField] private float downforce = 100f;
+
+    [Header("Engine Audio")]
+    [SerializeField] public AudioSource engineAudioSource;
+    [SerializeField] private float minPitch = 0.8f;
+    [SerializeField] private float maxPitch = 2.0f;
+    private bool engineWasPlaying = false;
+    private float currentPitch = 1f;
 
     [Header("Wheel Colliders")]
     [SerializeField] public WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
@@ -42,6 +51,7 @@ public class CarController : MonoBehaviour
 
     private void Start()
     {
+        enterCarScript = GetComponent<EnterCarScript>();
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
 
@@ -51,6 +61,19 @@ public class CarController : MonoBehaviour
         AdjustWheelFriction(frontRightWheelCollider);
         AdjustWheelFriction(rearLeftWheelCollider);
         AdjustWheelFriction(rearRightWheelCollider);
+
+        if (engineAudioSource != null)
+        {
+            engineAudioSource.loop = true;
+            engineAudioSource.playOnAwake = false;
+            engineAudioSource.pitch = minPitch;
+            engineAudioSource.volume = 1f;
+
+            if (enterCarScript != null && enterCarScript.isInCar)
+                engineAudioSource.Play();
+            else
+                engineAudioSource.Stop();
+        }
     }
 
     private void FixedUpdate()
@@ -67,6 +90,7 @@ public class CarController : MonoBehaviour
         ApplyAntiRoll(frontLeftWheelCollider, frontRightWheelCollider);
         ApplyAntiRoll(rearLeftWheelCollider, rearRightWheelCollider);
         TrackDriveDistance();
+        UpdateEngineSound();
     }
 
     private void TrackDriveDistance()
@@ -187,6 +211,37 @@ public class CarController : MonoBehaviour
         collider.GetWorldPose(out Vector3 pos, out Quaternion rot);
         transform.rotation = rot * Quaternion.Euler(0, isLeft ? 90 : -90, 90);
         transform.position = pos;
+    }
+
+    private void UpdateEngineSound()
+    {
+        if (engineAudioSource == null || rb == null || enterCarScript == null)
+            return;
+
+        bool inCar = enterCarScript.isInCar;
+
+        if (inCar)
+        {
+            if (!engineWasPlaying)
+            {
+                engineAudioSource.Play();
+                engineWasPlaying = true;
+            }
+
+            float speedPercent = Mathf.Clamp01(rb.linearVelocity.magnitude / maxSpeed);
+            float targetPitch = Mathf.Lerp(minPitch, maxPitch, speedPercent);
+
+           
+            currentPitch = Mathf.Lerp(currentPitch, targetPitch, Time.deltaTime * 5f);
+            engineAudioSource.pitch = currentPitch;
+        }
+      
+    }
+
+    public void StopEngineSound()
+    {
+        if (engineAudioSource != null && engineAudioSource.isPlaying)
+            engineAudioSource.Stop();
     }
 
     private void DisplaySpeed()

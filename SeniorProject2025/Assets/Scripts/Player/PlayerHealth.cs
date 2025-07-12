@@ -42,6 +42,13 @@ public class PlayerHealth : MonoBehaviour
     public GameObject player;
     public GameObject medicalBill;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource ShieldAudioSource;
+    [SerializeField] private AudioClip blockSound;
+    [SerializeField] private AudioSource healthAudioSource;
+    [SerializeField] private AudioClip takeDamageSound;
+    [SerializeField] private AudioClip deathSound;
+
     private bool wasBlocking = false;
 
     void Start()
@@ -164,6 +171,9 @@ public class PlayerHealth : MonoBehaviour
     {
         if (playerStats.isBlocking)
         {
+            if (blockSound != null && ShieldAudioSource != null)
+                ShieldAudioSource.PlayOneShot(blockSound, 5f);
+
             playerStats.blockAmt++;
             UpdateShieldIcons();
 
@@ -179,14 +189,19 @@ public class PlayerHealth : MonoBehaviour
         }
 
         // Not blocking, take damage
-        playerStats.blockAmt = 0;
-        SetShieldIconsVisible(false);
-        playerStats.health -= damageToTake;
-        UpdateHealthUI();
-
+        if (playerStats.health > 0)
+        {
+            playerStats.blockAmt = 0;
+            SetShieldIconsVisible(false);
+            playerStats.health -= damageToTake;
+            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+        }
+            UpdateHealthUI();
+        
         if (playerStats.health <= 0)
         {
             playerDied();
+            healthAudioSource.PlayOneShot(deathSound, 1.0f);
         }
     }
 

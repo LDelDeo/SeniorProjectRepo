@@ -147,6 +147,7 @@ public class EnterCarScript : MonoBehaviour
     private void ExitCar()
     {
         siren.Stop();
+        carControllerScript.StopEngineSound();
 
         // Enable Player Camera
         playerCamera.gameObject.SetActive(true);
