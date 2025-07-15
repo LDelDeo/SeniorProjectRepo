@@ -48,6 +48,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private AudioSource healthAudioSource;
     [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip stimSound;
 
     private bool wasBlocking = false;
 
@@ -191,10 +192,11 @@ public class PlayerHealth : MonoBehaviour
         // Not blocking, take damage
         if (playerStats.health > 0)
         {
+            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
             playerStats.blockAmt = 0;
             SetShieldIconsVisible(false);
             playerStats.health -= damageToTake;
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            
         }
             UpdateHealthUI();
         
@@ -226,6 +228,7 @@ public class PlayerHealth : MonoBehaviour
         stimObject.SetActive(true);
         stimAnim.SetTrigger("stimShot");
         StartCoroutine(PlayerHeal());
+        healthAudioSource.PlayOneShot(stimSound, 1.0f);
     }
 
     private IEnumerator PlayerHeal()
