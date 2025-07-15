@@ -32,6 +32,11 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     public float knockbackDuration = 0.2f;
     private bool isKnockedBack = false;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource healthAudioSource;
+    [SerializeField] private AudioClip takeDamageSound;
+    [SerializeField] private AudioClip deathSound;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -120,9 +125,9 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     // Instant Death from Gun
     public void TakeDamageFromGun()
     {
+        healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
         fpShooting.Deathmarker();
-
         if (alertIconInstance != null)
         {
             Destroy(alertIconInstance);
@@ -135,13 +140,13 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
-
         if (!isSpooked)
             BecomeSpooked();
 
         if (health <= 0)
         {
             fpShooting.Deathmarker();
+            healthAudioSource.PlayOneShot(deathSound, 1.0f);
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
@@ -152,6 +157,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
+            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
             StartCoroutine(ApplyKnockback());
         }
     }

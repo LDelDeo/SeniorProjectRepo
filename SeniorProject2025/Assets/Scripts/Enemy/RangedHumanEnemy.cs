@@ -33,6 +33,11 @@ public class RangedHumanEnemy : MonoBehaviour
     private float attackCooldown = 2f;
     private float nextAttackTime = 0f;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource healthAudioSource;
+    [SerializeField] private AudioClip takeDamageSound;
+    [SerializeField] private AudioClip deathSound;
+
     // Start & Update
     private void Start()
     {
@@ -102,7 +107,7 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         bloodShed.Play();
         fpShooting.Deathmarker();
-
+        healthAudioSource.PlayOneShot(deathSound, 1.0f);
         if (alertIconInstance != null)
         {
             Destroy(alertIconInstance);
@@ -122,7 +127,9 @@ public class RangedHumanEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            healthAudioSource.PlayOneShot(deathSound, 1.0f);
             fpShooting.Deathmarker();
+            
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
@@ -133,6 +140,7 @@ public class RangedHumanEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
+            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
             StartCoroutine(ApplyKnockback());
         }
     }

@@ -132,7 +132,7 @@ public class CrimeSpawner : MonoBehaviour
         {
             var chosenCrime = availableCrimes[Random.Range(0, availableCrimes.Count)];
             Instantiate(chosenCrime.prefab, GetRandomPos(chosenCrime.locations), Quaternion.identity);
-            crimeSpawnerAudioSource.PlayOneShot(spawnCrimeSound, 1.0f);
+            crimeSpawnerAudioSource.PlayOneShot(spawnCrimeSound, 1.5f);
         }
     }
 

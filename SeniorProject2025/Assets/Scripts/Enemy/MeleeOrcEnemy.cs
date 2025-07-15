@@ -25,6 +25,11 @@ public class MeleeOrcEnemy : MonoBehaviour
     public float knockbackDuration = 0.2f;
     private bool isKnockedBack = false;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource healthAudioSource;
+    [SerializeField] private AudioClip takeDamageSound;
+    [SerializeField] private AudioClip deathSound;
+
     //Start & Update
     private void Start()
     {
@@ -71,6 +76,7 @@ public class MeleeOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            healthAudioSource.PlayOneShot(deathSound, 1.0f);
             fpShooting.Deathmarker();
             if (alertIconInstance != null)
             {
@@ -82,6 +88,7 @@ public class MeleeOrcEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
+            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
             StartCoroutine(ApplyKnockback());
         }
     }
