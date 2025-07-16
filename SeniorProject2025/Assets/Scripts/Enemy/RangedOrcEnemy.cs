@@ -18,6 +18,7 @@ public class RangedOrcEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    private Animator animator;
 
     [Header("Ranged Attack")]
     public GameObject projectilePrefab; //Assign this in the Inspector
@@ -37,6 +38,7 @@ public class RangedOrcEnemy : MonoBehaviour
     {
         //Game Elements
         health = maxHealth;
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -45,6 +47,15 @@ public class RangedOrcEnemy : MonoBehaviour
         playerTransform = GameObject.FindWithTag("Player");
         playerHealth = FindFirstObjectByType<PlayerHealth>();
         fpShooting = FindFirstObjectByType<FPShooting>();
+
+        if (isHostile == true)
+        {
+            animator.SetBool("isHostile", true);
+        }
+        else
+        {
+            animator.SetBool("isHostile", false);
+        }
 
         AttackPlayer();
     }
@@ -120,13 +131,13 @@ public class RangedOrcEnemy : MonoBehaviour
 
             if (Time.time >= nextAttackTime)
             {
-                ShootProjectile();
+                //ShootProjectile();
                 nextAttackTime = Time.time + attackCooldown;
             }
         }
     }
 
-    private void ShootProjectile()
+    public void ShootProjectile()
     {
         if (projectilePrefab != null && firePoint != null)
         {

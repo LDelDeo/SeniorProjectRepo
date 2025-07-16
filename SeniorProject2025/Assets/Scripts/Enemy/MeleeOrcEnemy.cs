@@ -8,7 +8,6 @@ public class MeleeOrcEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 6.5f;
     private float attackDamage = 35.0f;
-    //private float speed = 12.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -19,6 +18,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    private Animator animator;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 5f;
@@ -30,24 +30,49 @@ public class MeleeOrcEnemy : MonoBehaviour
     [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private AudioClip deathSound;
 
-    //Start & Update
+    [Header("Attack Settings")]
+    public float attackRange = 0.25f;
+    public float attackCooldown = 4.1f;
+    private bool isAttacking = false;
+    private bool canDealDamage = false;
+
+    // Start & Update
     private void Start()
     {
         health = maxHealth;
+        animator = GetComponentInChildren<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        playerTransform = GameObject.FindWithTag("Player");
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
+
     }
 
     private void Update()
     {
-        playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindFirstObjectByType<PlayerHealth>();
-        fpShooting = FindFirstObjectByType<FPShooting>();
-        agent = GetComponent<NavMeshAgent>();
+        animator.applyRootMotion = false;
+        if (playerTransform == null)
+            return;
 
-        if (!isKnockedBack)
-            FollowPlayer();
+        if (!isKnockedBack && isHostile)
+        {
+            float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
+
+            if (distance <= attackRange)
+            {
+                agent.isStopped = true;
+                if (!isAttacking)
+                    StartCoroutine(AttackPlayer());
+            }
+            else
+            {
+                agent.isStopped = false;
+                FollowPlayer();
+            }
+        }
     }
 
-    // Will Attack 
+    // Will Attack
     public void BecomeHostile()
     {
         isHostile = true;
@@ -59,8 +84,6 @@ public class MeleeOrcEnemy : MonoBehaviour
         }
     }
 
-
-
     // Dealing & Taking Damage
     public void DealDamage()
     {
@@ -71,7 +94,6 @@ public class MeleeOrcEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
-
         isHostile = true;
 
         if (health <= 0)
@@ -79,11 +101,8 @@ public class MeleeOrcEnemy : MonoBehaviour
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             fpShooting.Deathmarker();
             if (alertIconInstance != null)
-            {
                 Destroy(alertIconInstance);
-            }
-
-            Destroy(gameObject);    
+            Destroy(gameObject);
         }
         else
         {
@@ -116,7 +135,43 @@ public class MeleeOrcEnemy : MonoBehaviour
     // Movement
     private void FollowPlayer()
     {
-        if (isHostile)
+        if (isHostile && playerTransform != null)
             agent.destination = playerTransform.transform.position;
+            animator.SetTrigger("isMoving");
+    }
+
+    private void StopPursuit()
+    {
+        agent.ResetPath();
+    }
+
+    // Attack Coroutine
+    private IEnumerator AttackPlayer()
+    {
+        isAttacking = true;
+
+        if (animator != null)
+            animator.SetBool("isAttacking", true);
+
+        yield return new WaitForSeconds(attackCooldown);
+
+        isAttacking = false;
+        animator.SetBool("isAttacking", false);
+    }
+
+    // Called via animation event during attack animation
+    public void EnableDamageWindow()
+    {
+        canDealDamage = true;
+    }
+
+    // Called by hand collider script
+    public void TryDealDamage()
+    {
+        if (canDealDamage)
+        {
+            DealDamage();
+            canDealDamage = false; // Prevent double hit
+        }
     }
 }
