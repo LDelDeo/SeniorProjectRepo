@@ -712,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   purchaseableCars:
-  - {fileID: 919132149155446097, guid: f89363c3e5e39c243bbd50d1ba290299, type: 3}
+  - {fileID: 6049708161188215793, guid: d3a78d440bf5e3c458ab43539a791fbb, type: 3}
   - {fileID: 4806979267700107649, guid: 5aa3b138b4d4dd141a3e8b1c1b25370c, type: 3}
   - {fileID: 3365964616837895147, guid: 72affedeeeef4c14aabf2725fb49d2c8, type: 3}
   - {fileID: 8163176922697471242, guid: 6f8b53ef81d39d743bb0ab0ebc93ead4, type: 3}

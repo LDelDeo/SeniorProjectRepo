@@ -321,9 +321,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8374456103856775903, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3448063852989858490, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 609895942775911622, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
       propertyPath: m_Name
       value: CyberTruck
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538057606817204104, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4798030623285775711, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -331,6 +355,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 330585546}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1384731707}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fc1c33252d15f8748b53e0cd55bb33ef, type: 3}
       insertIndex: -1
@@ -988,6 +1015,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &699067838
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1061470186}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 7.6544394
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7.6544404
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7.654441
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5450001
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.18799865
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+      propertyPath: m_Name
+      value: PoliceCruiser
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,6 +2995,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327468036}
   m_CullTransparentMesh: 1
+--- !u!4 &1384731707 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 76024b8ca895925419962cefa2c1d310, type: 3}
+  m_PrefabInstance: {fileID: 699067838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1427338885
 GameObject:
   m_ObjectHideFlags: 0
