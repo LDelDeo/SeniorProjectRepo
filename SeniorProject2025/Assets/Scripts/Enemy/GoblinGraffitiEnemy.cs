@@ -206,7 +206,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasBeenCaught) return;
+        //if (hasBeenCaught) return;
 
         if (other.CompareTag("Player"))
         {
