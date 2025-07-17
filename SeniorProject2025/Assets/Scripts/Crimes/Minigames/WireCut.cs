@@ -19,6 +19,7 @@ public class WireCut : MonoBehaviour
     public bool doneCorrectly;
 
     private string correctWire;
+    public AudioSource explosion;
 
     void Start()
     {
@@ -83,8 +84,10 @@ public class WireCut : MonoBehaviour
             Invoke("CloseMinigame", 0.5f);
 
             doneCorrectly = false;
+
             // Player Death/Explosion
             playerHealth.playerDied();
+            explosion.Play();
         }
         
     }

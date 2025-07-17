@@ -7,6 +7,7 @@ public class EnterBombPlant : MonoBehaviour
 {
     public GameObject[] enemies;
     public GameObject exclamationPoint;
+    public AudioSource explosion;
 
     // Bomb Countdown
     public TMP_Text countdownText;
@@ -44,10 +45,12 @@ public class EnterBombPlant : MonoBehaviour
             {
                 //wireCut.doneCorrectly = false;
 
+                explosion.Play();
                 playerHealth.playerDied();
                 Destroy(exclamationPoint);
                 Destroy(gameObject);
                 timerEnded = true;
+
             }
 
             if (wireCut != null)

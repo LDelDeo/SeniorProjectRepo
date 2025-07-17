@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.AI;
+using System.Collections;
 
 public class MeleeOrcEnemy : MonoBehaviour
 {
@@ -31,12 +31,12 @@ public class MeleeOrcEnemy : MonoBehaviour
     [SerializeField] private AudioClip deathSound;
 
     [Header("Attack Settings")]
-    public float attackRange = 0.25f;
-    public float attackCooldown = 4.1f;
-    private bool isAttacking = false;
+    public float attackRange = 1.3f;
+    public float attackCooldown = 2.0f;
     private bool canDealDamage = false;
+    private float attackTimer = 0f;
+    private bool isAttacking = false;
 
-    // Start & Update
     private void Start()
     {
         health = maxHealth;
@@ -46,33 +46,82 @@ public class MeleeOrcEnemy : MonoBehaviour
         playerHealth = FindFirstObjectByType<PlayerHealth>();
         fpShooting = FindFirstObjectByType<FPShooting>();
 
+        agent.stoppingDistance = attackRange * 0.85f;
     }
 
     private void Update()
     {
-        animator.applyRootMotion = false;
-        if (playerTransform == null)
+        if (playerTransform == null || isKnockedBack || !isHostile)
             return;
 
-        if (!isKnockedBack && isHostile)
-        {
-            float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
+        float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
 
-            if (distance <= attackRange)
+        // Always face the player
+        Vector3 lookDir = playerTransform.transform.position - transform.position;
+        lookDir.y = 0;
+        if (lookDir != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+        }
+
+        attackTimer += Time.deltaTime;
+
+        if (distance <= attackRange)
+        {
+            if (!isAttacking && attackTimer >= attackCooldown)
             {
-                agent.isStopped = true;
-                if (!isAttacking)
-                    StartCoroutine(AttackPlayer());
+                StartAttack();
             }
-            else
+
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+
+            animator.SetBool("isMoving", false);
+        }
+        else
+        {
+            StopAttack();
+            FollowPlayer();
+        }
+    }
+
+    private void StartAttack()
+    {
+        isAttacking = true;
+        attackTimer = 0f;
+
+        if (animator != null)
+            animator.SetBool("isAttacking", true);
+    }
+
+    private void StopAttack()
+    {
+        if (isAttacking)
+        {
+            isAttacking = false;
+            if (animator != null)
+                animator.SetBool("isAttacking", false);
+        }
+
+        if (!agent.enabled || playerTransform == null)
+            return;
+
+        agent.isStopped = false;
+    }
+
+    private void FollowPlayer()
+    {
+        if (isHostile && playerTransform != null)
+        {
+            if (!agent.pathPending && agent.enabled)
             {
-                agent.isStopped = false;
-                FollowPlayer();
+                agent.SetDestination(playerTransform.transform.position);
+                animator.SetBool("isMoving", true);
             }
         }
     }
 
-    // Will Attack
     public void BecomeHostile()
     {
         isHostile = true;
@@ -84,10 +133,12 @@ public class MeleeOrcEnemy : MonoBehaviour
         }
     }
 
-    // Dealing & Taking Damage
     public void DealDamage()
     {
-        playerHealth.TakeDamage(attackDamage);
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(attackDamage);
+        }
     }
 
     public void TakeDamage(float damageToTake)
@@ -112,7 +163,6 @@ public class MeleeOrcEnemy : MonoBehaviour
         }
     }
 
-    // Knockback Coroutine
     private IEnumerator ApplyKnockback()
     {
         isKnockedBack = true;
@@ -132,46 +182,23 @@ public class MeleeOrcEnemy : MonoBehaviour
         isKnockedBack = false;
     }
 
-    // Movement
-    private void FollowPlayer()
-    {
-        if (isHostile && playerTransform != null)
-            agent.destination = playerTransform.transform.position;
-            animator.SetTrigger("isMoving");
-    }
-
-    private void StopPursuit()
-    {
-        agent.ResetPath();
-    }
-
-    // Attack Coroutine
-    private IEnumerator AttackPlayer()
-    {
-        isAttacking = true;
-
-        if (animator != null)
-            animator.SetBool("isAttacking", true);
-
-        yield return new WaitForSeconds(attackCooldown);
-
-        isAttacking = false;
-        animator.SetBool("isAttacking", false);
-    }
-
-    // Called via animation event during attack animation
+    // Called via animation event (beginning of punch wind-up)
     public void EnableDamageWindow()
     {
         canDealDamage = true;
     }
 
-    // Called by hand collider script
+    // Called via animation event (at impact frame)
     public void TryDealDamage()
     {
-        if (canDealDamage)
+        if (!canDealDamage) return;
+
+        float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
+        if (distance <= attackRange + 0.2f)
         {
             DealDamage();
-            canDealDamage = false; // Prevent double hit
         }
+
+        canDealDamage = false;
     }
 }

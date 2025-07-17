@@ -51,6 +51,7 @@ public class RangedOrcEnemy : MonoBehaviour
         if (isHostile == true)
         {
             animator.SetBool("isHostile", true);
+            RotateTowardsPlayer();
         }
         else
         {
@@ -59,6 +60,25 @@ public class RangedOrcEnemy : MonoBehaviour
 
         AttackPlayer();
     }
+
+    private void RotateTowardsPlayer()
+    {
+        if (playerTransform == null) return;
+
+        Vector3 direction = playerTransform.transform.position - transform.position;
+        direction.y = 0; // keep rotation only on horizontal plane
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            // Apply a -90 degrees Y offset to fix model facing
+            Quaternion rotationOffset = Quaternion.Euler(0, -90f, 0);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * rotationOffset, Time.deltaTime * 5f);
+        }
+    }
+
 
     //Will Attack
     public void BecomeHostile()
