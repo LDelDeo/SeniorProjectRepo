@@ -10,8 +10,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private GameObject policeOfficer;
     private NavMeshAgent agent;
     private bool isSpooked = false;
+    private bool hasBeenCaught = false;
     private float runDistance = 10f;
-    //private bool hasRunAway = false;
     private TMP_Text pressE;
     private bool canBeCuffed = false;
 
@@ -41,7 +41,15 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         enterCarScript = FindFirstObjectByType<EnterCarScript>();
-        
+        fpShooting = FindFirstObjectByType<FPShooting>();
+        policeOfficer = GameObject.FindGameObjectWithTag("Player");
+
+        GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
+        if (pressEObject != null)
+        {
+            pressE = pressEObject.GetComponent<TMP_Text>();
+        }
+
         health = maxHealth;
 
         if (enterCarScript.isInCar == false && pressE != null)
@@ -52,37 +60,43 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     void Update()
     {
-        if (enterCarScript.isInCar == false)
-        {
-            policeOfficer = GameObject.FindGameObjectWithTag("Player");
-            fpShooting = FindFirstObjectByType<FPShooting>();
-            GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
-            if (pressEObject != null)
-            {
-                pressE = pressEObject.GetComponent<TMP_Text>();
-            }
+        if (enterCarScript.isInCar || isKnockedBack || hasBeenCaught) return;
 
-            if (isKnockedBack) return;
-        }
-
-        
-        
-
-        if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && hasBeenCaught == false)
         {
             RunAway();
         }
 
         if (canBeCuffed && Input.GetKeyDown(KeyCode.E))
         {
-            pressE.text = "";
+            if (pressE != null) pressE.text = "";
             canBeCuffed = false;
+
+            hasBeenCaught = true;
+
+            agent.ResetPath();
+            agent.velocity = Vector3.zero;
             agent.isStopped = true;
 
             anim.SetBool("gotCaught", true);
+            anim.applyRootMotion = false;
+
+            Collider col = GetComponent<Collider>();
+            if (col != null) col.enabled = false;
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
+
+            isSpooked = false;
 
             StartCoroutine(Despawn());
         }
+
+
     }
 
     public IEnumerator Despawn()
@@ -93,6 +107,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     public void BecomeSpooked()
     {
+        if (hasBeenCaught) return;
+
         isSpooked = true;
 
         if (alertIconPrefab != null && alertIconInstance == null)
@@ -104,6 +120,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     private void RunAway()
     {
+        if (hasBeenCaught) return;
+
         Vector3 directionAwayFromThreat = (transform.position - policeOfficer.transform.position).normalized;
         Vector3 randomOffset = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
         Vector3 runToPosition = transform.position + directionAwayFromThreat * runDistance + randomOffset;
@@ -121,25 +139,29 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         }
     }
 
-
-    // Instant Death from Gun
     public void TakeDamageFromGun()
     {
+        if (hasBeenCaught) return;
+
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
         fpShooting.Deathmarker();
+
         if (alertIconInstance != null)
         {
             Destroy(alertIconInstance);
         }
 
-        Destroy(gameObject);    
+        Destroy(gameObject);
     }
 
     public void TakeDamageFromBaton(float damageToTake)
     {
+        if (hasBeenCaught) return;
+
         health -= damageToTake;
         bloodShed.Play();
+
         if (!isSpooked)
             BecomeSpooked();
 
@@ -147,12 +169,13 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         {
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
+
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
             }
-            
-            Destroy(gameObject);    
+
+            Destroy(gameObject);
         }
         else
         {
@@ -183,18 +206,25 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (hasBeenCaught) return;
+
+        if (other.CompareTag("Player"))
         {
-            pressE.text = "Press [E] to Handcuff";
+            if (pressE != null)
+                pressE.text = "Press [E] to Handcuff";
+
             canBeCuffed = true;
         }
     }
 
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.CompareTag("Player"))
         {
-            pressE.text = "";
+            if (pressE != null)
+                pressE.text = "";
+
             canBeCuffed = false;
         }
     }

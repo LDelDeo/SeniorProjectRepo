@@ -8,7 +8,6 @@ public class MeleeHumanEnemy : MonoBehaviour
     private float health;
     private float maxHealth = 4f;
     private float attackDamage = 15.0f;
-    //private float speed = 18.0f;
     private bool isHostile = false;
 
     [Header("Script & Player Grabs")]
@@ -19,6 +18,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    private Animator animator;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -30,24 +30,88 @@ public class MeleeHumanEnemy : MonoBehaviour
     [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private AudioClip deathSound;
 
-    //Start & Update
+    [Header("Attack Settings")]
+    public float attackRange = 1.2f;
+    public float attackCooldown = 1.8f;
+    private float attackTimer = 0f;
+    private bool isAttacking = false;
+    private bool canDealDamage = false;
+
     private void Start()
     {
         health = maxHealth;
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
+        playerTransform = GameObject.FindWithTag("Player");
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
+        fpShooting = FindFirstObjectByType<FPShooting>();
+
+        agent.stoppingDistance = attackRange * 0.85f;
     }
 
     private void Update()
     {
-        if (!isKnockedBack)
-            FollowPlayer();
+        if (!isHostile || isKnockedBack || playerTransform == null) return;
 
-        agent = GetComponent<NavMeshAgent>();
-        playerTransform = GameObject.FindWithTag("Player");
-        playerHealth = FindFirstObjectByType<PlayerHealth>();
-        fpShooting = FindFirstObjectByType<FPShooting>();
+        float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
+        Vector3 lookDir = playerTransform.transform.position - transform.position;
+        lookDir.y = 0;
+        if (lookDir != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
+        }
+
+        attackTimer += Time.deltaTime;
+
+        if (distance <= attackRange)
+        {
+            if (!isAttacking && attackTimer >= attackCooldown)
+                StartAttack();
+
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+        }
+        else
+        {
+            StopAttack();
+            FollowPlayer();
+        }
     }
 
-    // Will Attack 
+    private void FollowPlayer()
+    {
+        if (agent.enabled && !agent.pathPending && playerTransform != null)
+        {
+            agent.SetDestination(playerTransform.transform.position);
+            animator.SetTrigger("isMoving");
+
+        }
+    }
+
+    private void StartAttack()
+    {
+        isAttacking = true;
+        attackTimer = 0f;
+        if (animator != null)
+            animator.SetBool("isAttacking", true);
+    }
+
+    private void StopAttack()
+    {
+        if (isAttacking)
+        {
+            isAttacking = false;
+            if (animator != null)
+                animator.SetBool("isAttacking", false);
+        }
+
+        if (agent.enabled && playerTransform != null)
+        {
+            agent.isStopped = false;
+        }
+    }
+
     public void BecomeHostile()
     {
         isHostile = true;
@@ -59,48 +123,55 @@ public class MeleeHumanEnemy : MonoBehaviour
         }
     }
 
-
-
-    // Dealing & Taking Damage
     public void DealDamage()
     {
-        playerHealth.TakeDamage(attackDamage);
+        if (playerHealth != null)
+            playerHealth.TakeDamage(attackDamage);
     }
 
-    //Instant Death from Gun
+    public void EnableDamageWindow()
+    {
+        canDealDamage = true;
+    }
+
+    public void TryDealDamage()
+    {
+        if (!canDealDamage) return;
+
+        float distance = Vector3.Distance(transform.position, playerTransform.transform.position);
+        if (distance <= attackRange + 0.2f)
+        {
+            DealDamage();
+        }
+
+        canDealDamage = false;
+    }
+
     public void TakeDamageFromGun()
     {
+        if (alertIconInstance != null)
+            Destroy(alertIconInstance);
+
         bloodShed.Play();
         fpShooting.Deathmarker();
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
-        if (alertIconInstance != null)
-        {
-            Destroy(alertIconInstance);
-        }
-
-
-
-        Destroy(gameObject);    
+        Destroy(gameObject);
     }
 
     public void TakeDamageFromBaton(float damageToTake)
     {
         health -= damageToTake;
         bloodShed.Play();
-
         isHostile = true;
 
         if (health <= 0)
         {
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
-            fpShooting.Deathmarker();
             if (alertIconInstance != null)
-            {
-                
                 Destroy(alertIconInstance);
-            }
-            
-            Destroy(gameObject);    
+
+            fpShooting.Deathmarker();
+            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            Destroy(gameObject);
         }
         else
         {
@@ -110,7 +181,6 @@ public class MeleeHumanEnemy : MonoBehaviour
         }
     }
 
-    // Knockback Coroutine
     private IEnumerator ApplyKnockback()
     {
         isKnockedBack = true;
@@ -128,12 +198,5 @@ public class MeleeHumanEnemy : MonoBehaviour
 
         agent.isStopped = false;
         isKnockedBack = false;
-    }
-
-    // Movement
-    private void FollowPlayer()
-    {
-        if (isHostile)
-            agent.destination = playerTransform.transform.position;
     }
 }

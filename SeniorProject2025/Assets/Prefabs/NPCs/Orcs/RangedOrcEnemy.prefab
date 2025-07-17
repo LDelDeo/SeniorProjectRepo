@@ -1077,10 +1077,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.4175912
+  m_Radius: 0.58651763
   m_Height: 2.8351836
   m_Direction: 1
-  m_Center: {x: 0.035895865, y: 1, z: 0.05128751}
+  m_Center: {x: 0.051148627, y: 1, z: 0.07325536}
 --- !u!195 &2985762116921262449
 NavMeshAgent:
   m_ObjectHideFlags: 0
