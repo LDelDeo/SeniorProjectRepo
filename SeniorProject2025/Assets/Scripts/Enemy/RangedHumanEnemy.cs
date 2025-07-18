@@ -37,12 +37,19 @@ public class RangedHumanEnemy : MonoBehaviour
     [SerializeField] private AudioSource healthAudioSource;
     [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip shootSound;
+
+    [Header("Animation")]
+    private Animator animator;
+    public GameObject pistol;
 
     // Start & Update
     private void Start()
     {
         //Game Elements
         health = maxHealth;
+        animator = GetComponentInChildren<Animator>();
+        pistol.SetActive(false);
     }
 
     private void Update()
@@ -67,6 +74,7 @@ public class RangedHumanEnemy : MonoBehaviour
     public void BecomeHostile()
     {
         isHostile = true;
+        pistol.SetActive(true);
 
         if (alertIconPrefab != null && alertIconInstance == null)
         {
@@ -78,17 +86,28 @@ public class RangedHumanEnemy : MonoBehaviour
     //Rotate to Face Player
     private void FacePlayer()
     {
-        if (playerTransform != null)
+        if (playerTransform == null) return;
+
+        Vector3 direction = (playerTransform.transform.position - transform.position).normalized;
+        direction.y = 0f;
+
+        if (direction != Vector3.zero)
         {
-            Vector3 direction = (playerTransform.transform.position - transform.position).normalized;
-            direction.y = 0f;
-            if (direction != Vector3.zero)
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+
+            // Check if attacking
+            bool isAttacking = animator != null && animator.GetBool("isAttacking");
+
+            // Apply rotation offset only when attacking
+            if (isAttacking)
             {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
+                lookRotation *= Quaternion.Euler(0, -35f, 0);
             }
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         }
     }
+
 
 
 
@@ -154,29 +173,53 @@ public class RangedHumanEnemy : MonoBehaviour
 
         if (distanceToPlayer > attackRange)
         {
-            //Move toward player if out of range
-            agent.destination = playerTransform.transform.position;
+            // Move toward player
+            if (Time.time >= nextAttackTime) // Only move if not preparing to shoot
+            {
+                agent.isStopped = false;
+                agent.destination = playerTransform.transform.position;
+
+                // Play movement animation
+                if (animator != null)
+                {
+                    animator.SetTrigger("isMoving");
+                    animator.SetBool("isAttacking", false);
+                }
+            }
         }
         else
         {
-            //Stop moving and shoot if in range
+            // Stop movement and attack
+            agent.isStopped = true;
             agent.destination = transform.position;
+
+            if (animator != null)
+            {
+                animator.ResetTrigger("isMoving");
+                animator.SetBool("isAttacking", true);
+            }
 
             if (Time.time >= nextAttackTime)
             {
-                ShootProjectile();
                 nextAttackTime = Time.time + attackCooldown;
+
+                // Delay fire to sync with anim event, or fire instantly:
+                //ShootProjectile(); 
+                // we do this in the animation event
             }
         }
+
     }
 
-    private void ShootProjectile()
+
+    public void ShootProjectile()
     {
         if (projectilePrefab != null && firePoint != null)
         {
             GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
             Vector3 direction = (playerTransform.transform.position - firePoint.position).normalized;
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            healthAudioSource.PlayOneShot(shootSound, 1.0f);
             if (rb != null)
             {
                 rb.linearVelocity = direction * projectileSpeed;

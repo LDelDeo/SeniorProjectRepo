@@ -20484,6 +20484,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8327209191512733544, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 078dc0482dd092c4bbd58583e6111920, type: 2}
+    - target: {fileID: 8327209191512733544, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 10924f940fb60e64b9196330a873db38, type: 2}
+    - target: {fileID: 8327209191512733544, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: 'm_Materials.Array.data[3]'
       value: 
       objectReference: {fileID: 2100000, guid: 20bb015401e38814e9d08172178c267e, type: 2}
@@ -20491,6 +20499,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 20bb015401e38814e9d08172178c267e, type: 2}
+    - target: {fileID: 9197141473727647856, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 078dc0482dd092c4bbd58583e6111920, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20518,6 +20530,10 @@ PrefabInstance:
       propertyPath: m_Speed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1517812450271102559, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 16e97cea94d7f9d40a6d2f0de0ae21d5, type: 2}
     - target: {fileID: 4115492426519597622, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: m_Name
       value: MeleeHumanEnemy (2)
