@@ -32,7 +32,7 @@ public class NPCWaypoints : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * Quaternion.Euler(0, -90f, 0), Time.deltaTime * 5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * Quaternion.Euler(0, -100f, 0), Time.deltaTime * 5f);
 
         }
     }

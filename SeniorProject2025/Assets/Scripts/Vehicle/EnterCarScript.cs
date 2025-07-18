@@ -87,7 +87,7 @@ public class EnterCarScript : MonoBehaviour
 
     private void CarLights()
     {
-        if (isInCar && Input.GetKeyDown(KeyCode.P))
+        if (isInCar && Input.GetKeyDown(KeyCode.Q))
         {
             carLights.SetActive(!carLights.activeSelf);
 
