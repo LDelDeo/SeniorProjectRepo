@@ -100,6 +100,21 @@ public class PlayerData : MonoBehaviour
 
         }
     }
+    
+    public int GetXPRequiredForLevel(int level)
+    {
+        switch (level)
+        {
+            case 1: return 95;
+            case 2: return 195;
+            case 3: return 500;
+            case 4: return 600;
+            case 5: return 700;
+            case 6: return 1400;
+            default: return 1400 + (level - 6) * 50;
+        }
+    }
+
     public void CheckCurrentLvl()
     {
         switch (level)
@@ -125,7 +140,7 @@ public class PlayerData : MonoBehaviour
             default:
                 int linearXP = 50;
                 xpToNextLevel = 1400 + (level - 6) * linearXP;
-               
+
                 break;
         }
     }

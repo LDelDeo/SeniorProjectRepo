@@ -42,15 +42,19 @@ public class CrimeCompletion : MonoBehaviour
 
         TMP_Text xpGained = screen.transform.Find("XPText").GetComponent<TMP_Text>();
         TMP_Text creditsGained = screen.transform.Find("CreditsText").GetComponent<TMP_Text>();
+        TMP_Text totalCredits = screen.transform.Find("CompletionCreditsText").GetComponent<TMP_Text>();
 
         xpGained.text = "You Gained " + XP + " XP";
         creditsGained.text = "You Gained " + Credits + " Credits";
+        
 
         int oldLevel = playerData.level;
         int oldXP = playerData.xp;
 
         playerData.AddCredits(Credits);
         playerData.AddXP(XP);
+
+        totalCredits.text = "" + PlayerPrefs.GetInt("Credits", 0);
 
         int newLevel = playerData.level;
         int newXP = playerData.xp;
@@ -80,51 +84,76 @@ public class CrimeCompletion : MonoBehaviour
 
     private IEnumerator AnimateXPBar(Slider xpBar, int oldXP, int newXP, int finalMaxXP, int oldLevel, int newLevel)
     {
-        float duration = 0.8f;
-        int startXP = oldXP;
-        int currentMax = finalMaxXP;
-        int levelsToAnimate = newLevel - oldLevel;
+        float xpBarBecomesActiveAt = 5.5f;
+        float waitBeforeStart = 8.0f;
+        float duration = 3.75f;
 
-        if (levelsToAnimate <= 0)
+        yield return new WaitForSeconds(xpBarBecomesActiveAt);
+
+        while (!xpBar.gameObject.activeInHierarchy)
+            yield return null;
+
+        yield return null;
+
+        xpBar.maxValue = playerData.GetXPRequiredForLevel(oldLevel);
+        xpBar.value = oldXP;
+
+        yield return new WaitForSeconds(waitBeforeStart - xpBarBecomesActiveAt);
+
+        if (newLevel == oldLevel)
         {
-            // Just animate XP gain within same level
             float t = 0f;
             while (t < duration)
             {
                 t += Time.deltaTime;
-                xpBar.value = Mathf.Lerp(startXP, newXP, t / duration);
+                xpBar.value = Mathf.Lerp(oldXP, newXP, t / duration);
                 yield return null;
             }
             xpBar.value = newXP;
         }
         else
         {
-            // Animate level-up progression
-            for (int i = 0; i < levelsToAnimate; i++)
+            int currentXP = oldXP;
+
+            for (int level = oldLevel; level < newLevel; level++)
             {
+                int levelXPRequired = playerData.GetXPRequiredForLevel(level);
+                xpBar.maxValue = levelXPRequired;
+                xpBar.value = currentXP;
+
                 float t = 0f;
                 while (t < duration)
                 {
                     t += Time.deltaTime;
-                    xpBar.maxValue = currentMax;
-                    xpBar.value = Mathf.Lerp(startXP, currentMax, t / duration);
+                    xpBar.value = Mathf.Lerp(currentXP, levelXPRequired, t / duration);
                     yield return null;
                 }
 
-                xpBar.value = currentMax;
-                yield return new WaitForSeconds(0.15f);
+                xpBar.value = levelXPRequired;
+                yield return new WaitForSeconds(0.2f);
 
-                startXP = 0;
-                currentMax = Mathf.RoundToInt(currentMax * 2.5f); // You can change this scaling if needed
+                float resetDuration = 0.5f;
+                float tReset = 0f;
+                while (tReset < resetDuration)
+                {
+                    tReset += Time.deltaTime;
+                    xpBar.value = Mathf.Lerp(levelXPRequired, 0, tReset / resetDuration);
+                    yield return null;
+                }
+
+                xpBar.value = 0;
+                currentXP = 0;
             }
 
-            // Animate final partial XP
-            xpBar.maxValue = finalMaxXP;
-            float tFinal = 0f;
-            while (tFinal < duration)
+            int finalLevelXPRequired = playerData.GetXPRequiredForLevel(newLevel);
+            xpBar.maxValue = finalLevelXPRequired;
+            xpBar.value = 0;
+
+            float finalT = 0f;
+            while (finalT < duration)
             {
-                tFinal += Time.deltaTime;
-                xpBar.value = Mathf.Lerp(0, newXP, tFinal / duration);
+                finalT += Time.deltaTime;
+                xpBar.value = Mathf.Lerp(0, newXP, finalT / duration);
                 yield return null;
             }
 
@@ -134,9 +163,10 @@ public class CrimeCompletion : MonoBehaviour
 
     private IEnumerator ShowLevelUpMessage(TMP_Text levelUpText)
     {
+        yield return new WaitForSeconds(11.75f);
         levelUpText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        levelUpText.gameObject.SetActive(false);
+        //yield return new WaitForSeconds(3f);
+        //levelUpText.gameObject.SetActive(false);
     }
 
 }
