@@ -228,7 +228,7 @@ public class PlayerHealth : MonoBehaviour
         stimObject.SetActive(true);
         stimAnim.SetTrigger("stimShot");
         StartCoroutine(PlayerHeal());
-        healthAudioSource.PlayOneShot(stimSound, 1.0f);
+        healthAudioSource.PlayOneShot(stimSound, 1.5f);
     }
 
     private IEnumerator PlayerHeal()
