@@ -231,17 +231,29 @@ public class CarController : MonoBehaviour
             float speedPercent = Mathf.Clamp01(rb.linearVelocity.magnitude / maxSpeed);
             float targetPitch = Mathf.Lerp(minPitch, maxPitch, speedPercent);
 
-           
             currentPitch = Mathf.Lerp(currentPitch, targetPitch, Time.deltaTime * 5f);
             engineAudioSource.pitch = currentPitch;
         }
-      
+        else
+        {
+            if (engineWasPlaying)
+            {
+                engineAudioSource.Stop();
+                engineWasPlaying = false;
+            }
+        }
     }
 
     public void StopEngineSound()
     {
         if (engineAudioSource != null && engineAudioSource.isPlaying)
             engineAudioSource.Stop();
+    }
+
+    public void OnExitCar()
+    {
+        StopEngineSound();
+        engineWasPlaying = false;
     }
 
     private void DisplaySpeed()

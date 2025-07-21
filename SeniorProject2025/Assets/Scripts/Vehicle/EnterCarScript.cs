@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class EnterCarScript : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class EnterCarScript : MonoBehaviour
    public FPController playerMovement;
    public FPShooting fpShooting;
    public DebugConsole debugConsole;
-    public AudioSource siren;
+    public AudioSource sirenAudioSource;
+    public AudioClip siren;
 
     void Start()
     {
@@ -32,7 +34,13 @@ public class EnterCarScript : MonoBehaviour
         {
             EnterCar();
 
-            siren.Play();
+            // Setup and play looping siren
+            if (sirenAudioSource != null && siren != null)
+            {
+                sirenAudioSource.clip = siren;
+                sirenAudioSource.loop = true;
+                sirenAudioSource.Play();
+            }
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -90,16 +98,23 @@ public class EnterCarScript : MonoBehaviour
         if (isInCar && Input.GetKeyDown(KeyCode.Q))
         {
             carLights.SetActive(!carLights.activeSelf);
-
             areLightsOn = carLights.activeSelf;
 
             if (areLightsOn)
             {
-                siren.Play();
+                if (sirenAudioSource != null && siren != null)
+                {
+                    sirenAudioSource.clip = siren;
+                    sirenAudioSource.loop = true;
+                    sirenAudioSource.Play();
+                }
             }
             else
             {
-                siren.Stop();
+                if (sirenAudioSource != null && sirenAudioSource.isPlaying)
+                {
+                    sirenAudioSource.Stop();
+                }
             }
         }
     }
@@ -107,49 +122,53 @@ public class EnterCarScript : MonoBehaviour
 
     private void EnterCar()
     {
-        // Disable Player Movement Script and Character Controller
         playerMovement.enabled = false;
-        // Set Player Pos to Under Map Car Transform
         player.transform.position = playerInCarTransform.position;
-
         player.GetComponent<Rigidbody>().useGravity = false;
-        // Disable Player Camera
+
         playerCamera.gameObject.SetActive(false);
-        // Disbale Player HUD
         playerCanvas.gameObject.SetActive(false);
-
-        // Disable Player Shoot Script
         fpShooting.enabled = false;
-        // Enable the car's camera and canvas
-        carCamera.gameObject.SetActive(true); // Enable the car's camera
-        carCanvas.gameObject.SetActive(true); // Enable the car's UI canvas
 
-        // Enable the car's controller script when the player is in the car
+        carCamera.gameObject.SetActive(true);
+        carCanvas.gameObject.SetActive(true);
+
         if (carControllerScript != null)
         {
             carControllerScript.enabled = true;
         }
 
-        isInCar = true; // Player is now in the car
-        enterText.SetActive(false); // Hide the 'Enter' text
-        PlayerPrefs.SetInt("IsInCar", isInCar ? 1 : 0);
+        isInCar = true;
+        enterText.SetActive(false);
+        PlayerPrefs.SetInt("IsInCar", 1);
 
         if (areLightsOn)
         {
-            siren.Play();
+            if (sirenAudioSource != null && siren != null)
+            {
+                sirenAudioSource.clip = siren;
+                sirenAudioSource.loop = true;
+                sirenAudioSource.Play();
+            }
         }
         else
         {
-            siren.Stop();
+            if (sirenAudioSource != null && sirenAudioSource.isPlaying)
+            {
+                sirenAudioSource.Stop();
+            }
         }
     }
 
     private void ExitCar()
     {
-        siren.Stop();
-        carControllerScript.StopEngineSound();
+        if (sirenAudioSource != null && sirenAudioSource.isPlaying)
+        {
+            sirenAudioSource.Stop();
+        }
 
-        // Enable Player Camera
+        carControllerScript.OnExitCar();
+
         playerCamera.gameObject.SetActive(true);
 
         // Enable Player HUD

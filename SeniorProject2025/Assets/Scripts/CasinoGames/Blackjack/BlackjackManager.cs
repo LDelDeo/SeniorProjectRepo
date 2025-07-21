@@ -59,7 +59,9 @@ public class BlackjackManager : MonoBehaviour
         restartButton.interactable = false;
         DisableMainButtons();
         resultText.text = "Place your bets to begin.";
-        UpdateCreditsUI();
+        
+        StartCoroutine(DelayedUIRefresh());
+
     }
 
     void PlaceBet()
@@ -571,5 +573,11 @@ public class BlackjackManager : MonoBehaviour
             }
         }
     }
+    IEnumerator DelayedUIRefresh()
+    {
+        yield return new WaitForSeconds(0.1f);
+        UpdateCreditsUI();
+    }
+
 
 }

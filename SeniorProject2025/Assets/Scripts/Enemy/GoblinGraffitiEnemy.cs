@@ -69,10 +69,13 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
         if (canBeCuffed && Input.GetKeyDown(KeyCode.E))
         {
-            if (pressE != null) pressE.text = "";
+            hasBeenCaught = true;
             canBeCuffed = false;
 
-            hasBeenCaught = true;
+            if (pressE != null)
+            {
+                pressE.text = ""; 
+            }
 
             agent.ResetPath();
             agent.velocity = Vector3.zero;
@@ -146,6 +149,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
         fpShooting.Deathmarker();
+        if (pressE != null) pressE.text = "";
+
 
         if (alertIconInstance != null)
         {
@@ -169,6 +174,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         {
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            if (pressE != null) pressE.text = "";
 
             if (alertIconInstance != null)
             {
@@ -206,7 +212,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (hasBeenCaught) return;
+        if (hasBeenCaught) return; // Prevent showing prompt after already caught
 
         if (other.CompareTag("Player"))
         {

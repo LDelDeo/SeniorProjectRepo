@@ -22,9 +22,16 @@ public static class SceneHelper
 
         PlayerPrefs.Save();
 
-        // Load new scene
-        //SceneManager.LoadScene(sceneName);
-        LoadingScreenManager.Instance.LoadSceneWithLoadingScreen(sceneName);
+        // Load new scene with fallback
+        if (LoadingScreenManager.Instance != null)
+        {
+            LoadingScreenManager.Instance.LoadSceneWithLoadingScreen(sceneName);
+        }
+        else
+        {
+            Debug.LogWarning("LoadingScreenManager.Instance is null. Falling back to SceneManager.LoadScene.");
+            SceneManager.LoadScene(sceneName);
+        }
     }
 }
 
