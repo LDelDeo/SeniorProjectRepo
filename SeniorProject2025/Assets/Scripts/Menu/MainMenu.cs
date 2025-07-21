@@ -34,6 +34,7 @@ public class Menu : MonoBehaviour
             newGameButton.SetActive(true);
             playTutorial.isOn = true;      
         }
+        this.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", 1f);
     }
 
 

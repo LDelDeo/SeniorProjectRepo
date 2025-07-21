@@ -1073,7 +1073,8 @@ MonoBehaviour:
   fpController: {fileID: 0}
   fpsShooting: {fileID: 0}
   musicSource: {fileID: 0}
-  sfxAudioSources: []
+  sfxAudioSources:
+  - {fileID: 0}
   musicSlider: {fileID: 5740804839903121383}
   audioSlider: {fileID: 6228887432752073232}
   sensitivitySlider: {fileID: 4758682543365755279}

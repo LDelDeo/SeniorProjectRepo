@@ -14,6 +14,8 @@ public class OptionsMenuManager : MonoBehaviour
     public Slider audioSlider;
     public Slider sensitivitySlider;
 
+    private GameObject[] npcCar;
+
     void Start()
     {
         float sensitivity = PlayerPrefs.GetFloat("Sensitivity", 1f);
@@ -31,6 +33,7 @@ public class OptionsMenuManager : MonoBehaviour
         // Apply initial volume based on loaded prefs
         OnMusicVolumeChanged(musicVolume);
         OnSFXVolumeChanged(sfxVolume);
+
     }
 
     void Update()
@@ -38,6 +41,21 @@ public class OptionsMenuManager : MonoBehaviour
         if (fpController == null)
         {
             fpController = FindFirstObjectByType<FPController>();
+        }
+
+        if (npcCar == null)
+        {
+            npcCar = GameObject.FindGameObjectsWithTag("NPCCar");
+
+            foreach (GameObject car in npcCar)
+            {
+                AudioSource[] sources = car.GetComponents<AudioSource>();
+                foreach (AudioSource src in sources)
+                {
+                    sfxAudioSources.Add(src);
+                    src.volume = audioSlider.value;
+                }
+            }
         }
     }
 
