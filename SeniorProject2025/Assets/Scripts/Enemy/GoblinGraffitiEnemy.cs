@@ -148,6 +148,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
+        GetComponent<NPCRagdoll>().Die();
         fpShooting.Deathmarker();
         if (pressE != null) pressE.text = "";
 
@@ -157,7 +158,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
             Destroy(alertIconInstance);
         }
 
-        Destroy(gameObject);
+        Destroy(this);
     }
 
     public void TakeDamageFromBaton(float damageToTake)
@@ -172,6 +173,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            
+            GetComponent<NPCRagdoll>().Die();
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             if (pressE != null) pressE.text = "";
@@ -181,7 +184,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
                 Destroy(alertIconInstance);
             }
 
-            Destroy(gameObject);
+            Destroy(this);
         }
         else
         {
@@ -213,13 +216,16 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (hasBeenCaught) return; // Prevent showing prompt after already caught
-
-        if (other.CompareTag("Player"))
+        if (health > 0)
         {
-            if (pressE != null)
-                pressE.text = "Press [E] to Handcuff";
+            if (other.CompareTag("Player"))
+            {
+                if (pressE != null)
+                    pressE.text = "Press [E] to Handcuff";
 
-            canBeCuffed = true;
+
+                canBeCuffed = true;
+            }
         }
     }
 

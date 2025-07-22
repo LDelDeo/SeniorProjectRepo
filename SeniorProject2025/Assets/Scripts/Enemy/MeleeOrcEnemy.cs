@@ -153,7 +153,8 @@ public class MeleeOrcEnemy : MonoBehaviour
             fpShooting.Deathmarker();
             if (alertIconInstance != null)
                 Destroy(alertIconInstance);
-            Destroy(gameObject);
+            GetComponent<NPCRagdoll>().Die();
+            Destroy(this);
         }
         else
         {

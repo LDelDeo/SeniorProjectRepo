@@ -155,7 +155,8 @@ public class MeleeHumanEnemy : MonoBehaviour
         bloodShed.Play();
         fpShooting.Deathmarker();
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
-        Destroy(gameObject);
+        GetComponent<NPCRagdoll>().Die();
+        Destroy(this);
     }
 
     public void TakeDamageFromBaton(float damageToTake)
@@ -171,7 +172,8 @@ public class MeleeHumanEnemy : MonoBehaviour
 
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
-            Destroy(gameObject);
+            GetComponent<NPCRagdoll>().Die();
+            Destroy(this);
         }
         else
         {

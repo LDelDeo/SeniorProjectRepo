@@ -123,7 +123,8 @@ public class RangedOrcEnemy : MonoBehaviour
                 Destroy(alertIconInstance);
             }
 
-            Destroy(gameObject);
+            GetComponent<NPCRagdoll>().Die();
+            Destroy(this);
         }
         else
         {

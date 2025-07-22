@@ -134,7 +134,8 @@ public class RangedHumanEnemy : MonoBehaviour
 
 
 
-        Destroy(gameObject);    
+        GetComponent<NPCRagdoll>().Die();
+        Destroy(this);
     }
 
     public void TakeDamageFromBaton(float damageToTake)
@@ -153,8 +154,9 @@ public class RangedHumanEnemy : MonoBehaviour
             {
                 Destroy(alertIconInstance);
             }
-            
-            Destroy(gameObject);    
+
+            GetComponent<NPCRagdoll>().Die();
+            Destroy(this);
         }
         else
         {
