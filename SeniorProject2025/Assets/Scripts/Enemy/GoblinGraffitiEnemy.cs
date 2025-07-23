@@ -66,7 +66,11 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         {
             RunAway();
         }
-
+        if(canBeCuffed)
+        {
+            if (pressE != null)
+                pressE.text = "Press [E] to Handcuff";
+        }
         if (canBeCuffed && Input.GetKeyDown(KeyCode.E))
         {
             hasBeenCaught = true;
@@ -218,17 +222,12 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (hasBeenCaught) return; // Prevent showing prompt after already caught
-        if (health > 0)
-        {
+       
             if (other.CompareTag("Player"))
             {
-                if (pressE != null)
-                    pressE.text = "Press [E] to Handcuff";
-
-
                 canBeCuffed = true;
             }
-        }
+        
     }
 
 
