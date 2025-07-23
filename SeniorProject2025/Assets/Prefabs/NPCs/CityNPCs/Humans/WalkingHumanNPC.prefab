@@ -359,6 +359,9 @@ PrefabInstance:
       addedObject: {fileID: 785306105066123919}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b39b27a8d7c9bb44820c1855258fd56, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -2298049576812744894}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b39b27a8d7c9bb44820c1855258fd56, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1847215374827586652}
   m_SourcePrefab: {fileID: 100100000, guid: 1b39b27a8d7c9bb44820c1855258fd56, type: 3}
 --- !u!1 &4908442890583256091 stripped
@@ -427,6 +430,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-2298049576812744894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4908442890583256091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb9988dc5cd6e842aa25f41a3b86df7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humanVoice: {fileID: 1847215374827586652}
+  voiceClips:
+  - {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
+  - {fileID: 8300000, guid: dc317b8533fbd9a4d866ebac0cbf84f3, type: 3}
 --- !u!82 &1847215374827586652
 AudioSource:
   m_ObjectHideFlags: 0
@@ -437,8 +456,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a5d54bf536616b24fae6d8be96e7ec6a, type: 3}
-  m_Resource: {fileID: 8300000, guid: a5d54bf536616b24fae6d8be96e7ec6a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
+  m_Resource: {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
