@@ -150,6 +150,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     public void TakeDamageFromGun()
     {
         GetComponent<NPCRagdoll>().Die();
+        gameObject.tag = "Untagged";
         if (alertIconInstance != null)
             Destroy(alertIconInstance);
 
@@ -169,6 +170,7 @@ public class MeleeHumanEnemy : MonoBehaviour
         if (health <= 0)
         {
             GetComponent<NPCRagdoll>().Die();
+            gameObject.tag = "Untagged";
             if (alertIconInstance != null)
                 Destroy(alertIconInstance);
 

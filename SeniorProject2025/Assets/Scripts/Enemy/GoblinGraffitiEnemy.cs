@@ -149,6 +149,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
         GetComponent<NPCRagdoll>().Die();
+        gameObject.tag = "Untagged";
         fpShooting.Deathmarker();
         if (pressE != null) pressE.text = "";
 
@@ -175,6 +176,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         {
             
             GetComponent<NPCRagdoll>().Die();
+            gameObject.tag = "Untagged";
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             if (pressE != null) pressE.text = "";
