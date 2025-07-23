@@ -520,6 +520,7 @@ MonoBehaviour:
   voiceClips:
   - {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
   - {fileID: 8300000, guid: dc317b8533fbd9a4d866ebac0cbf84f3, type: 3}
+  - {fileID: 8300000, guid: c2c399e0902da90489a4aa95677d0a75, type: 3}
 --- !u!82 &9108372126796263516
 AudioSource:
   m_ObjectHideFlags: 0
