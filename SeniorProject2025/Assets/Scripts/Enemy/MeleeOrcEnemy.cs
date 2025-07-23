@@ -149,6 +149,7 @@ public class MeleeOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            gameObject.tag = "Untagged";
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             fpShooting.Deathmarker();
             if (alertIconInstance != null)

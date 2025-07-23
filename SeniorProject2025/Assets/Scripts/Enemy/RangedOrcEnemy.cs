@@ -112,6 +112,7 @@ public class RangedOrcEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            gameObject.tag = "Untagged";
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             int orcsDefeated = PlayerPrefs.GetInt("RangedOrcsDefeated", 0);
             PlayerPrefs.SetInt("RangedOrcsDefeated", orcsDefeated + 1);

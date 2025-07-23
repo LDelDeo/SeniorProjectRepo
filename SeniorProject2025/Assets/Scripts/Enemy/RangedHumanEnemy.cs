@@ -126,6 +126,7 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         bloodShed.Play();
         fpShooting.Deathmarker();
+        gameObject.tag = "Untagged";
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         if (alertIconInstance != null)
         {
@@ -142,14 +143,13 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
-        
         isHostile = true;
 
         if (health <= 0)
         {
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
             fpShooting.Deathmarker();
-            
+            gameObject.tag = "Untagged";
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
