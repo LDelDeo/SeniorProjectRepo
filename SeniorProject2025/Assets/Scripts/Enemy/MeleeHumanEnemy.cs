@@ -149,13 +149,14 @@ public class MeleeHumanEnemy : MonoBehaviour
 
     public void TakeDamageFromGun()
     {
+        GetComponent<NPCRagdoll>().Die();
         if (alertIconInstance != null)
             Destroy(alertIconInstance);
 
         bloodShed.Play();
         fpShooting.Deathmarker();
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
-        GetComponent<NPCRagdoll>().Die();
+        
         Destroy(this);
     }
 
@@ -167,12 +168,13 @@ public class MeleeHumanEnemy : MonoBehaviour
 
         if (health <= 0)
         {
+            GetComponent<NPCRagdoll>().Die();
             if (alertIconInstance != null)
                 Destroy(alertIconInstance);
 
             fpShooting.Deathmarker();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
-            GetComponent<NPCRagdoll>().Die();
+           
             Destroy(this);
         }
         else
