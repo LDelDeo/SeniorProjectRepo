@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public class NPCWaypoints : MonoBehaviour
 {
+    [Header("Waypoints")]
     public GameObject[] waypoints;
     private int currentWaypointIndex = 0;
     private NavMeshAgent agent;
@@ -33,8 +34,6 @@ public class NPCWaypoints : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * Quaternion.Euler(0, -100f, 0), Time.deltaTime * 5f);
-
         }
     }
-
 }

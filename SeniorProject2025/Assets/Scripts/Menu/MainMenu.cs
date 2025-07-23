@@ -54,17 +54,17 @@ public class Menu : MonoBehaviour
 
     public void NewGame()
     {
-
-
         if (playTutorial.isOn)
         {
             //SceneManager.LoadScene("TutorialScene");
             LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("TutorialScene");
+            PlayerPrefs.DeleteAll();
         }
         else
         {
             //SceneManager.LoadScene("MainScene");
             LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
+            PlayerPrefs.DeleteAll();
         }
     }
 
