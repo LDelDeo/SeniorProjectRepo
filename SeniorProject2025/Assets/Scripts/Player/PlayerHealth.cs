@@ -33,6 +33,7 @@ public class PlayerHealth : MonoBehaviour
     private bool isStimReady = true;
     private float stimShotAnimTime = 0.75f;
     private float currentHealthNow;
+    public Animator stimStunAnim;
 
     [Header("Fade & Respawn")]
     public Image fadeImage;
@@ -49,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private AudioClip takeDamageSound;
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip stimSound;
+    [SerializeField] private AudioClip stimStunned;
 
     private bool wasBlocking = false;
 
@@ -227,14 +229,16 @@ public class PlayerHealth : MonoBehaviour
         shieldObject.SetActive(false);
         stimObject.SetActive(true);
         stimAnim.SetTrigger("stimShot");
-        StartCoroutine(PlayerHeal());
-        healthAudioSource.PlayOneShot(stimSound, 1.5f);
+        StartCoroutine(PlayerHeal()); 
     }
 
     private IEnumerator PlayerHeal()
     {
         yield return new WaitForSeconds(stimShotAnimTime);
+        healthAudioSource.PlayOneShot(stimSound, 1.5f);
+        stimStunAnim.SetTrigger("Stunned");
         shieldObject.SetActive(true);
+        healthAudioSource.PlayOneShot(stimStunned, 2.0f);
         
         var healthToHeal = playerStats.maxHealth - currentHealthNow;
         var healingHealth = 0;
