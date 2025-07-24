@@ -100,16 +100,23 @@ public class SlotMachineManager : MonoBehaviour
     IEnumerator SpinAllReels()
     {
         int[] rollResult = new int[4];
+        Coroutine[] spinCoroutines = new Coroutine[4];
 
         for (int i = 0; i < 4; i++)
         {
-            yield return StartCoroutine(SpinReel(i, 1f + i * 0.2f, rollResult));
+            spinCoroutines[i] = StartCoroutine(SpinReel(i, 1f + i * 0.2f, rollResult));
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            yield return spinCoroutines[i];
         }
 
         yield return new WaitForSeconds(0.2f);
 
         audioSource.Stop();
         audioSource.loop = false;
+
 
         bool allMatch = true;
         for (int i = 1; i < 4; i++)
