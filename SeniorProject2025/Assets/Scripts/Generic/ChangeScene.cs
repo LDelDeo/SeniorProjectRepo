@@ -21,7 +21,8 @@ public class ChangeScene : MonoBehaviour
     {
         if (Input.GetKeyDown(parsedKey))
         {
-            SceneManager.LoadScene(sceneName);
+            //SceneManager.LoadScene(sceneName);
+            LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainScene");
         }
     }
 }
