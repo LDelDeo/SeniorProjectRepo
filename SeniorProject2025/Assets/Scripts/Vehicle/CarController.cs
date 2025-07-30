@@ -67,7 +67,9 @@ public class CarController : MonoBehaviour
             engineAudioSource.loop = true;
             engineAudioSource.playOnAwake = false;
             engineAudioSource.pitch = minPitch;
-            engineAudioSource.volume = 1f;
+            float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
+            engineAudioSource.volume = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(savedSFXVolume, 2f));
+
 
             if (enterCarScript != null && enterCarScript.isInCar)
                 engineAudioSource.Play();

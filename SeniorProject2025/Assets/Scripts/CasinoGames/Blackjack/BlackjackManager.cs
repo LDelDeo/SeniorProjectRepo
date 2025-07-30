@@ -88,6 +88,10 @@ public class BlackjackManager : MonoBehaviour
         PlayerPrefs.SetInt("HandsPlayedBJ", handsPlayed);
         PlayerPrefs.Save();
 
+        placeBetButton.interactable = false;
+        betInputField.interactable = false;
+        matchBetInputField.interactable = false;
+
         playerData.SpendCredits(currentBet + matchBet);
         audioSource.PlayOneShot(placeBetSFX);
         UpdateCreditsUI();

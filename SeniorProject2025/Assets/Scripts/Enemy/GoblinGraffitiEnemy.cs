@@ -222,11 +222,15 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (hasBeenCaught) return; // Prevent showing prompt after already caught
-       
-            if (other.CompareTag("Player"))
-            {
-                canBeCuffed = true;
-            }
+
+        if (other.CompareTag("Player"))
+        {
+            canBeCuffed = true;
+                
+            if (pressE != null)
+            pressE.text = "Press [E] to Handcuff";
+        }
+            
         
     }
 

@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseButtonsGroup;
     public FPShooting fPShooting;
     public FPController fPMovement;
+    public Toggle fullscreenToggle;
 
     private bool isPaused = false;
     private InputSystemUIInputModule inputModule;
@@ -30,6 +31,15 @@ public class PauseMenu : MonoBehaviour
         quitButton.onClick.AddListener(Quit);
 
         inputModule = FindFirstObjectByType<InputSystemUIInputModule>();
+
+        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        Screen.fullScreen = isFullscreen;
+
+        if (fullscreenToggle != null)
+        {
+            fullscreenToggle.SetIsOnWithoutNotify(isFullscreen);
+            fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggled);
+        }
     }
 
     void Update()
@@ -69,6 +79,7 @@ public class PauseMenu : MonoBehaviour
         fPShooting.enabled = false;
         fPMovement.enabled = false;
     }
+
     void Options()
     {
         pauseButtonsGroup.SetActive(false);
@@ -80,6 +91,7 @@ public class PauseMenu : MonoBehaviour
         optionSliders.SetActive(false);
         pauseButtonsGroup.SetActive(true);
     }
+
     public void Quit()
     {
         Time.timeScale = 1f;
@@ -95,6 +107,22 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         LoadingScreenManager.Instance.LoadSceneWithLoadingScreen("MainMenu");
     }
+
+    public void OnFullscreenToggled(bool isFullscreen)
+    {
+        if (isFullscreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.fullScreen = true;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+            Screen.SetResolution(1280, 720, false); 
+        }
+
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
 }
-
-

@@ -13,6 +13,7 @@ public class OptionsMenuManager : MonoBehaviour
     public Slider musicSlider;
     public Slider audioSlider;
     public Slider sensitivitySlider;
+    public Toggle fullscreenToggle;
 
     private GameObject[] npcCar;
 
@@ -22,18 +23,23 @@ public class OptionsMenuManager : MonoBehaviour
         float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
         float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
-        sensitivitySlider.value = sensitivity;
-        musicSlider.value = musicVolume;
-        audioSlider.value = sfxVolume;
+        sensitivitySlider.SetValueWithoutNotify(sensitivity);
+        musicSlider.SetValueWithoutNotify(musicVolume);
+        audioSlider.SetValueWithoutNotify(sfxVolume);
 
         sensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
         musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
         audioSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
 
-        // Apply initial volume based on loaded prefs
+        OnSensitivityChanged(sensitivity);
         OnMusicVolumeChanged(musicVolume);
         OnSFXVolumeChanged(sfxVolume);
 
+        // Fullscreen toggle setup
+        bool isFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
+        Screen.fullScreen = isFullscreen;
+        fullscreenToggle.SetIsOnWithoutNotify(isFullscreen);
+        fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggled);
     }
 
     void Update()
@@ -57,6 +63,15 @@ public class OptionsMenuManager : MonoBehaviour
                 }
             }
         }
+
+        if (musicSource != null)
+        {
+            float targetVol = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(PlayerPrefs.GetFloat("MusicVolume", 1f), 2f));
+            if (!Mathf.Approximately(musicSource.volume, targetVol))
+            {
+                musicSource.volume = targetVol;
+            }
+        }
     }
 
     public void OnMusicVolumeChanged(float value)
@@ -67,8 +82,6 @@ public class OptionsMenuManager : MonoBehaviour
             musicSource.volume = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(value, 2f));
     }
 
-
-
     public void OnSFXVolumeChanged(float value)
     {
         PlayerPrefs.SetFloat("SFXVolume", value);
@@ -76,7 +89,7 @@ public class OptionsMenuManager : MonoBehaviour
         foreach (AudioSource source in sfxAudioSources)
         {
             if (source != null)
-                source.volume = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(value, 2f)); 
+                source.volume = Mathf.Lerp(0.0001f, 1f, Mathf.Pow(value, 2f));
         }
     }
 
@@ -90,5 +103,21 @@ public class OptionsMenuManager : MonoBehaviour
         }
     }
 
-}
+    public void OnFullscreenToggled(bool isFullscreen)
+    {
+        if (isFullscreen)
+        {
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.fullScreen = true;
+        }
+        else
+        {
+            Screen.fullScreenMode = FullScreenMode.Windowed;
+            Screen.SetResolution(1280, 720, false); // Width, Height, fullscreen false
+        }
 
+        PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+}
