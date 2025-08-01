@@ -1959,16 +1959,16 @@ MonoBehaviour:
   - {fileID: 721939387}
   - {fileID: 39122697}
   symbolSprites:
-  - {fileID: 841149673, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
+  - {fileID: -714348434, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   - {fileID: 936196302, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   - {fileID: -1342950378, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
-  - {fileID: -714348434, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
+  - {fileID: 841149673, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   blurredSprites:
   - {fileID: 841149673, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   - {fileID: 936196302, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   - {fileID: -1342950378, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
   - {fileID: -714348434, guid: 4aa842ff32539a54a818592b061e0269, type: 3}
-  payouts: 0a000000190000003200000064000000
+  payouts: 64000000fa000000ee02000010270000
   audioSource: {fileID: 713659859}
   spinClip: {fileID: 8300000, guid: cb50488ab0d40a84e8098819e8ffda0f, type: 3}
   winClip: {fileID: 8300000, guid: d0e083c2e1ded79498c7fa0638f15f67, type: 3}
