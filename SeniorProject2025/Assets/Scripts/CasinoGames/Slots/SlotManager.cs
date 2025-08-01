@@ -76,6 +76,7 @@ public class SlotMachineManager : MonoBehaviour
 
     void Spin()
     {
+        spinButton.interactable = false;
         if (playerData.credits < currentBet) return;
 
         if (isSpinning && currentSpinRoutine != null)
@@ -149,7 +150,7 @@ public class SlotMachineManager : MonoBehaviour
         {
             winText.text = "WIN: 0";
         }
-
+        spinButton.interactable = true;
         UpdateUI();
         isSpinning = false;
         currentSpinRoutine = null;
