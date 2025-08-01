@@ -26,6 +26,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     public ParticleSystem bloodShed;
     private EnterCarScript enterCarScript;
     public Animator anim;
+    public GoblinGraffitiSprayPaint sprayPaint;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -66,7 +67,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         {
             RunAway();
         }
-        if(canBeCuffed)
+        if (canBeCuffed)
         {
             if (pressE != null)
                 pressE.text = "Press [E] to Handcuff";
@@ -78,7 +79,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
             if (pressE != null)
             {
-                pressE.text = ""; 
+                pressE.text = "";
             }
 
             agent.ResetPath();
@@ -103,6 +104,10 @@ public class GoblinGraffitiEnemy : MonoBehaviour
             StartCoroutine(Despawn());
         }
 
+        if (isSpooked)
+        {
+            sprayPaint.StopPainting();
+        }
 
     }
 

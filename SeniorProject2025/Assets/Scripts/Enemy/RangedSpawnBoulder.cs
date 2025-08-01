@@ -4,6 +4,7 @@ public class RangedSpawnBoulder : MonoBehaviour
 {
     private RangedOrcEnemy orc;
     public GameObject BoulderGrab;
+    public ParticleSystem groundSmash;
 
     private void Start()
     {
@@ -20,6 +21,11 @@ public class RangedSpawnBoulder : MonoBehaviour
     private void GrabbingBoulder()
     {
         BoulderGrab.SetActive(true);
+    }
+
+    private void CrackGround()
+    {
+        groundSmash.Play();
     }
 }
 

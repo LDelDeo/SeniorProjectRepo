@@ -37,6 +37,9 @@ public class CarController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text speedText;
 
+    [Header("VFX")]
+    public ParticleSystem[] exhaustSmokes;
+
     public Rigidbody rb;
 
     // Friction handling
@@ -124,6 +127,25 @@ public class CarController : MonoBehaviour
 
         float torqueMultiplier = switchingDirection ? 0f : 1f; // prevent torque during switch
         float torque = Mathf.Abs(verticalInput) * motorForce * Mathf.Sign(verticalInput);
+
+        float speed = rb.linearVelocity.magnitude;
+        if (speed > 0.5f)
+        {
+            foreach (ParticleSystem smoke in exhaustSmokes)
+            {
+                if (!smoke.isPlaying)
+                    smoke.Play();
+            }
+
+        }
+        else
+        {
+            foreach (ParticleSystem smoke in exhaustSmokes)
+            {
+                if (smoke.isPlaying)
+                    smoke.Stop();
+            }
+        }
 
         if (verticalInput > 0)
         {
@@ -256,6 +278,11 @@ public class CarController : MonoBehaviour
     {
         StopEngineSound();
         engineWasPlaying = false;
+        foreach (ParticleSystem smoke in exhaustSmokes)
+            {
+                if (smoke.isPlaying)
+                    smoke.Stop();
+            }
     }
 
     private void DisplaySpeed()

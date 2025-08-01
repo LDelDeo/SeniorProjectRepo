@@ -56,6 +56,11 @@ public class FPShooting : MonoBehaviour
     private Coroutine hitmarkerRoutine;
     private Coroutine deathmarkerRoutine;
 
+    [Header("VFX Hit")]
+    [SerializeField] private GameObject hitEffectPrimary; // Impact
+    [SerializeField] private GameObject hitEffectSecondary; // Bullet Hole
+
+
     [Header("SFX Settings")]
     private float sfxVolume;
 
@@ -217,7 +222,7 @@ public class FPShooting : MonoBehaviour
 
     private void Shoot()
     {
-
+        
         if (playerStats.bullets == 0 && !isReloading && currentWeapon == WeaponType.Gun && !playerStats.isBlocking && !fpController.isSprinting)
         {
             Reload();
@@ -225,7 +230,10 @@ public class FPShooting : MonoBehaviour
 
         if (!playerStats.isBlocking && hasAmmo && currentWeapon == WeaponType.Gun && !isReloading && !fpController.isSprinting)
         {
+            //This is from the camera
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Vector3 offsetOrigin = ray.origin + cam.transform.forward * 0.5f;
+            Ray adjustedRay = new Ray(offsetOrigin, ray.direction);
             playerStats.bullets--;
             muzzleFlash.Play();
 
@@ -269,6 +277,20 @@ public class FPShooting : MonoBehaviour
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromGun();
                     enterDrugDeal.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                }
+
+                Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
+
+                if (hitEffectPrimary != null)
+                {
+                    GameObject vfx1 = Instantiate(hitEffectPrimary, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(vfx1, 2f);
+                }
+
+                if (hitEffectSecondary != null)
+                {
+                    GameObject vfx2 = Instantiate(hitEffectSecondary, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(vfx2, 2f);
                 }
 
             }
