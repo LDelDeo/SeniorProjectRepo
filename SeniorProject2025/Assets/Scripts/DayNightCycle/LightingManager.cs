@@ -7,7 +7,7 @@ public class LightingManager : MonoBehaviour
     [Header("Lighting Settings")]
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
-    [SerializeField, Range(0f, 1f)] private float TimeOfDay;
+    [SerializeField, Range(0f, 1f)] public float TimeOfDay;
     [SerializeField] private float DayDuration = 300f; // 5 minutes for full day cycle
 
     private List<Light> streetLights = new List<Light>();

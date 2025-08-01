@@ -398,6 +398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flies
       objectReference: {fileID: 0}
+    - target: {fileID: 1533709653163852537, guid: d64fb972788fdae4a91383622f22c946, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5894082072219145681, guid: d64fb972788fdae4a91383622f22c946, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.0954
