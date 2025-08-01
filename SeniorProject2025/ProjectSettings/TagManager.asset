@@ -31,6 +31,8 @@ TagManager:
   - richTrigger
   - industrialTrigger
   - LoadingScreen
+  - FireFly
+  - Flies
   layers:
   - Default
   - TransparentFX

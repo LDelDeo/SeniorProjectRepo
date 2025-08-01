@@ -29,15 +29,38 @@ public class Weather : MonoBehaviour
 
     public void Update()
     {
+        GameObject[] fireFlies = GameObject.FindGameObjectsWithTag("FireFly");
+        GameObject[] flies = GameObject.FindGameObjectsWithTag("Flies");
+
         if (lightingManager.TimeOfDay > 0.75 || lightingManager.TimeOfDay < 0.25) //After Sunset, Before Sunrise
         {
             currentWeather[0].Play();
             currentWeather[1].Stop();
+
+            foreach (GameObject fireFly in fireFlies)
+            {
+                fireFly.GetComponent<ParticleSystem>().Play();
+            }
+
+            foreach (GameObject fly in flies)
+            {
+                fly.GetComponent<ParticleSystem>().Play();
+            }
         }
         else
         {
             currentWeather[0].Stop();
             currentWeather[1].Play();
+
+            foreach (GameObject fireFly in fireFlies)
+            {
+                fireFly.GetComponent<ParticleSystem>().Stop();
+            }
+
+            foreach (GameObject fly in flies)
+            {
+                fly.GetComponent<ParticleSystem>().Stop();
+            }
         }
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2421523268742910762}
   m_Layer: 0
   m_Name: Flies
-  m_TagString: Untagged
+  m_TagString: Flies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 0
   startDelay:
