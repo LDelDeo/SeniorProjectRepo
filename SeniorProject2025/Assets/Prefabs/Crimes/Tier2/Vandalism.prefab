@@ -14846,6 +14846,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8460211345022320163}
     m_Modifications:
+    - target: {fileID: -8895842704492345182, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: Priority
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4115492426519597622, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: m_Name
       value: MeleeHumanEnemy (1)

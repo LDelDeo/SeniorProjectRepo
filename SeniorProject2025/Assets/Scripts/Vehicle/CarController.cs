@@ -289,7 +289,7 @@ public class CarController : MonoBehaviour
     {
         float speed = rb.linearVelocity.magnitude * 2.23694f;
         speed = Mathf.Min(speed, 50f);
-        speedText.text = Mathf.Round(speed) + " mph";
+        speedText.text = Mathf.Round(speed) + "";
     }
 
     private void CapMaxSpeedWithFriction()
