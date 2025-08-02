@@ -68,9 +68,33 @@ public class FPShooting : MonoBehaviour
     public enum WeaponType { Gun, Melee, None }
     public WeaponType currentWeapon = WeaponType.Gun;
 
+    public void EquipWeapon(GameObject weapon)
+    {
+        // Activate the weapon
+        weapon.SetActive(true);
+
+        // Force renderer(s) refresh
+        Renderer[] renderers = weapon.GetComponentsInChildren<Renderer>();
+        foreach (var rend in renderers)
+        {
+            rend.enabled = false;
+            rend.enabled = true;
+        }
+
+        // Force animator refresh if it exists
+        Animator anim = weapon.GetComponentInChildren<Animator>();
+        if (anim != null)
+        {
+            anim.Rebind();
+            anim.Update(0f);
+        }
+    }
 
     private void Start()
     {
+        EquipWeapon(gun);
+
+
         hasAmmo = true;
 
         int defaultBullets = GetMaxBullets();

@@ -166,14 +166,25 @@ public class FPController : MonoBehaviour
 
             bobAndSwayOffset = new Vector3(swayOffset, bobOffset, 0f);
         }
+        else
+        {
+            // Smoothly reset camera to starting position when not moving
+            bobTimer = 0f; // Optional: Reset to prevent large values
+            cameraTransform.localPosition = Vector3.Lerp(
+                cameraTransform.localPosition,
+                cameraStartPos + externalShakeOffset,
+                Time.deltaTime * currentSwaySpeed
+            );
+            return;
+        }
 
-        // Final camera position = base + sway/bob + shake
         cameraTransform.localPosition = Vector3.Lerp(
             cameraTransform.localPosition,
             cameraStartPos + bobAndSwayOffset + externalShakeOffset,
             Time.deltaTime * currentSwaySpeed
         );
     }
+
 
     void HandleSprint()
     {
