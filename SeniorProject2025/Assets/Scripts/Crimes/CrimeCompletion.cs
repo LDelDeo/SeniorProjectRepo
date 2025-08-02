@@ -14,6 +14,7 @@ public class CrimeCompletion : MonoBehaviour
     public GameObject completionScreenPrefab;
     public Transform canvasTransform;
     public GameObject playerHUD;
+    public EnterCarScript enterCarScript;
 
     [Header("XP & Credits Amounts")]
 
@@ -30,6 +31,11 @@ public class CrimeCompletion : MonoBehaviour
 
     public void CrimeStopped(int XP, int Credits)
     {
+        if (enterCarScript.isInCar)
+        {
+            enterCarScript.ExitCar();
+        }
+        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 

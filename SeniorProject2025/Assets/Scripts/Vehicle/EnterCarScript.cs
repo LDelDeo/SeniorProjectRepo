@@ -25,6 +25,7 @@ public class EnterCarScript : MonoBehaviour
    public DebugConsole debugConsole;
     public AudioSource sirenAudioSource;
     public AudioClip siren;
+    public Animator gunAnim;
 
     void Start()
     {
@@ -160,12 +161,14 @@ public class EnterCarScript : MonoBehaviour
         }
     }
 
-    private void ExitCar()
+    public void ExitCar()
     {
         if (sirenAudioSource != null && sirenAudioSource.isPlaying)
         {
             sirenAudioSource.Stop();
         }
+
+        //gunAnim.SetTrigger("enterCar");
 
         carControllerScript.OnExitCar();
 

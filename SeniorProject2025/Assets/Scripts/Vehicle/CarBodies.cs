@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CarBodies : MonoBehaviour
 {
@@ -65,5 +66,17 @@ public class CarBodies : MonoBehaviour
                 wheel.SetActive(selectedCar.name != "Hanna-R7");
             }
         }
+
+        StartCoroutine(RefreshCar(selectedCar));
     }
+
+     private IEnumerator RefreshCar(GameObject car)
+        {
+            if (car == null)
+                yield break;
+
+            car.SetActive(false);
+            yield return null; // Wait 1 frame
+            car.SetActive(true);
+        }
 }
