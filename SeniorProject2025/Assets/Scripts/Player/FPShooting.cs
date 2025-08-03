@@ -121,13 +121,18 @@ public class FPShooting : MonoBehaviour
             SwitchWeapon(currentWeapon);
         }
 
-        if (enterAssault == null || enterDrugDeal == null || enterVandalism == null || enterGraffiti == null)
-        {
-            enterAssault = FindFirstObjectByType<EnterAssault>();
-            enterDrugDeal = FindFirstObjectByType<EnterDrugDeal>();
-            enterVandalism = FindFirstObjectByType<EnterVandalism>();
-            enterGraffiti = FindFirstObjectByType<EnterGraffiti>();
-        }
+        if(enterAssault == null)
+        enterAssault = FindFirstObjectByType<EnterAssault>();
+
+        if(enterDrugDeal == null)
+        enterDrugDeal = FindFirstObjectByType<EnterDrugDeal>();
+
+        if(enterVandalism == null)
+        enterVandalism = FindFirstObjectByType<EnterVandalism>();
+        
+        if(enterGraffiti == null)
+        enterGraffiti = FindFirstObjectByType<EnterGraffiti>();
+
 
         UpdateReticle();    
 
@@ -163,7 +168,7 @@ public class FPShooting : MonoBehaviour
             hasAmmo = false;
         }
 
-        if (playerStats.bullets <= 3)
+        if (playerStats.bullets <= 3 && currentWeapon == WeaponType.Gun)
         {
             reloadText.text = "R to Reload";
         }
@@ -185,8 +190,9 @@ public class FPShooting : MonoBehaviour
             ? playerStats.playerRangedRange 
             : playerStats.playerMeleeRange;
 
+        int layerMask = ~(1 << 14); //Mask 14 is Player
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit, range))
+        if (Physics.Raycast(ray, out RaycastHit hit, range, layerMask))
         {
             if (currentWeapon == WeaponType.Gun &&
                 (hit.collider.CompareTag("GoblinGraffitiEnemy") ||
@@ -272,9 +278,12 @@ public class FPShooting : MonoBehaviour
                 //Humans
                 if (hit.collider.tag == "MeleeHumanEnemy")
                 {
-                    hit.collider.GetComponent<MeleeHumanEnemy>().TakeDamageFromGun();
-                    enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
-                    enterVandalism.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                    MeleeHumanEnemy enemy = hit.collider.GetComponent<MeleeHumanEnemy>();
+                    enemy.TakeDamageFromGun();
+                    //enterAssault.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                    //enterVandalism.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
+                    //Since theres two here, we need to specifify which crime it actually is 
+                    enemy.ReportImproperKill();
                 }
                 if (hit.collider.tag == "RangedHumanEnemy")
                 {
@@ -283,7 +292,7 @@ public class FPShooting : MonoBehaviour
                 }
                 
                 //This just checks what your hitting
-                //Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
+                Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
 
                 if (hitEffectPrimary != null)
                 {
@@ -358,8 +367,9 @@ public class FPShooting : MonoBehaviour
 
             // Play melee animation
             meleeAnim.SetTrigger("Melee");
+            int layerMask = ~(1 << 14);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerMeleeRange))
+            if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerMeleeRange, layerMask))
             {
                 //Baton Cannot Deal Damage to Orcs
                 //Baton CAN Deal Damage to Humans, Elves & Other Species
@@ -380,7 +390,7 @@ public class FPShooting : MonoBehaviour
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
                 }
-                    
+
 
             }
         }

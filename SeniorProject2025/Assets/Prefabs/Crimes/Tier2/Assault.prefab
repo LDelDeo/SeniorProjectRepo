@@ -16864,7 +16864,7 @@ GameObject:
   - component: {fileID: 8460211345022320163}
   - component: {fileID: 8726509457468525750}
   - component: {fileID: 630537756829491634}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Assault
   m_TagString: crimeThree
   m_Icon: {fileID: 0}
@@ -19921,6 +19921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 3079073908168554260}
+  crimeScript: {fileID: 0}
   knockbackForce: 8
   knockbackDuration: 0.4
   healthAudioSource: {fileID: 0}
@@ -20309,6 +20310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 2445907298846900477}
+  crimeScript: {fileID: 0}
   knockbackForce: 8
   knockbackDuration: 0.4
   healthAudioSource: {fileID: 0}
@@ -20502,6 +20504,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8460211345022320163}
     m_Modifications:
+    - target: {fileID: -8326253929804915167, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: crimeScript
+      value: 
+      objectReference: {fileID: 630537756829491634}
     - target: {fileID: 4115492426519597622, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: m_Name
       value: MeleeHumanEnemy (3)
@@ -20589,6 +20595,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8460211345022320163}
     m_Modifications:
+    - target: {fileID: -8326253929804915167, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: crimeScript
+      value: 
+      objectReference: {fileID: 630537756829491634}
     - target: {fileID: 1216344947206530280, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: m_Speed
       value: 5

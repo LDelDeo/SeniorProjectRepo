@@ -312,6 +312,7 @@ public class BlackjackManager : MonoBehaviour
     {
         if (gameOver) return;
         StartCoroutine(DealerPlay());
+        DisableMainButtons();
     }
 
     IEnumerator DealerPlay()

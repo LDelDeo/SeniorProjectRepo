@@ -19,6 +19,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
     private Animator animator;
+    public MonoBehaviour crimeScript;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -77,6 +78,14 @@ public class MeleeHumanEnemy : MonoBehaviour
             StopAttack();
             FollowPlayer();
         }
+    }
+
+    public void ReportImproperKill()
+    {
+        if (crimeScript is EnterAssault assault)
+            assault.crimeFoughtCorrectly = false;
+        else if (crimeScript is EnterVandalism vandalism)
+            vandalism.crimeFoughtCorrectly = false;
     }
 
     private void FollowPlayer()

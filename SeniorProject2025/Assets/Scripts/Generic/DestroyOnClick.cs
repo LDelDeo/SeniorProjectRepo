@@ -6,6 +6,7 @@ public class DestroyOnClick : MonoBehaviour
     private FPController fPController;
     private EnterCarScript enterCarScript;
     private GameObject playerHUD;
+
     void Start()
     {
         fPShooting = FindFirstObjectByType<FPShooting>();
@@ -15,18 +16,37 @@ public class DestroyOnClick : MonoBehaviour
 
     void Update()
     {
-        if (enterCarScript.isInCar == false)
-        playerHUD = GameObject.FindWithTag("PlayerHUD");
+        if (!enterCarScript.isInCar)
+        {
+            playerHUD = GameObject.FindWithTag("PlayerHUD");
+        }
     }
+
     public void DestroyOnButtonClick()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameObject[] crimeCompleteScreens = GameObject.FindGameObjectsWithTag("CrimeCompletionScreen");
+        int activeScreenCount = 0;
 
-        fPShooting.enabled = true;
-        fPController.enabled = true;
+        foreach (GameObject screen in crimeCompleteScreens)
+        {
+            if (screen.activeInHierarchy)
+            {
+                activeScreenCount++;
+                if (activeScreenCount > 1)
+                    break;
+            }
+        }
 
-        playerHUD.SetActive(true);
+        if (activeScreenCount <= 1)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            fPShooting.enabled = true;
+            fPController.enabled = true;
+
+            playerHUD?.SetActive(true); 
+        }
 
         Destroy(gameObject);
     }

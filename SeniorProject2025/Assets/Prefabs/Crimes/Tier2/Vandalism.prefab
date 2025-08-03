@@ -10918,7 +10918,7 @@ GameObject:
   - component: {fileID: 8460211345022320163}
   - component: {fileID: 8726509457468525750}
   - component: {fileID: 7516158665986537564}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Vandalism
   m_TagString: crimeSeven
   m_Icon: {fileID: 0}
@@ -12456,6 +12456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 3079073908168554260}
+  crimeScript: {fileID: 0}
   knockbackForce: 8
   knockbackDuration: 0.4
   healthAudioSource: {fileID: 0}
@@ -14850,6 +14851,10 @@ PrefabInstance:
       propertyPath: Priority
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8326253929804915167, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
+      propertyPath: crimeScript
+      value: 
+      objectReference: {fileID: 7516158665986537564}
     - target: {fileID: 4115492426519597622, guid: 06f684dd0ccca1f46bbac21cc9ac41dd, type: 3}
       propertyPath: m_Name
       value: MeleeHumanEnemy (1)

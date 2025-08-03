@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 9185214592950508160}
   m_Layer: 0
   m_Name: CrimeCompletionScreen
-  m_TagString: Untagged
+  m_TagString: CrimeCompletionScreen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

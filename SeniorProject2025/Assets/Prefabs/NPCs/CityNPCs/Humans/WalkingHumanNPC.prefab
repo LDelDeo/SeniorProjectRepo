@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb9988dc5cd6e842aa25f41a3b86df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  humanVoice: {fileID: 1847215374827586652}
+  voiceSource: {fileID: 1847215374827586652}
   voiceClips:
   - {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
   - {fileID: 8300000, guid: dc317b8533fbd9a4d866ebac0cbf84f3, type: 3}

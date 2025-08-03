@@ -33,6 +33,7 @@ TagManager:
   - LoadingScreen
   - FireFly
   - Flies
+  - CrimeCompletionScreen
   layers:
   - Default
   - TransparentFX

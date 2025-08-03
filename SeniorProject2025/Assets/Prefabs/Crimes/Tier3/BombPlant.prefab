@@ -5131,7 +5131,7 @@ GameObject:
   - component: {fileID: 8460211345022320163}
   - component: {fileID: 8726509457468525750}
   - component: {fileID: 2408283044120228188}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: BombPlant
   m_TagString: crimeSix
   m_Icon: {fileID: 0}
