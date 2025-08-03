@@ -319,6 +319,16 @@ public class FPShooting : MonoBehaviour
         }
        
     }
+    public void CancelReload()
+    {
+        if (isReloading)
+        {
+            isReloading = false;
+            gunAnim.ResetTrigger("ReloadTrigger");
+            gunAudio.Stop();
+        }
+    }
+
     public void RefillAmmo()
     {
         int maxBullets = GetMaxBullets();
@@ -475,6 +485,7 @@ public class FPShooting : MonoBehaviour
         currentWeapon = type;
         
         weaponTypeAnim.SetTrigger("WeaponSwitch");
+        CancelReload();
 
         switch (type)
         {
@@ -593,6 +604,22 @@ public class FPShooting : MonoBehaviour
         yield return new WaitForSeconds(hitmarkerDuration);
         DeathMarkerImage.enabled = false;
         deathmarkerRoutine = null;
+    }
+    public void ResetWeaponState()
+    {
+        isReloading = false;
+        hasAmmo = true;
+
+        gunAnim.ResetTrigger("ReloadTrigger");
+        gunAnim.ResetTrigger("ShootTrigger");
+        gunAnim.SetBool("IsSprintingBool", false);
+        gunAnim.Play("Idle", 0); 
+
+        gunAudio.Stop();
+
+
+        currentWeapon = WeaponType.Gun;
+        SwitchWeapon(currentWeapon);
     }
 
 }

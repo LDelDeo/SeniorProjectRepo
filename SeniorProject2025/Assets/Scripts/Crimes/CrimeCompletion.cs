@@ -35,7 +35,8 @@ public class CrimeCompletion : MonoBehaviour
         {
             enterCarScript.ExitCar();
         }
-        
+        FindFirstObjectByType<FPShooting>().CancelReload();
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 

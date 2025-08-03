@@ -160,7 +160,8 @@ public class FPController : MonoBehaviour
 
         if (isMoving)
         {
-            bobTimer += Time.deltaTime * currentBobSpeed;
+            bobTimer = Mathf.Repeat(bobTimer + Time.deltaTime * currentBobSpeed, Mathf.PI * 2f);
+
             float bobOffset = Mathf.Sin(bobTimer) * bobAmount;
             float swayOffset = Mathf.Sin(bobTimer) * swayAmount;
 
@@ -168,8 +169,7 @@ public class FPController : MonoBehaviour
         }
         else
         {
-            // Smoothly reset camera to starting position when not moving
-            bobTimer = 0f; // Optional: Reset to prevent large values
+            bobTimer = 0f;
             cameraTransform.localPosition = Vector3.Lerp(
                 cameraTransform.localPosition,
                 cameraStartPos + externalShakeOffset,
@@ -186,8 +186,17 @@ public class FPController : MonoBehaviour
     }
 
 
+
     void HandleSprint()
     {
+        fpShooting.gunAnim.applyRootMotion = false;
+        if (fpShooting.gunAnim.GetCurrentAnimatorStateInfo(0).IsTag("Sprinting"))
+            return;
+        if (!isSprinting && fpShooting.gunAnim.GetBool("IsSprintingBool"))
+        {
+            fpShooting.gunAnim.SetBool("IsSprintingBool", false);
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isSprinting)
         {
             isSprinting = true;
@@ -216,6 +225,20 @@ public class FPController : MonoBehaviour
         }
         
     }
+
+    public void ResetSprint()
+    {
+        isSprinting = false;
+        currentBobSpeed = bobSpeed;
+        currentSwaySpeed = swaySpeed;
+        moveSpeed = 5f;
+
+        if (fpShooting != null && fpShooting.gunAnim != null)
+        {
+            fpShooting.gunAnim.SetBool("IsSprintingBool", false);
+        }
+    }
+
     void OnEnable()
     {
         if (this.GetComponent<CharacterController>() != null)
@@ -227,7 +250,9 @@ public class FPController : MonoBehaviour
     {
         if (this.GetComponent<CharacterController>() != null)
         {
+            ResetSprint();
             this.GetComponent<CharacterController>().enabled = false;
+            
         }
     }
 }

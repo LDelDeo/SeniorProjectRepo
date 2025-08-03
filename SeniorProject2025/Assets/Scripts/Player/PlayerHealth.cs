@@ -204,6 +204,7 @@ public class PlayerHealth : MonoBehaviour
         
         if (playerStats.health <= 0)
         {
+            
             playerDied();
             healthAudioSource.PlayOneShot(deathSound, 1.0f);
         }
@@ -357,8 +358,11 @@ public class PlayerHealth : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        fPController.enabled = false;
-        fpsShooting.enabled = false;
+        
+        fPController.enabled = true;
+        fpsShooting.enabled = true;
+        FindFirstObjectByType<FPShooting>().CancelReload();
+        FindFirstObjectByType<FPShooting>().ResetWeaponState();
     }
 
     public void DestroyCrime(string crimeTag)
