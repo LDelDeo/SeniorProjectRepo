@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class CarController : MonoBehaviour
 {
@@ -79,6 +80,8 @@ public class CarController : MonoBehaviour
             else
                 engineAudioSource.Stop();
         }
+        rb.linearDamping = 0;
+        rb.angularDamping = 0.05f;
     }
 
     private void FixedUpdate()
@@ -97,7 +100,7 @@ public class CarController : MonoBehaviour
         TrackDriveDistance();
         UpdateEngineSound();
     }
-
+   
     private void TrackDriveDistance()
     {
         float distanceThisFrame = Vector3.Distance(transform.position, lastPosition);
@@ -392,5 +395,25 @@ public class CarController : MonoBehaviour
         WheelFrictionCurve sideways = wheel.sidewaysFriction;
         sideways.stiffness = sidewaysStiffness;
         wheel.sidewaysFriction = sideways;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Npc"))
+        {
+            NPCRagdoll npc = collision.collider.GetComponent<NPCRagdoll>();
+            if (npc != null)
+            {
+                npc.Die();
+
+                Rigidbody hitBody = npc.GetMainRagdollBody(); 
+
+                if (hitBody != null)
+                {
+                    Vector3 forceDir = collision.contacts[0].normal * -1f; 
+                    hitBody.AddForce(forceDir * 500f, ForceMode.Impulse); 
+                }
+            }
+        }
     }
 }

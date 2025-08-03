@@ -9,7 +9,7 @@ public class NPCRagdoll : MonoBehaviour
     private Collider rootCollider;
     private NavMeshAgent agent;
     public Collider bodyCollider;
-    
+    private bool isDead = false;
 
     void Awake()
     {
@@ -40,23 +40,34 @@ public class NPCRagdoll : MonoBehaviour
         if (rootCollider != null) rootCollider.enabled = true;
         if (agent != null) agent.enabled = true;
     }
-
+    public Rigidbody GetMainRagdollBody()
+    {
+        return ragdollBodies.Length > 0 ? ragdollBodies[0] : null;
+    }
     public void Die()
     {
-        
+        gameObject.layer = LayerMask.NameToLayer("DeadNpc");
+
         if (animator != null) animator.enabled = false;
         if (agent != null) agent.enabled = false;
         if (rootCollider != null) rootCollider.enabled = false;
         if (bodyCollider != null) bodyCollider.enabled = false;
 
         foreach (var rb in ragdollBodies)
+    {
+        if (rb != null)
         {
-            if (rb != null) rb.isKinematic = false;
+            rb.isKinematic = false;
+            rb.useGravity = true;
         }
+    }
 
         foreach (var col in ragdollColliders)
         {
-            if (col != null) col.enabled = true;
+            if (col != null)
+            {
+                col.enabled = true;
+            }
         }
 
         Destroy(gameObject, 8f);

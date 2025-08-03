@@ -34,6 +34,8 @@ TagManager:
   - FireFly
   - Flies
   - CrimeCompletionScreen
+  - Npc
+  - Vick
   layers:
   - Default
   - TransparentFX
@@ -51,8 +53,8 @@ TagManager:
   - Buildings
   - Player
   - Gun
-  - 
-  - 
+  - CopCar
+  - DeadNpc
   - 
   - 
   - 

@@ -8,6 +8,7 @@ public class FPShooting : MonoBehaviour
     [Header("Grabs")]
     public PlayerStats playerStats;
     public FPController fpController;
+    private PlayerHealth playerHealth;
     public Camera cam;
     public Animator shieldAnim;
     public Animator gunAnim;  // Animator reference for the gun or player model
@@ -89,6 +90,7 @@ public class FPShooting : MonoBehaviour
         shieldCooldownBar.fillAmount = 0f;
 
         fpController = FindFirstObjectByType<FPController>();
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
 
         originalCamPosition = cam.transform.localPosition;
     }
@@ -285,12 +287,23 @@ public class FPShooting : MonoBehaviour
                     //Since theres two here, we need to specifify which crime it actually is 
                     enemy.ReportImproperKill();
                 }
+
                 if (hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromGun();
                     enterDrugDeal.crimeFoughtCorrectly = false; // You Are Not Supposed To Kill Lower Tier Threats
                 }
-                
+
+                if (hit.collider.tag == "Npc")
+                {
+                    hit.collider.GetComponent<NPCRagdoll>().Die();
+                }
+
+                if (hit.collider.tag == "Vick")
+                {
+                    playerHealth.TakeDamage(1000);
+                }
+
                 //This just checks what your hitting
                 Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
 
@@ -399,6 +412,15 @@ public class FPShooting : MonoBehaviour
                 if (hit.collider.tag == "RangedHumanEnemy")
                 {
                     hit.collider.GetComponent<RangedHumanEnemy>().TakeDamageFromBaton(playerStats.playerMeleeDamage);
+                }
+                if (hit.collider.tag == "Npc")
+                {
+                    Deathmarker();
+                    hit.collider.GetComponent<NPCRagdoll>().Die();
+                }
+                if (hit.collider.tag == "Vick")
+                {
+                    playerHealth.TakeDamage(1000);
                 }
 
 
