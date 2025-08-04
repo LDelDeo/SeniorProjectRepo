@@ -6,6 +6,7 @@ public class DebugConsole : MonoBehaviour
     public GameObject debugConsoleObject;
     public GameObject consoleBG;
     public bool consoleOpen;
+    public bool canYouUseConsole = false;
 
     [Header("Script Grabs")]
     public FPShooting fPShooting;
@@ -25,7 +26,7 @@ public class DebugConsole : MonoBehaviour
     void Update()
     {
         //F3 to Trigger Debug Console
-        if (Input.GetKeyDown(KeyCode.F3) && !enterCarScript.isInCar)
+        if (Input.GetKeyDown(KeyCode.F3) && !enterCarScript.isInCar && canYouUseConsole)
         {
             if (consoleOpen)
             {

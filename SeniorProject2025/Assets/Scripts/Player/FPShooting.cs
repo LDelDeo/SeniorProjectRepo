@@ -209,7 +209,9 @@ public class FPShooting : MonoBehaviour
                 hit.collider.CompareTag("MeleeOrcEnemy") ||
                 hit.collider.CompareTag("RangedOrcEnemy") ||
                 hit.collider.CompareTag("MeleeHumanEnemy") ||
-                hit.collider.CompareTag("RangedHumanEnemy")))
+                hit.collider.CompareTag("RangedHumanEnemy") ||
+                hit.collider.CompareTag("Npc") ||
+                hit.collider.CompareTag("Vick")))
             {
                 reticle.color = Color.red;
                 return;
@@ -218,7 +220,9 @@ public class FPShooting : MonoBehaviour
             if (currentWeapon == WeaponType.Melee &&
                 (hit.collider.CompareTag("GoblinGraffitiEnemy") ||
                 hit.collider.CompareTag("MeleeHumanEnemy") ||
-                hit.collider.CompareTag("RangedHumanEnemy")))
+                hit.collider.CompareTag("RangedHumanEnemy") ||
+                hit.collider.CompareTag("Npc") ||
+                hit.collider.CompareTag("Vick")))
             {
                 reticle.color = Color.red;
                 return;
@@ -304,6 +308,7 @@ public class FPShooting : MonoBehaviour
 
                 if (hit.collider.tag == "Npc")
                 {
+                    Deathmarker();
                     hit.collider.GetComponent<NPCRagdoll>().Die();
                 }
 
@@ -313,7 +318,7 @@ public class FPShooting : MonoBehaviour
                 }
 
                 //This just checks what your hitting
-                Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
+                //Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
 
                 if (hitEffectPrimary != null)
                 {
