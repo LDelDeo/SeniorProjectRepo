@@ -68,6 +68,11 @@ public class FPShooting : MonoBehaviour
     //Weapon Types
     public enum WeaponType { Gun, Melee, None }
     public WeaponType currentWeapon = WeaponType.Gun;
+    private WeaponType lastHeldWeapon = WeaponType.Gun;
+    private int noWeaponZoneCount = 0;
+    bool isInNoWeaponZone => noWeaponZoneCount > 0;
+    public TMP_Text noWeaponAlert;
+
 
     private void Start()
     {
@@ -98,6 +103,7 @@ public class FPShooting : MonoBehaviour
 
     private void Update()
     {
+
         if (currentWeapon == WeaponType.Gun)
         {
             bulletsText.text = "" + playerStats.bullets;
@@ -112,18 +118,20 @@ public class FPShooting : MonoBehaviour
         ApplySFXVolume();
 
         // Button to Switch Weapons
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(WeaponType.Melee);
-
-        // Scroll Wheel to Switch Weapons
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll != 0f)
+        if (!isInNoWeaponZone)
         {
-            currentWeapon = currentWeapon == WeaponType.Gun ? WeaponType.Melee : WeaponType.Gun;
-            SwitchWeapon(currentWeapon);
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchWeapon(WeaponType.Gun);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchWeapon(WeaponType.Melee);
+
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0f)
+            {
+                currentWeapon = currentWeapon == WeaponType.Gun ? WeaponType.Melee : WeaponType.Gun;
+                SwitchWeapon(currentWeapon);
+            }
         }
 
-        if(enterAssault == null)
+        if (enterAssault == null)
         enterAssault = FindFirstObjectByType<EnterAssault>();
 
         if(enterDrugDeal == null)
@@ -642,6 +650,37 @@ public class FPShooting : MonoBehaviour
 
         currentWeapon = WeaponType.Gun;
         SwitchWeapon(currentWeapon);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("NoWeaponZone"))
+        {
+            noWeaponZoneCount++;
+
+            if (noWeaponZoneCount == 1)
+            {
+                lastHeldWeapon = currentWeapon;
+                SwitchWeapon(WeaponType.None);
+                noWeaponAlert.text = "Safe Zone";
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("NoWeaponZone"))
+        {
+            noWeaponZoneCount--;
+
+            if (noWeaponZoneCount <= 0)
+            {
+                noWeaponZoneCount = 0;
+                SwitchWeapon(lastHeldWeapon);
+
+                noWeaponAlert.text = "";
+            }
+        }
     }
 
 }
