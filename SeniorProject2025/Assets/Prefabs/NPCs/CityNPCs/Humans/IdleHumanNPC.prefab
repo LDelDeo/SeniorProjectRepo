@@ -1465,6 +1465,24 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
   - {fileID: 8300000, guid: dc317b8533fbd9a4d866ebac0cbf84f3, type: 3}
   - {fileID: 8300000, guid: c2c399e0902da90489a4aa95677d0a75, type: 3}
+  - {fileID: 8300000, guid: 044d494d64fd4e54bbd8e1b18b178abe, type: 3}
+  - {fileID: 8300000, guid: cdc6be6fa461f28498a5983e04b46cf3, type: 3}
+  - {fileID: 8300000, guid: f756f9908c15ebb4a943b04e1463d248, type: 3}
+  - {fileID: 8300000, guid: 031e46bd7a9b22d44b91512e5bd91926, type: 3}
+  - {fileID: 8300000, guid: 824250c286dcfff408e2c493cd3b40e6, type: 3}
+  - {fileID: 8300000, guid: ffbfeb3af4748d546a7d3aab3b4a3a47, type: 3}
+  - {fileID: 8300000, guid: dc8b19aa5f6770347b2fb220662d4afd, type: 3}
+  - {fileID: 8300000, guid: 0184906796bd9974d9b100c3215d380c, type: 3}
+  - {fileID: 8300000, guid: 14bba43e60f14bc46b18d6254fdd123e, type: 3}
+  - {fileID: 8300000, guid: 0da246fbb46ad5c49aa22498e1414e6e, type: 3}
+  - {fileID: 8300000, guid: 8356bfaf63cb86746bb5232615083e6c, type: 3}
+  - {fileID: 8300000, guid: 3bf26b4e54dc0da4f96124423a6731e9, type: 3}
+  - {fileID: 8300000, guid: cd2b376491d38cc428cea9bb49dc5b83, type: 3}
+  - {fileID: 8300000, guid: bc64276de6c55d94eb5cb60a682eb5e6, type: 3}
+  - {fileID: 8300000, guid: 52ffdaa55708a67488ab7fcce9859ff0, type: 3}
+  - {fileID: 8300000, guid: 10432275acced594eacfc26ee81868a9, type: 3}
+  - {fileID: 8300000, guid: 76f196d25f11f664f8314225fc3b71fe, type: 3}
+  - {fileID: 8300000, guid: 1c45642d7dd0d4343b1bc3a64c1b7d9d, type: 3}
 --- !u!82 &9108372126796263516
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1475,12 +1493,12 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
-  m_Resource: {fileID: 8300000, guid: 478fcb2785632de4ab3f0fe64eadbf5d, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.65
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

@@ -7,7 +7,7 @@ public class NPCVoiceLines : MonoBehaviour
     public AudioClip[] voiceClips;
 
     //Random Intervals
-    private float playVoice = 8f; //Every 8 Seconds Switches and Plays a New Voice
+    public float playVoice = 5f; //Every 5 Seconds Switches and Plays a New Voice
     private float timer = 0.0f;
 
     private void Update()
@@ -17,6 +17,7 @@ public class NPCVoiceLines : MonoBehaviour
         if (timer >= playVoice)
         {
             PlayVoice();
+            timer = 0f;
         }
     }
 
