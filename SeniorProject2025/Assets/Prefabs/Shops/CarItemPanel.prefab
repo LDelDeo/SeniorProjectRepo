@@ -449,7 +449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverSound: {fileID: 8300000, guid: 670d0fecc69aaa34f9c56904bf18535f, type: 3}
-  clickSound: {fileID: 8300000, guid: c4ec4c0cd44e7f945b530d3d27a30163, type: 3}
+  clickSound: {fileID: 8300000, guid: fb16d7df574b41a4e8189993d1c2622d, type: 3}
   audioSource: {fileID: 246459950172136007}
 --- !u!1 &2627744218761354651
 GameObject:
@@ -520,8 +520,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e68bd8def6c3464429168ae0577a9ac7, type: 2}
-  m_sharedMaterial: {fileID: -8670328825630723244, guid: e68bd8def6c3464429168ae0577a9ac7, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a457652642e46f54da0d129341c4604d, type: 2}
+  m_sharedMaterial: {fileID: 1384534984384729559, guid: a457652642e46f54da0d129341c4604d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

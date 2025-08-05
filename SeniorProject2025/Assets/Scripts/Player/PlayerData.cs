@@ -233,6 +233,11 @@ public class PlayerData : MonoBehaviour
             PlayerPrefs.SetFloat("CarPosY", carTransform.position.y);
             PlayerPrefs.SetFloat("CarPosZ", carTransform.position.z);
 
+            PlayerPrefs.SetFloat("CarRotX", carTransform.rotation.x);
+            PlayerPrefs.SetFloat("CarRotY", carTransform.rotation.y);
+            PlayerPrefs.SetFloat("CarRotZ", carTransform.rotation.z);
+            PlayerPrefs.SetFloat("CarRotW", carTransform.rotation.w);
+
             PlayerPrefs.Save();
         }
     }
@@ -246,6 +251,13 @@ public class PlayerData : MonoBehaviour
             float posZ1 = PlayerPrefs.GetFloat("CarPosZ", -3f);
             Vector3 loadedPosCar = new Vector3(posX1, posY1, posZ1);
             carTransform.position = loadedPosCar;
+
+            float rotX = PlayerPrefs.GetFloat("CarRotX", 0f);
+            float rotY = PlayerPrefs.GetFloat("CarRotY", 0f);
+            float rotZ = PlayerPrefs.GetFloat("CarRotZ", 0f);
+            float rotW = PlayerPrefs.GetFloat("CarRotW", 1f);
+            Quaternion loadedRot = new Quaternion(rotX, rotY, rotZ, rotW);
+            carTransform.rotation = loadedRot;
         }
     }
    

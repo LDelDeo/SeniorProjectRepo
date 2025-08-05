@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public PlayerStats playerStats;
     public FPShooting fpsShooting;
     public FPController fPController;
+    public Rigidbody rb;
 
     [Header("Health Effects")]
     public TMP_Text HealthText;
@@ -358,6 +359,8 @@ public class PlayerHealth : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         
         fPController.enabled = true;
         fpsShooting.enabled = true;

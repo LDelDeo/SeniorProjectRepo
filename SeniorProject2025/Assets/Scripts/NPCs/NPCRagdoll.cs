@@ -11,6 +11,13 @@ public class NPCRagdoll : MonoBehaviour
     public Collider bodyCollider;
     private bool isDead = false;
 
+    [Header("Death Effects")]
+    public AudioSource npcVoiceSource;
+    public AudioSource deathSFX;
+    public ParticleSystem bloodCloud;
+    public ParticleSystem bloodSplat;
+
+
     void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -46,6 +53,18 @@ public class NPCRagdoll : MonoBehaviour
     }
     public void Die()
     {
+        if(npcVoiceSource != null)
+        npcVoiceSource.Stop();
+
+        if (deathSFX != null)
+        deathSFX.Play();
+        
+        if (bloodCloud != null)
+        bloodCloud.Play();
+
+        if(bloodSplat != null)
+        bloodSplat.Play();
+
         gameObject.layer = LayerMask.NameToLayer("DeadNpc");
 
         if (animator != null) animator.enabled = false;

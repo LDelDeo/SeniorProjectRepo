@@ -37,6 +37,10 @@ public class CarShopUI : MonoBehaviour
 
     private GameObject currentDisplayCar;
 
+    [Header("Purchase Animation")]
+    public TMP_Text purchaseText;
+    public Animator purchaseAnim;
+
     private void Start()
     {
         Cursor.visible = true;
@@ -195,6 +199,10 @@ public class CarShopUI : MonoBehaviour
                     selectButton.gameObject.SetActive(true);
                     selectButton.interactable = true;
                     UpdatePurchaseButtonColor(purchaseButton, false);
+
+                    purchaseText.text = "- " + carPrice;
+                    purchaseAnim.SetTrigger("BoughtCar");
+
                     Debug.Log("Purchased: " + currentCar.name);
                 }
                 else

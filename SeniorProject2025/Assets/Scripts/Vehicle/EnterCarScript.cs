@@ -67,6 +67,7 @@ public class EnterCarScript : MonoBehaviour
         else
         {
             player.transform.position = playerInCarTransform.position;
+            player.transform.rotation = car.transform.rotation * Quaternion.Euler(0, 180, 0);
         }
 
         // If the player is in the trigger zone and presses the 'E' key

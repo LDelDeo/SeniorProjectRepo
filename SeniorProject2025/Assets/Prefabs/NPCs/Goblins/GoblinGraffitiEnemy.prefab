@@ -1590,6 +1590,7 @@ GameObject:
   - component: {fileID: 7127149355460628208}
   - component: {fileID: 6876374988889600432}
   - component: {fileID: 1565802730554148365}
+  - component: {fileID: 1823998793376359693}
   m_Layer: 7
   m_Name: GoblinGraffitiEnemy
   m_TagString: GoblinGraffitiEnemy
@@ -1610,6 +1611,8 @@ Transform:
   m_LocalScale: {x: 1.0192778, y: 1.0192778, z: 1.0192778}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5873694758589221428}
+  - {fileID: 259377976441089414}
   - {fileID: 8973883390278585270}
   - {fileID: 1721605786172557351}
   - {fileID: 4355731103548513518}
@@ -1815,6 +1818,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyCollider: {fileID: 601759701585310470}
+  npcVoiceSource: {fileID: 6876374988889600432}
+  deathSFX: {fileID: 1823998793376359693}
+  bloodCloud: {fileID: 491325145698045355}
+  bloodSplat: {fileID: 8178718643159962208}
 --- !u!82 &6876374988889600432
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1969,7 +1976,103 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9209ee3cee3074245b7e06c6572e9424, type: 3}
   - {fileID: 8300000, guid: 1280313a51a38bb4185e09062ee57a5c, type: 3}
   - {fileID: 8300000, guid: 6e2159b76af351b4d88750dadca3514f, type: 3}
-  playVoice: 5
+--- !u!82 &1823998793376359693
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4115492426519597622}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 169de4e841ca60b498fcee8822dfecbc, type: 3}
+  m_Resource: {fileID: 8300000, guid: 169de4e841ca60b498fcee8822dfecbc, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 0
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4191205936579100168
 GameObject:
   m_ObjectHideFlags: 0
@@ -9907,6 +10010,148 @@ CharacterJoint:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7879573196766932689, guid: 3c483801e6e93704d96d10cee2a3b445, type: 3}
   m_PrefabInstance: {fileID: 1934601727774915960}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4084058802141710759
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6297174927853309147}
+    m_Modifications:
+    - target: {fileID: 616249963887951614, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_Name
+      value: Blood Splat
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.164
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.319
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.278
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5273108862111374279, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+--- !u!4 &259377976441089414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4266038263181108257, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+  m_PrefabInstance: {fileID: 4084058802141710759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8178718643159962208 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5273108862111374279, guid: 0b35b98db51654b43a941638739b480a, type: 3}
+  m_PrefabInstance: {fileID: 4084058802141710759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4906233472649747286
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6297174927853309147}
+    m_Modifications:
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.158
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.354
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.324
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1632926638368251029, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: m_Name
+      value: Blood Cloud
+      objectReference: {fileID: 0}
+    - target: {fileID: 4812088250533926653, guid: 373b855fc2baede48865baa329098d18, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 373b855fc2baede48865baa329098d18, type: 3}
+--- !u!198 &491325145698045355 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4812088250533926653, guid: 373b855fc2baede48865baa329098d18, type: 3}
+  m_PrefabInstance: {fileID: 4906233472649747286}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5873694758589221428 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1555429733974643042, guid: 373b855fc2baede48865baa329098d18, type: 3}
+  m_PrefabInstance: {fileID: 4906233472649747286}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5157834618615009999
 PrefabInstance:

@@ -25,6 +25,10 @@ public class CamoShopUI : MonoBehaviour
     [Header("Showcase Gun")]
     public List<MeshRenderer> showcaseGunRenderers;
 
+    [Header("Purchase Animation")]
+    public TMP_Text animationText;
+    public Animator purchaseAnim;
+
     private Material currentSelectedCamo;
 
     private class CamoItemData
@@ -114,6 +118,9 @@ public class CamoShopUI : MonoBehaviour
                     priceText.gameObject.SetActive(false);
                     selectButton.gameObject.SetActive(true);
                     selectButton.interactable = true;
+
+                    animationText.text = "- " + camoPrice;
+                    purchaseAnim.SetTrigger("Bought");
                 }
             });
 
