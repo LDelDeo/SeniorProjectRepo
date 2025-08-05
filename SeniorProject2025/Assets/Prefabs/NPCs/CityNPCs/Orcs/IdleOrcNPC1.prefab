@@ -1452,13 +1452,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.65
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 20
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 10
@@ -1595,6 +1595,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ba03b71c3a637764eba0b3f370c36d5e, type: 3}
   - {fileID: 8300000, guid: 616b24a3c1f12f74f88589ec26787c2b, type: 3}
   - {fileID: 8300000, guid: 08e4b6eb7e91cec4e96616737789b0bd, type: 3}
+  playVoice: 5
 --- !u!114 &-8042291140306059245
 MonoBehaviour:
   m_ObjectHideFlags: 0

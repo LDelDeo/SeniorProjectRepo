@@ -1999,6 +1999,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4c8d0ab594c02ee46a36f07d5340dc30, type: 3}
   - {fileID: 8300000, guid: 65ae2f67f5d999447b6191e54c718fd4, type: 3}
   - {fileID: 8300000, guid: 46ec246ffa70a1e44a6ca1261e8deaaa, type: 3}
+  playVoice: 5
 --- !u!82 &5738097647211127241
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2012,13 +2013,13 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.65
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 20
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 10
