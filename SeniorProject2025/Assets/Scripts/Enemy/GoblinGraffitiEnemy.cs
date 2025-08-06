@@ -135,21 +135,51 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         if (hasBeenCaught) return;
 
         Vector3 directionAwayFromThreat = (transform.position - policeOfficer.transform.position).normalized;
-        Vector3 randomOffset = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
-        Vector3 runToPosition = transform.position + directionAwayFromThreat * runDistance + randomOffset;
+        Vector3 runToPosition = transform.position + directionAwayFromThreat * runDistance;
 
-        anim.SetBool("isSpooked", true);
-
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(runToPosition, out hit, 3f, NavMesh.AllAreas))
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(runToPosition, out navHit, 10f, NavMesh.AllAreas))
         {
-            agent.SetDestination(hit.position);
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(navHit.position, path) && path.status == NavMeshPathStatus.PathComplete)
+            {
+                anim.SetBool("isSpooked", true);
+                agent.SetDestination(navHit.position);
+            }
+            else
+            {
+                // Could not find valid path, pick a random valid point instead
+                TryRandomEscapeDirection();
+            }
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh position to flee to.");
+            // Could not sample a nav point in that direction
+            TryRandomEscapeDirection();
         }
     }
+
+    private void TryRandomEscapeDirection()
+    {
+        for (int i = 0; i < 10; i++) // Try 10 times to find a random safe position
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * runDistance;
+            randomDirection.y = 0;
+            Vector3 candidatePos = transform.position + randomDirection;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(candidatePos, out hit, 5f, NavMesh.AllAreas))
+            {
+                NavMeshPath path = new NavMeshPath();
+                if (agent.CalculatePath(hit.position, path) && path.status == NavMeshPathStatus.PathComplete)
+                {
+                    agent.SetDestination(hit.position);
+                    return;
+                }
+            }
+        }
+    }
+
 
     public void TakeDamageFromGun()
     {
