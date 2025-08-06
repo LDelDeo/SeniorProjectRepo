@@ -61,6 +61,12 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     void Update()
     {
+        GameObject pressEObject = GameObject.FindGameObjectWithTag("handcuffText");
+        if (pressEObject != null)
+        {
+            pressE = pressEObject.GetComponent<TMP_Text>();
+        }
+        
         if (enterCarScript.isInCar || isKnockedBack || hasBeenCaught) return;
 
         if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && hasBeenCaught == false)

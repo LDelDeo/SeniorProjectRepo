@@ -37,6 +37,15 @@ public class CrimeCompletion : MonoBehaviour
         }
         FindFirstObjectByType<FPShooting>().CancelReload();
 
+        GameObject stimStunObj = GameObject.Find("StimStun");
+        //Animator stimStunAnim = stimStunObj.GetComponent<Animator>();
+        Image stimStunImg = stimStunObj.GetComponent<Image>();
+
+        //stimStunAnim.Stop();
+        Color color = stimStunImg.color;
+        color.a = 0f;
+        stimStunImg.color = color;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
