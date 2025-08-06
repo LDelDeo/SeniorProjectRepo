@@ -19,6 +19,7 @@ public class CarController : MonoBehaviour
     [SerializeField] public float decelerationSpeed = 2.5f;
     [SerializeField] private float maxSpeed = 18f; // ~39 mph
     [SerializeField] private float downforce = 100f;
+    [SerializeField] public Rigidbody rb;
 
     [Header("Engine Audio")]
     [SerializeField] public AudioSource engineAudioSource;
@@ -41,7 +42,8 @@ public class CarController : MonoBehaviour
     [Header("VFX")]
     public ParticleSystem[] exhaustSmokes;
 
-    public Rigidbody rb;
+    [Header("Skid Trails")]
+    [SerializeField] private TrailRenderer[] skidTrails;
 
     // Friction handling
     private float currentForwardStiffness = 2.0f;
@@ -65,7 +67,7 @@ public class CarController : MonoBehaviour
         AdjustWheelFriction(frontRightWheelCollider);
         AdjustWheelFriction(rearLeftWheelCollider);
         AdjustWheelFriction(rearRightWheelCollider);
-
+        skidTrails = GetComponentsInChildren<TrailRenderer>(true);
         if (engineAudioSource != null)
         {
             engineAudioSource.loop = true;
@@ -99,6 +101,7 @@ public class CarController : MonoBehaviour
         ApplyAntiRoll(rearLeftWheelCollider, rearRightWheelCollider);
         TrackDriveDistance();
         UpdateEngineSound();
+        UpdateSkidTrails();
     }
    
     private void TrackDriveDistance()
@@ -239,6 +242,29 @@ public class CarController : MonoBehaviour
         transform.rotation = rot * Quaternion.Euler(0, isLeft ? 90 : -90, 90);
         transform.position = pos;
     }
+
+    private void UpdateSkidTrails()
+    {
+        if (skidTrails == null || skidTrails.Length == 0) return;
+
+        float speed = rb.linearVelocity.magnitude;
+        float turnAmount = Mathf.Abs(horizontalInput);
+        float acceleration = Mathf.Abs(verticalInput);
+
+        //Conditions
+        bool isBrakingHard = isBreaking && speed > 2f;
+        bool isAcceleratingFast = acceleration > 0.7f && speed > 4f;
+        bool isDrifting = speed > 6f && turnAmount > 0.5f;
+
+        bool shouldEmit = isBrakingHard || isAcceleratingFast || isDrifting;
+
+        foreach (var trail in skidTrails)
+        {
+            if (trail != null)
+                trail.emitting = shouldEmit;
+        }
+    }
+
 
     private void UpdateEngineSound()
     {
