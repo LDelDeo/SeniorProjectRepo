@@ -19,6 +19,9 @@ public class EnterCarScript : MonoBehaviour
     public bool areLightsOn;
     public Transform playerInCarTransform;
     public Transform exitCarTransform;
+    public Transform exitCarTransformRight; 
+    public Vector3 boxSize = new Vector3(2, 1, 2); 
+    public LayerMask obstructionMask;
     public Transform lookForwardTransform;
    public FPController playerMovement;
    public FPShooting fpShooting;
@@ -71,7 +74,7 @@ public class EnterCarScript : MonoBehaviour
         }
 
         // If the player is in the trigger zone and presses the 'E' key
-        if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E) && !debugConsole.consoleOpen)
+        if (playerInTriggerZone && Input.GetKeyDown(KeyCode.E) && !debugConsole.consoleOpen && !fpShooting.isInNoWeaponZone)
         {
             if (!isInCar)
             {
@@ -197,7 +200,18 @@ public class EnterCarScript : MonoBehaviour
         isInCar = false; // Player is now out of the car
         enterText.SetActive(true); // Show the 'Enter' text again
 
-        player.transform.position = exitCarTransform.position;
+        Vector3 checkCenter = exitCarTransform.position;
+        Quaternion checkRotation = exitCarTransform.rotation;
+
+        // Check if any colliders are overlapping with the trigger box
+        Collider[] hits = Physics.OverlapBox(checkCenter, boxSize / 2f, checkRotation, obstructionMask);
+
+        bool isBlocked = hits.Length > 0;
+
+        // Decide where to spawn
+        Transform finalExit = isBlocked ? exitCarTransformRight : exitCarTransform;
+        player.transform.position = finalExit.position;
+
         // Make Player look Forward
         player.transform.LookAt(lookForwardTransform.position);
         // Enable Player Movement Script and Character Controller
@@ -207,7 +221,7 @@ public class EnterCarScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && !fpShooting.isInNoWeaponZone)
         {
             enterText.SetActive(true); // Show the 'Enter' text when player enters the trigger
             playerInTriggerZone = true; // Set flag to true when player is in the trigger zone
