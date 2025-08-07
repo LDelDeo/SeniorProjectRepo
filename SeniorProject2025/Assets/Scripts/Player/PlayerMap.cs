@@ -9,6 +9,8 @@ public class PlayerMap : MonoBehaviour
     [Header("Canvas' / UI / HUD")]
     public GameObject playerHUD;
     public GameObject carHUD;
+    public GameObject mapToggleText;
+    public GameObject playerMapMarker;
     
     [Header("Script Grabs")]
     public EnterCarScript enterCarScript;
@@ -35,12 +37,19 @@ public class PlayerMap : MonoBehaviour
             carHUD.SetActive(false);
             playerHUD.SetActive(false);
             miniMap.SetActive(false);
+            mapToggleText.SetActive(true);
 
+            playerMapMarker.GetComponent<Animator>().enabled = true;
+            playerMapMarker.transform.localScale = new Vector3(24, 24, 24);
         }
         else
         {
             map.SetActive(false);
             miniMap.SetActive(true);
+            mapToggleText.SetActive(false);
+
+            playerMapMarker.GetComponent<Animator>().enabled = false;
+            playerMapMarker.transform.localScale = new Vector3(12.4f, 12.4f, 12.4f);
 
             if (enterCarScript.isInCar)
             {
