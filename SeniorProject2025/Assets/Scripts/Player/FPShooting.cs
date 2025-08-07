@@ -20,6 +20,7 @@ public class FPShooting : MonoBehaviour
     private EnterVandalism enterVandalism;
     private EnterGraffiti enterGraffiti;
     public Animator weaponTypeAnim;
+    public Button imStuckBtn;
     
 
     [Header("Shooting & Reloading")]
@@ -70,7 +71,7 @@ public class FPShooting : MonoBehaviour
     public WeaponType currentWeapon = WeaponType.Gun;
     private WeaponType lastHeldWeapon = WeaponType.Gun;
     private int noWeaponZoneCount = 0;
-    bool isInNoWeaponZone => noWeaponZoneCount > 0;
+     public bool isInNoWeaponZone => noWeaponZoneCount > 0;
     public TMP_Text noWeaponAlert;
 
 
@@ -129,9 +130,15 @@ public class FPShooting : MonoBehaviour
                 currentWeapon = currentWeapon == WeaponType.Gun ? WeaponType.Melee : WeaponType.Gun;
                 SwitchWeapon(currentWeapon);
             }
+            imStuckBtn.interactable = true;
+
+        }
+        if (isInNoWeaponZone)
+        {
+            imStuckBtn.interactable = false;
         }
 
-        if (enterAssault == null)
+            if (enterAssault == null)
         enterAssault = FindFirstObjectByType<EnterAssault>();
 
         if(enterDrugDeal == null)
@@ -668,6 +675,7 @@ public class FPShooting : MonoBehaviour
                 lastHeldWeapon = currentWeapon;
                 SwitchWeapon(WeaponType.None);
                 noWeaponAlert.text = "Safe Zone";
+
             }
         }
     }
