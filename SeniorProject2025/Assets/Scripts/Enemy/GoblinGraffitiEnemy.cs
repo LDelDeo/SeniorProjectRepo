@@ -155,12 +155,23 @@ public class GoblinGraffitiEnemy : MonoBehaviour
             else
             {
                 // Could not find valid path, pick a random valid point instead
+
+                if (!anim.GetBool("isSpooked"))
+                {
+                    anim.SetBool("isSpooked", true);
+                }
+
                 TryRandomEscapeDirection();
             }
         }
         else
         {
             // Could not sample a nav point in that direction
+            if (!anim.GetBool("isSpooked"))
+            {
+                anim.SetBool("isSpooked", true);
+            }
+
             TryRandomEscapeDirection();
         }
     }

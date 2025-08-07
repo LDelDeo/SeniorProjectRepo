@@ -200,7 +200,7 @@ public class FPShooting : MonoBehaviour
             ? playerStats.playerRangedRange 
             : playerStats.playerMeleeRange;
 
-        int layerMask = ~(1 << 14); //Mask 14 is Player
+        int layerMask = ~(1 << 14) | (1 << 16); //Mask 14 is Player, 16 is Cop Car
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, range, layerMask))
         {
@@ -267,7 +267,7 @@ public class FPShooting : MonoBehaviour
             // Shoot Sound
             gunAudio.PlayOneShot(gunShot);
 
-            int layerMask = ~(1 << 14); //Mask 14 is Player
+            int layerMask = ~(1 << 14) | (1 << 16); //Mask 14 is Player
 
             if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerRangedRange, layerMask))
             {
@@ -403,7 +403,7 @@ public class FPShooting : MonoBehaviour
 
             // Play melee animation
             meleeAnim.SetTrigger("Melee");
-            int layerMask = ~(1 << 14);
+            int layerMask = ~(1 << 14) | (1 << 16);
 
             if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerMeleeRange, layerMask))
             {
