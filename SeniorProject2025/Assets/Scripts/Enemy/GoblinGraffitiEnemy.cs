@@ -10,10 +10,10 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     private GameObject policeOfficer;
     private NavMeshAgent agent;
     private bool isSpooked = false;
-    private bool hasBeenCaught = false;
+    public bool hasBeenCaught = false;
     private float runDistance = 10f;
-    private TMP_Text pressE;
-    private bool canBeCuffed = false;
+    public TMP_Text pressE;
+    public bool canBeCuffed = false;
 
     [Header("Enemy Values")]
     private float health;
@@ -72,6 +72,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         if (isSpooked && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance && hasBeenCaught == false)
         {
             RunAway();
+            
         }
         if (canBeCuffed)
         {
@@ -80,9 +81,10 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         }
         if (canBeCuffed && Input.GetKeyDown(KeyCode.E))
         {
+            this.tag = "";
+            
             hasBeenCaught = true;
             canBeCuffed = false;
-
             if (pressE != null)
             {
                 pressE.text = "";
@@ -271,30 +273,5 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         isKnockedBack = false;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (hasBeenCaught) return; // Prevent showing prompt after already caught
-
-        if (other.CompareTag("Player"))
-        {
-            canBeCuffed = true;
-                
-            if (pressE != null)
-            pressE.text = "Press [E] to Handcuff";
-        }
-            
-        
-    }
-
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (pressE != null)
-                pressE.text = "";
-
-            canBeCuffed = false;
-        }
-    }
+  
 }

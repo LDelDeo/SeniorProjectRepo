@@ -49,6 +49,7 @@ public class PlayerMap : MonoBehaviour
             mapToggleText.SetActive(false);
 
             playerMapMarker.GetComponent<Animator>().enabled = false;
+            playerMapMarker.GetComponent<SpriteRenderer>().color = Color.white;
             playerMapMarker.transform.localScale = new Vector3(12.4f, 12.4f, 12.4f);
 
             if (enterCarScript.isInCar)

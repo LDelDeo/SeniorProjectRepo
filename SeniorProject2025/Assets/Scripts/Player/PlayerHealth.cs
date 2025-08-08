@@ -361,9 +361,9 @@ public class PlayerHealth : MonoBehaviour
 
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        
-        fPController.enabled = true;
-        fpsShooting.enabled = true;
+
+        fPController.enabled = false;
+        fpsShooting.enabled = false;
         FindFirstObjectByType<FPShooting>().CancelReload();
         FindFirstObjectByType<FPShooting>().ResetWeaponState();
     }

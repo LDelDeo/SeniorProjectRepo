@@ -19,7 +19,11 @@ public class EnterCarScript : MonoBehaviour
     public bool areLightsOn;
     public Transform playerInCarTransform;
     public Transform exitCarTransform;
-    public Transform exitCarTransformRight; 
+    public Transform exitCarTransformRight;
+    public Transform exitCarTransformBack;
+    public Transform exitCarTransformFront;
+    public Transform finalExit;
+    public bool isBlocked;
     public Vector3 boxSize = new Vector3(2, 1, 2); 
     public LayerMask obstructionMask;
     public Transform lookForwardTransform;
@@ -200,17 +204,34 @@ public class EnterCarScript : MonoBehaviour
         isInCar = false; // Player is now out of the car
         enterText.SetActive(true); // Show the 'Enter' text again
 
-        Vector3 checkCenter = exitCarTransform.position;
-        Quaternion checkRotation = exitCarTransform.rotation;
-
         // Check if any colliders are overlapping with the trigger box
-        Collider[] hits = Physics.OverlapBox(checkCenter, boxSize / 2f, checkRotation, obstructionMask);
+        // Decide where to spawn (priority order)
+        Transform[] exits =
+        {
+    exitCarTransform,
+    exitCarTransformRight,
+    exitCarTransformBack,
+    exitCarTransformFront
+};
 
-        bool isBlocked = hits.Length > 0;
+        Transform finalExit = null;
+        foreach (var t in exits)
+        {
+            // use each exit's own rotation
+            if (!CheckIfTransformIsBlocked(t.position, t.rotation))
+            {
+                finalExit = t;
+                break;
+            }
+        }
 
-        // Decide where to spawn
-        Transform finalExit = isBlocked ? exitCarTransformRight : exitCarTransform;
+        // Fallback if somehow all are blocked
+        if (finalExit == null)
+            finalExit = exitCarTransformBack ?? exitCarTransform;
+
+        // Move player
         player.transform.position = finalExit.position;
+
 
         // Make Player look Forward
         player.transform.LookAt(lookForwardTransform.position);
@@ -218,6 +239,12 @@ public class EnterCarScript : MonoBehaviour
         playerMovement.enabled = true;
         PlayerPrefs.SetInt("IsInCar", isInCar ? 1 : 0);
     }
+
+    public bool CheckIfTransformIsBlocked(Vector3 checkCenter, Quaternion checkRotation)
+    {
+        return Physics.CheckBox(checkCenter, boxSize * 0.5f, checkRotation, obstructionMask);
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {

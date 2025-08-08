@@ -672,6 +672,73 @@ Transform:
   - {fileID: 6916646713933149996}
   m_Father: {fileID: 6615367798829561149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1800676029624763434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9057861278504234426}
+  - component: {fileID: 7958199207987746813}
+  - component: {fileID: 4624420727306477208}
+  m_Layer: 14
+  m_Name: CatchRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9057861278504234426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800676029624763434}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.9984252, z: -0, w: 0.056100518}
+  m_LocalPosition: {x: -0.051879674, y: 1.0413138, z: 0.023472916}
+  m_LocalScale: {x: 0.98108625, y: 0.9810868, z: 0.98108625}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6297174927853309147}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7958199207987746813
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800676029624763434}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.8269806, y: 3.0826275, z: 3.6633227}
+  m_Center: {x: -0.05187968, y: 0.42, z: 0.023472799}
+--- !u!114 &4624420727306477208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1800676029624763434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c4c786043454c64b94bf92ff428b099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goblinGraffitiEnemy: {fileID: -7770234227178324273}
 --- !u!1 &2130552222774390864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,7 +1652,6 @@ GameObject:
   - component: {fileID: -7770234227178324273}
   - component: {fileID: 601759701585310470}
   - component: {fileID: 1216344947206530280}
-  - component: {fileID: 6757250341386685188}
   - component: {fileID: 2756609138261535556}
   - component: {fileID: 7127149355460628208}
   - component: {fileID: 6876374988889600432}
@@ -1611,6 +1677,7 @@ Transform:
   m_LocalScale: {x: 1.0192778, y: 1.0192778, z: 1.0192778}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9057861278504234426}
   - {fileID: 5873694758589221428}
   - {fileID: 259377976441089414}
   - {fileID: 8973883390278585270}
@@ -1633,6 +1700,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85990ad85f236b84b88284a11be30497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasBeenCaught: 0
+  pressE: {fileID: 0}
+  canBeCuffed: 0
   alertIconPrefab: {fileID: 6672847486806009111, guid: f4b5b6e76a83ef14a89b9db42ccaef68, type: 3}
   bloodShed: {fileID: 7278556807897425918}
   anim: {fileID: 2706755623679608188}
@@ -1687,27 +1757,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!65 &6757250341386685188
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4115492426519597622}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.8269806, y: 3.0826275, z: 3.6633227}
-  m_Center: {x: -0.05187968, y: 1.0413136, z: 0.023472799}
 --- !u!82 &2756609138261535556
 AudioSource:
   m_ObjectHideFlags: 0

@@ -274,7 +274,7 @@ public class FPShooting : MonoBehaviour
             // Shoot Sound
             gunAudio.PlayOneShot(gunShot);
 
-            int layerMask = ~(1 << 14) | (1 << 16); //Mask 14 is Player
+            int layerMask = ~(1 << 14|1<<16); //| (1 << 16); //Mask 14 is Player
 
             if (Physics.Raycast(ray, out RaycastHit hit, playerStats.playerRangedRange, layerMask))
             {
@@ -325,7 +325,7 @@ public class FPShooting : MonoBehaviour
                 }
 
                 //This just checks what your hitting
-                //Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
+                Debug.Log($"Hit Object: {hit.collider.name} | Tag: {hit.collider.tag} | Layer: {hit.collider.gameObject.layer}");
 
                 if (hitEffectPrimary != null)
                 {
