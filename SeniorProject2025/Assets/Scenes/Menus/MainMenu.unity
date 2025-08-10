@@ -2714,8 +2714,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Luke Del Deo - Programming\nTyler Coletti - Programming\nKeith Morgan
-    - Design \nColby Hanna - Design"
+  m_text: 'Luke Del Deo - Programming
+
+    Tyler Coletti - Programming
+
+    Keith
+    Morgan - Design/VFX
+
+    Colby Hanna - Design/Voice Acting'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e68bd8def6c3464429168ae0577a9ac7, type: 2}
   m_sharedMaterial: {fileID: -8670328825630723244, guid: e68bd8def6c3464429168ae0577a9ac7, type: 2}

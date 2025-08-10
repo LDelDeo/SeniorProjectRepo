@@ -49,9 +49,18 @@ public class PlayerData : MonoBehaviour
 
     void Update()
     {
-       
         //SaveCarPosition();
         CheckCurrentLvl();
+        CreditsCap(999999999); //999 Million
+        
+    }
+
+    public void CreditsCap(int cap)
+    {
+        if (credits >= 1000000000) //1 Billion
+        {
+            credits = cap;
+        }
     }
 
     public void AddCredits(int amount)
