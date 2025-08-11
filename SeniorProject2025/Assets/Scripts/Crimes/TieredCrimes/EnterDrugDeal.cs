@@ -27,12 +27,12 @@ public class EnterDrugDeal : MonoBehaviour
             if (crimeFoughtCorrectly)
             {
                 // Payout Player Credits
-                crimeCompletion.CrimeStopped(crimeCompletion.tierTwoXP, crimeCompletion.tierTwoCredits);
+                crimeCompletion.CrimeStopped(crimeCompletion.tierTwoXP, crimeCompletion.tierTwoCredits, false, 2);
             }
             else
             {
                 // No Payout, Done Wrong
-                crimeCompletion.CrimeStopped(crimeCompletion.failedXP, crimeCompletion.failedCredits);
+                crimeCompletion.CrimeStopped(crimeCompletion.failedXP, crimeCompletion.failedCredits, true, 2);
             }
             
 

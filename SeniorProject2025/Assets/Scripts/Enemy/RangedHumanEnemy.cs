@@ -19,6 +19,7 @@ public class RangedHumanEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    public ParticleSystem bloodSplat;
 
     [Header("Knockback Settings")]
     public float knockbackForce = 6f;
@@ -125,6 +126,7 @@ public class RangedHumanEnemy : MonoBehaviour
     public void TakeDamageFromGun()
     {
         bloodShed.Play();
+        bloodSplat.Play();
         fpShooting.Deathmarker();
         gameObject.tag = "Untagged";
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
@@ -143,6 +145,7 @@ public class RangedHumanEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
+        bloodSplat.Play();
         isHostile = true;
 
         if (health <= 0)

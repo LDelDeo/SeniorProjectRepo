@@ -18,6 +18,7 @@ public class RangedOrcEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    public ParticleSystem bloodSplat;
     private Animator animator;
 
     [Header("Ranged Attack")]
@@ -107,6 +108,7 @@ public class RangedOrcEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
+        bloodSplat.Play();
 
         isHostile = true;
 

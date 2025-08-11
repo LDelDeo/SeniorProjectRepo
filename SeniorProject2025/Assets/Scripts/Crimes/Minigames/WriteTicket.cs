@@ -105,7 +105,7 @@ public class WriteTicket : MonoBehaviour
 
         ticketPanel.SetActive(false);
         
-        crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
+        crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits, false, 1);
 
         int current = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
         PlayerPrefs.SetInt("Tier1CrimesCompleted", current + 1);

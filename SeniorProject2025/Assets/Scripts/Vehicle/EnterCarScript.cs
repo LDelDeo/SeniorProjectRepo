@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using TMPro;
 
 public class EnterCarScript : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class EnterCarScript : MonoBehaviour
     public AudioSource sirenAudioSource;
     public AudioClip siren;
     public Animator gunAnim;
+    public Animator exitCarText;
+    private float currentWhyRotation;
 
     void Start()
     {
@@ -75,6 +78,13 @@ public class EnterCarScript : MonoBehaviour
         {
             player.transform.position = playerInCarTransform.position;
             player.transform.rotation = car.transform.rotation * Quaternion.Euler(0, 180, 0);
+
+            currentWhyRotation = car.transform.eulerAngles.y;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                exitCarText.SetTrigger("PauseAttempt");
+            }
         }
 
         // If the player is in the trigger zone and presses the 'E' key
@@ -176,6 +186,8 @@ public class EnterCarScript : MonoBehaviour
             sirenAudioSource.Stop();
         }
 
+        exitCarText.GetComponent<TMP_Text>().color = new Color32(230,0,0,0);
+
         //gunAnim.SetTrigger("enterCar");
 
         carControllerScript.OnExitCar();
@@ -187,7 +199,9 @@ public class EnterCarScript : MonoBehaviour
         
         // Enable Player Shoot Script
         fpShooting.enabled = true;
+        car.transform.rotation = Quaternion.Euler(0, currentWhyRotation,0);
         player.transform.rotation = Quaternion.identity;
+
 
         // Disable the car's camera and canvas
         carCamera.gameObject.SetActive(false); // Disable the car's camera

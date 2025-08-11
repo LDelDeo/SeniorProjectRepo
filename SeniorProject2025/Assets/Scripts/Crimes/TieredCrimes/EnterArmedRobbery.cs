@@ -24,7 +24,7 @@ public class EnterArmedRobbery : MonoBehaviour
         {
 
             // Payout Player Credits
-            crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits);
+            crimeCompletion.CrimeStopped(crimeCompletion.tierThreeXP, crimeCompletion.tierThreeCredits, false, 3);
 
             Destroy(exclamationPoint);
             Destroy(gameObject);

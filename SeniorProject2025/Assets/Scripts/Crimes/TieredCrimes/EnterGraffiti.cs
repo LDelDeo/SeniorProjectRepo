@@ -27,14 +27,14 @@ public class EnterGraffiti : MonoBehaviour
             if (crimeFoughtCorrectly)
             {
                 // Payout Player Credits
-                crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits);
+                crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits, false, 1); //Incorrect is FALSE
                 int current = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
                 PlayerPrefs.SetInt("Tier1CrimesCompleted", current + 1);
             }
             else
             {
                 // No Payout, Done Wrong
-                crimeCompletion.CrimeStopped(crimeCompletion.failedXP, crimeCompletion.failedCredits);
+                crimeCompletion.CrimeStopped(crimeCompletion.failedXP, crimeCompletion.failedCredits, true, 1); //Incorrect is TRUE
             }
             
 

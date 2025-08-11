@@ -18,6 +18,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    public ParticleSystem bloodSplat;
     private Animator animator;
 
     [Header("Knockback Settings")]
@@ -145,6 +146,7 @@ public class MeleeOrcEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
+        bloodSplat.Play();
         isHostile = true;
 
         if (health <= 0)

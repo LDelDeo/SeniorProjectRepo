@@ -29,7 +29,7 @@ public class CrimeCompletion : MonoBehaviour
     public int failedXP = 5;
     public int failedCredits = 0;
 
-    public void CrimeStopped(int XP, int Credits)
+    public void CrimeStopped(int XP, int Credits, bool Incorrect, int tier)
     {
         if (enterCarScript.isInCar)
         {
@@ -62,7 +62,7 @@ public class CrimeCompletion : MonoBehaviour
 
         xpGained.text = "You Gained " + XP + " XP";
         creditsGained.text = "You Gained " + Credits + " Credits";
-        
+
 
         int oldLevel = playerData.level;
         int oldXP = playerData.xp;
@@ -94,6 +94,23 @@ public class CrimeCompletion : MonoBehaviour
         {
             if (playerData.level > oldLevel)
                 StartCoroutine(ShowLevelUpMessage(levelUpText));
+        }
+
+        TMP_Text incorrectText = screen.transform.Find("IncorrectText").GetComponent<TMP_Text>();
+        if (Incorrect == true)
+        {
+            if (tier == 1)
+            {
+                incorrectText.text = "Tier 1 Crimes Are Completed Correctly Without the Use of Weapons, Try Catching Up to Your Target and Pressing [E] to Handcuff!";
+            }
+            else if (tier == 2)
+            {
+                incorrectText.text = "Tier 2 Crimes Are Completed Correctly by Using a Non Lethal Weapon, Try Using Your Baton Instead of your Lethal Pistol!";
+            }
+        }
+        else
+        {
+            incorrectText.text = "";
         }
 
     }

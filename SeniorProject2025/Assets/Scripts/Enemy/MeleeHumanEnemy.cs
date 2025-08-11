@@ -18,6 +18,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     public GameObject alertIconPrefab;
     private GameObject alertIconInstance;
     public ParticleSystem bloodShed;
+    public ParticleSystem bloodSplat;
     private Animator animator;
     public MonoBehaviour crimeScript;
 
@@ -164,6 +165,7 @@ public class MeleeHumanEnemy : MonoBehaviour
             Destroy(alertIconInstance);
 
         bloodShed.Play();
+        bloodSplat.Play();
         fpShooting.Deathmarker();
         healthAudioSource.PlayOneShot(deathSound, 1.0f);
         
@@ -174,6 +176,7 @@ public class MeleeHumanEnemy : MonoBehaviour
     {
         health -= damageToTake;
         bloodShed.Play();
+        bloodSplat.Play();
         isHostile = true;
 
         if (health <= 0)
