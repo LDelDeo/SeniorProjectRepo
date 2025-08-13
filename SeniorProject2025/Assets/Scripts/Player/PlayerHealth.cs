@@ -48,8 +48,8 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private AudioSource ShieldAudioSource;
     [SerializeField] private AudioClip blockSound;
     [SerializeField] private AudioSource healthAudioSource;
-    [SerializeField] private AudioClip takeDamageSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] takeDamageSound;
+    [SerializeField] private AudioClip[] deathSound;
     [SerializeField] private AudioClip stimSound;
     [SerializeField] private AudioClip stimStunned;
 
@@ -195,7 +195,8 @@ public class PlayerHealth : MonoBehaviour
         // Not blocking, take damage
         if (playerStats.health > 0)
         {
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            int rand = Random.Range(0, takeDamageSound.Length);
+            healthAudioSource.PlayOneShot(takeDamageSound[rand], 1.0f);
             playerStats.blockAmt = 0;
             SetShieldIconsVisible(false);
             playerStats.health -= damageToTake;
@@ -207,7 +208,8 @@ public class PlayerHealth : MonoBehaviour
         {
             
             playerDied();
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
         }
     }
 

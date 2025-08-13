@@ -31,8 +31,8 @@ public class RangedOrcEnemy : MonoBehaviour
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource healthAudioSource;
-    [SerializeField] private AudioClip takeDamageSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] takeDamageSound;
+    [SerializeField] private AudioClip[] deathSound;
 
     // Start & Update
     private void Start()
@@ -115,12 +115,13 @@ public class RangedOrcEnemy : MonoBehaviour
         if (health <= 0)
         {
             gameObject.tag = "Untagged";
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
             int orcsDefeated = PlayerPrefs.GetInt("RangedOrcsDefeated", 0);
             PlayerPrefs.SetInt("RangedOrcsDefeated", orcsDefeated + 1);
-            
+
             fpShooting.Deathmarker();
-            
+
             if (alertIconInstance != null)
             {
                 Destroy(alertIconInstance);
@@ -132,7 +133,9 @@ public class RangedOrcEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            int rand = Random.Range(0, takeDamageSound.Length);
+            healthAudioSource.clip = takeDamageSound[rand];
+            healthAudioSource.Play();
         }
     }
 

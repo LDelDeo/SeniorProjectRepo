@@ -1695,6 +1695,13 @@ MonoBehaviour:
   bodyCollider: {fileID: 839982660569205832}
   npcVoiceSource: {fileID: -1747153361293087291}
   deathSFX: {fileID: 4183614378760024828}
+  deathArray:
+  - {fileID: 8300000, guid: 1678e99134ebbaf4f9c6205d761fffeb, type: 3}
+  - {fileID: 8300000, guid: 7d8f8f285dc10564788d291b9525b92e, type: 3}
+  - {fileID: 8300000, guid: f8d7ea72824eb934e8694a8231904409, type: 3}
+  - {fileID: 8300000, guid: 6fd17561a16719e4cb025984e18c095f, type: 3}
+  - {fileID: 8300000, guid: ead197374265d844db0062c4db4f7a7c, type: 3}
+  - {fileID: 8300000, guid: 875e551abaad5094787229d5c019d579, type: 3}
   bloodCloud: {fileID: 3514036822074607959}
   bloodSplat: {fileID: 7967509936063507099}
 --- !u!136 &839982660569205832

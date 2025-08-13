@@ -1710,8 +1710,33 @@ MonoBehaviour:
   knockbackForce: 6
   knockbackDuration: 0.2
   healthAudioSource: {fileID: 2756609138261535556}
-  takeDamageSound: {fileID: 8300000, guid: 169de4e841ca60b498fcee8822dfecbc, type: 3}
-  deathSound: {fileID: 8300000, guid: ce96bc0747a48d5498235b02633a14d2, type: 3}
+  takeDamageSound:
+  - {fileID: 8300000, guid: 31e9d601401a7e241b0172684c96f67d, type: 3}
+  - {fileID: 8300000, guid: 9691d560812eaa342a50d4e25d04eb7c, type: 3}
+  - {fileID: 8300000, guid: 93f41d6285b5e0240a5396839721a4df, type: 3}
+  - {fileID: 8300000, guid: 8014784e57ab3ad46a924ee14daf73bd, type: 3}
+  - {fileID: 8300000, guid: b93a0763dbf9f1442b51aaed92b3136d, type: 3}
+  - {fileID: 8300000, guid: 43054dcefa1613e40984e2c4e57e5ae4, type: 3}
+  - {fileID: 8300000, guid: 9d21fd31863dc53498ab079ea3252c45, type: 3}
+  - {fileID: 8300000, guid: d7c63421bed9a8e4daa2540fdffce8fe, type: 3}
+  - {fileID: 8300000, guid: d2048f80af1dacc4280161c24c895bec, type: 3}
+  - {fileID: 8300000, guid: 9bd4a33342b3cee4cbcad37edff1475f, type: 3}
+  deathSound:
+  - {fileID: 8300000, guid: f42cbc9ef0fb22249b998bbfa8fd9196, type: 3}
+  - {fileID: 8300000, guid: a0927849c615e3649993d922eef59f4c, type: 3}
+  - {fileID: 8300000, guid: 8b7d8eb39122bc149b6bff6a8341a831, type: 3}
+  - {fileID: 8300000, guid: 745aa02169cff4c4aa2677a3b8be956a, type: 3}
+  - {fileID: 8300000, guid: f7dfdcaa049c9624592ac6866fd8a145, type: 3}
+  - {fileID: 8300000, guid: 0c36c50cc5dc5a4458b9b492c87b277f, type: 3}
+  - {fileID: 8300000, guid: a046951bf0b49a045b7edbe96e1174b0, type: 3}
+  - {fileID: 8300000, guid: e970aa8b1ad717345b8aa87b70b92cc0, type: 3}
+  - {fileID: 8300000, guid: 3dd73ed10a3cf87408f12f55b8ee63d4, type: 3}
+  - {fileID: 8300000, guid: fb94f29d4aedc554a87a8be637974670, type: 3}
+  - {fileID: 8300000, guid: 7cd94ab3ffc3af54393cf98f87666f4f, type: 3}
+  - {fileID: 8300000, guid: caad94b01706ae946b2decd926982215, type: 3}
+  - {fileID: 8300000, guid: de199cb7c2d92a04a9f13e8d8304a365, type: 3}
+  - {fileID: 8300000, guid: 93d7d9a7f13682b4fa0ef9f6d9ecdef1, type: 3}
+  - {fileID: 8300000, guid: c72ad560519bd604db292783b166e657, type: 3}
 --- !u!136 &601759701585310470
 CapsuleCollider:
   m_ObjectHideFlags: 0

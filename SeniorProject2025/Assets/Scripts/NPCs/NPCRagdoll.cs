@@ -14,6 +14,7 @@ public class NPCRagdoll : MonoBehaviour
     [Header("Death Effects")]
     public AudioSource npcVoiceSource;
     public AudioSource deathSFX;
+    public AudioClip[] deathArray;
     public ParticleSystem bloodCloud;
     public ParticleSystem bloodSplat;
 
@@ -56,8 +57,12 @@ public class NPCRagdoll : MonoBehaviour
         if(npcVoiceSource != null)
         npcVoiceSource.Stop();
 
-        if (deathSFX != null)
-        deathSFX.Play();
+        if (deathSFX != null && deathArray.Length > 0)
+        {
+            int rand = Random.Range(0, deathArray.Length);
+            deathSFX.PlayOneShot(deathArray[rand], 1.0f);
+        }
+        
         
         if (bloodCloud != null)
         bloodCloud.Play();

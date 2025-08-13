@@ -1544,8 +1544,27 @@ MonoBehaviour:
   knockbackForce: 5
   knockbackDuration: 0.2
   healthAudioSource: {fileID: -314022753955205148}
-  takeDamageSound: {fileID: 8300000, guid: b1a65828ba08d474ebe1fedb65ed3e73, type: 3}
-  deathSound: {fileID: 8300000, guid: ce96bc0747a48d5498235b02633a14d2, type: 3}
+  takeDamageSound:
+  - {fileID: 8300000, guid: 5a0a1c4e53fafd545a462c04bbfce6bb, type: 3}
+  - {fileID: 8300000, guid: 8c1d0796396acef48b139d8b37d0f30c, type: 3}
+  - {fileID: 8300000, guid: 957be5c221b90f648bbaf3c6cc9e7d4c, type: 3}
+  - {fileID: 8300000, guid: 4649636d3a9d47e4d8a903f070e5c887, type: 3}
+  - {fileID: 8300000, guid: 4b59128ae189cb54ab9bbf0644414e1a, type: 3}
+  - {fileID: 8300000, guid: 8a4fdcc7a04d4784b810054b9c8de93d, type: 3}
+  - {fileID: 8300000, guid: 266e1bb190f67b34080ebfd9fef31d5e, type: 3}
+  - {fileID: 8300000, guid: 4f71d33318476804ea85c504f0feda00, type: 3}
+  - {fileID: 8300000, guid: 30d5b579341907a4781ce0302bfbd386, type: 3}
+  - {fileID: 8300000, guid: 45145dc39cd6d47409671377ca0c0319, type: 3}
+  - {fileID: 8300000, guid: 8836d2e6d953c0741baaa5af4c18dd83, type: 3}
+  - {fileID: 8300000, guid: b9e487256ecca424e960960045c526e5, type: 3}
+  - {fileID: 8300000, guid: 4f30fcd2fc9efdd499972ae302a4a9f7, type: 3}
+  deathSound:
+  - {fileID: 8300000, guid: 1678e99134ebbaf4f9c6205d761fffeb, type: 3}
+  - {fileID: 8300000, guid: 7d8f8f285dc10564788d291b9525b92e, type: 3}
+  - {fileID: 8300000, guid: f8d7ea72824eb934e8694a8231904409, type: 3}
+  - {fileID: 8300000, guid: 6fd17561a16719e4cb025984e18c095f, type: 3}
+  - {fileID: 8300000, guid: ead197374265d844db0062c4db4f7a7c, type: 3}
+  - {fileID: 8300000, guid: 875e551abaad5094787229d5c019d579, type: 3}
   attackRange: 4
   attackCooldown: 4.1
 --- !u!136 &601759701585310470

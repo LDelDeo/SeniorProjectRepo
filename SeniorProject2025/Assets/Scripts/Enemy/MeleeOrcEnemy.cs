@@ -28,8 +28,8 @@ public class MeleeOrcEnemy : MonoBehaviour
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource healthAudioSource;
-    [SerializeField] private AudioClip takeDamageSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] takeDamageSound;
+    [SerializeField] private AudioClip[] deathSound;
 
     [Header("Attack Settings")]
     public float attackRange = 1.3f;
@@ -152,7 +152,8 @@ public class MeleeOrcEnemy : MonoBehaviour
         if (health <= 0)
         {
             gameObject.tag = "Untagged";
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
             fpShooting.Deathmarker();
             if (alertIconInstance != null)
                 Destroy(alertIconInstance);
@@ -162,7 +163,9 @@ public class MeleeOrcEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            int rand = Random.Range(0, takeDamageSound.Length);
+            healthAudioSource.clip = takeDamageSound[rand];
+            healthAudioSource.Play();
             StartCoroutine(ApplyKnockback());
         }
     }

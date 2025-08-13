@@ -1059,8 +1059,26 @@ MonoBehaviour:
   attackRange: 20
   projectileSpeed: 20
   healthAudioSource: {fileID: 6981974185491346343}
-  takeDamageSound: {fileID: 8300000, guid: ef568962d2b23604ca5e7f7197f26aa2, type: 3}
-  deathSound: {fileID: 8300000, guid: ce96bc0747a48d5498235b02633a14d2, type: 3}
+  takeDamageSound:
+  - {fileID: 8300000, guid: 52845400e1dd0d4409dfa40796e3a004, type: 3}
+  - {fileID: 8300000, guid: d270776373d8e1847acc3ef018cd5893, type: 3}
+  - {fileID: 8300000, guid: b73ef3306c9fdf34da4377e0602b05ce, type: 3}
+  - {fileID: 8300000, guid: 92982c31c0ccd8646b54f9a1f69aaf18, type: 3}
+  - {fileID: 8300000, guid: 59bac0a3e9a28c641b65296ec33dbdb1, type: 3}
+  - {fileID: 8300000, guid: 1252186bc43616e4dad432f1972882a3, type: 3}
+  - {fileID: 8300000, guid: 8628c3781e357e84bb0be3085f9540ab, type: 3}
+  - {fileID: 8300000, guid: 310b656c7134e1145a42b942e4f1d499, type: 3}
+  - {fileID: 8300000, guid: fc64600532bca4f43a0ac1172499280b, type: 3}
+  - {fileID: 8300000, guid: 4e5c7408cd67882429556014861ea7e2, type: 3}
+  - {fileID: 8300000, guid: 0f63c30fd663213429c3820f47f36ef1, type: 3}
+  deathSound:
+  - {fileID: 8300000, guid: 529cdab38d1adec4184e09071519fadc, type: 3}
+  - {fileID: 8300000, guid: e47c12f772e663b429284232cc9ea639, type: 3}
+  - {fileID: 8300000, guid: c445b0bd90999e04ab1d2b37c57f7448, type: 3}
+  - {fileID: 8300000, guid: a48c9635cf5162a4ca7bfd2c45603d6f, type: 3}
+  - {fileID: 8300000, guid: fbd1398cb4407ac4280f939b391683c0, type: 3}
+  - {fileID: 8300000, guid: d1ee797202865164f87b625ec081766d, type: 3}
+  - {fileID: 8300000, guid: 6c92d09e885ae5b4db3daf36a42babe8, type: 3}
   shootSound: {fileID: 8300000, guid: 880c39a41ac1f86438ec6c589fb4cb4d, type: 3}
   pistol: {fileID: 151627002461899782}
 --- !u!136 &8513357649598406191

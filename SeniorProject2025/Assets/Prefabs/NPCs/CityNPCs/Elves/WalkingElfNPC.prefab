@@ -2082,6 +2082,22 @@ MonoBehaviour:
   bodyCollider: {fileID: 4919369457735783721}
   npcVoiceSource: {fileID: 5738097647211127241}
   deathSFX: {fileID: 6704123586751242970}
+  deathArray:
+  - {fileID: 8300000, guid: f42cbc9ef0fb22249b998bbfa8fd9196, type: 3}
+  - {fileID: 8300000, guid: a0927849c615e3649993d922eef59f4c, type: 3}
+  - {fileID: 8300000, guid: 8b7d8eb39122bc149b6bff6a8341a831, type: 3}
+  - {fileID: 8300000, guid: 745aa02169cff4c4aa2677a3b8be956a, type: 3}
+  - {fileID: 8300000, guid: f7dfdcaa049c9624592ac6866fd8a145, type: 3}
+  - {fileID: 8300000, guid: 0c36c50cc5dc5a4458b9b492c87b277f, type: 3}
+  - {fileID: 8300000, guid: a046951bf0b49a045b7edbe96e1174b0, type: 3}
+  - {fileID: 8300000, guid: e970aa8b1ad717345b8aa87b70b92cc0, type: 3}
+  - {fileID: 8300000, guid: 3dd73ed10a3cf87408f12f55b8ee63d4, type: 3}
+  - {fileID: 8300000, guid: fb94f29d4aedc554a87a8be637974670, type: 3}
+  - {fileID: 8300000, guid: 7cd94ab3ffc3af54393cf98f87666f4f, type: 3}
+  - {fileID: 8300000, guid: caad94b01706ae946b2decd926982215, type: 3}
+  - {fileID: 8300000, guid: de199cb7c2d92a04a9f13e8d8304a365, type: 3}
+  - {fileID: 8300000, guid: 93d7d9a7f13682b4fa0ef9f6d9ecdef1, type: 3}
+  - {fileID: 8300000, guid: c72ad560519bd604db292783b166e657, type: 3}
   bloodCloud: {fileID: 5786950683441611253}
   bloodSplat: {fileID: 760936906107283371}
 --- !u!54 &-3552987721684866781

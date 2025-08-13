@@ -29,8 +29,8 @@ public class MeleeHumanEnemy : MonoBehaviour
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource healthAudioSource;
-    [SerializeField] private AudioClip takeDamageSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] takeDamageSound;
+    [SerializeField] private AudioClip[] deathSound;
 
     [Header("Attack Settings")]
     public float attackRange = 1.2f;
@@ -167,7 +167,8 @@ public class MeleeHumanEnemy : MonoBehaviour
         bloodShed.Play();
         bloodSplat.Play();
         fpShooting.Deathmarker();
-        healthAudioSource.PlayOneShot(deathSound, 1.0f);
+        int rand = Random.Range(0, deathSound.Length);
+        healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
         
         Destroy(this);
     }
@@ -187,14 +188,17 @@ public class MeleeHumanEnemy : MonoBehaviour
                 Destroy(alertIconInstance);
 
             fpShooting.Deathmarker();
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
            
             Destroy(this);
         }
         else
         {
             fpShooting.Hitmarker();
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            int rand = Random.Range(0, takeDamageSound.Length);
+            healthAudioSource.clip = takeDamageSound[rand];
+            healthAudioSource.Play();
             StartCoroutine(ApplyKnockback());
         }
     }

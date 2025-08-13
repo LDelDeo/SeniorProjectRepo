@@ -35,8 +35,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
     [Header("Audio Settings")]
     [SerializeField] private AudioSource healthAudioSource;
-    [SerializeField] private AudioClip takeDamageSound;
-    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private AudioClip[] takeDamageSound;
+    [SerializeField] private AudioClip[] deathSound;
 
     void Start()
     {
@@ -204,20 +204,35 @@ public class GoblinGraffitiEnemy : MonoBehaviour
     {
         if (hasBeenCaught) return;
 
-        healthAudioSource.PlayOneShot(deathSound, 1.0f);
         bloodShed.Play();
         GetComponent<NPCRagdoll>().Die();
-        gameObject.tag = "Untagged";
-        fpShooting.Deathmarker();
-        if (pressE != null) pressE.text = "";
 
 
-        if (alertIconInstance != null)
-        {
-            Destroy(alertIconInstance);
-        }
+            gameObject.tag = "Untagged";
 
-        Destroy(this);
+            if (agent != null)
+            {
+                agent.ResetPath();
+                agent.velocity = Vector3.zero;
+                agent.isStopped = true;
+            }
+
+            fpShooting.Deathmarker();
+
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
+
+            if (alertIconInstance != null)
+            {
+                Destroy(alertIconInstance);
+            }
+
+            if (pressE != null)
+            pressE.text = "";
+
+            
+            Destroy(this);
+        
     }
 
     public void TakeDamageFromBaton(float damageToTake)
@@ -226,6 +241,7 @@ public class GoblinGraffitiEnemy : MonoBehaviour
 
         health -= damageToTake;
         bloodShed.Play();
+        GetComponent<NPCRagdoll>().Die();
 
         if (!isSpooked)
             BecomeSpooked();
@@ -233,10 +249,10 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         if (health <= 0)
         {
             
-            GetComponent<NPCRagdoll>().Die();
             gameObject.tag = "Untagged";
             fpShooting.Deathmarker();
-            healthAudioSource.PlayOneShot(deathSound, 1.0f);
+            int rand = Random.Range(0, deathSound.Length);
+            healthAudioSource.PlayOneShot(deathSound[rand], 1.0f);
             if (pressE != null) pressE.text = "";
 
             if (alertIconInstance != null)
@@ -249,7 +265,8 @@ public class GoblinGraffitiEnemy : MonoBehaviour
         else
         {
             fpShooting.Hitmarker();
-            healthAudioSource.PlayOneShot(takeDamageSound, 1.0f);
+            int rand = Random.Range(0, takeDamageSound.Length);
+            healthAudioSource.PlayOneShot(takeDamageSound[rand], 1.0f);
             StartCoroutine(ApplyKnockback());
         }
     }
