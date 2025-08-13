@@ -59,7 +59,7 @@ public class CarController : MonoBehaviour
     {
         enterCarScript = GetComponent<EnterCarScript>();
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.5f, 0);
+        rb.centerOfMass = new Vector3(0, -.05f, 0);
 
         lastPosition = transform.position;
 
@@ -121,79 +121,44 @@ public class CarController : MonoBehaviour
 
     private void GetInput()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = -Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");   
         isBreaking = Input.GetKey(KeyCode.Space);
     }
 
+
     private void HandleMotor()
     {
-        float velocityZ = transform.InverseTransformDirection(rb.linearVelocity).z;
-        bool switchingDirection = (verticalInput > 0 && velocityZ < -0.1f) || (verticalInput < 0 && velocityZ > 0.1f);
 
-        float torqueMultiplier = switchingDirection ? 0f : 1f; // prevent torque during switch
-        float torque = Mathf.Abs(verticalInput) * motorForce * Mathf.Sign(verticalInput);
+        float input = verticalInput * -1; 
+        float velZ = Vector3.Dot(rb.linearVelocity, transform.forward);
 
-        float speed = rb.linearVelocity.magnitude;
-        if (speed > 0.5f)
-        {
-            foreach (ParticleSystem smoke in exhaustSmokes)
-            {
-                if (!smoke.isPlaying)
-                    smoke.Play();
-            }
-
-        }
-        else
-        {
-            foreach (ParticleSystem smoke in exhaustSmokes)
-            {
-                if (smoke.isPlaying)
-                    smoke.Stop();
-            }
-        }
-
-        if (verticalInput > 0)
-        {
-            frontLeftWheelCollider.motorTorque = torque;
-            frontRightWheelCollider.motorTorque = torque;
-        }
-        else if (verticalInput < 0)
-        {
-            frontLeftWheelCollider.motorTorque = torque * 1.5f;
-            frontRightWheelCollider.motorTorque = torque * 1.5f;
-        }
-
-        // Apply torque only when not switching direction
-        frontLeftWheelCollider.motorTorque = torque;
-        frontRightWheelCollider.motorTorque = torque;
+        bool switchingDirection = Mathf.Abs(velZ) > 0.2f && Mathf.Sign(input) != Mathf.Sign(velZ);
+        float torque = motorForce * input;
 
         if (switchingDirection)
         {
-            // Apply a little brake to stop before switching
+            torque = 0f;
             currentbreakForce = breakForce * 0.6f;
-        }
-        else if (Mathf.Abs(verticalInput) < 0.1f)
-        {
-            // Natural deceleration
-            ApplyDeceleration();
-            return;
         }
         else
         {
-            currentbreakForce = 0f;
+            currentbreakForce = isBreaking ? breakForce : 0f;
         }
 
-        // Apply brake if space is pressed
-        if (isBreaking)
-        {
-            currentbreakForce = breakForce;
-            frontLeftWheelCollider.motorTorque = 0f;
-            frontRightWheelCollider.motorTorque = 0f;
-        }
+        // Drive type 
+
+        // FWD
+        //frontLeftWheelCollider.motorTorque = torque;
+        //frontRightWheelCollider.motorTorque = torque;
+
+        // RWD 
+        rearLeftWheelCollider.motorTorque = torque;
+        rearRightWheelCollider.motorTorque = torque;
 
         ApplyBraking();
     }
+
 
 
     private void ApplyBraking()
