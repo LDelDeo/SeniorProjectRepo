@@ -56,6 +56,7 @@ public class NPCRagdoll : MonoBehaviour
     {
         if(npcVoiceSource != null)
         npcVoiceSource.Stop();
+        npcVoiceSource.enabled = false;
 
         if (deathSFX != null && deathArray.Length > 0)
         {
