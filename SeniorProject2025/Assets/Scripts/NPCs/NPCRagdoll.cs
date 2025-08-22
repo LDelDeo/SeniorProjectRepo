@@ -54,9 +54,12 @@ public class NPCRagdoll : MonoBehaviour
     }
     public void Die()
     {
-        if(npcVoiceSource != null)
-        npcVoiceSource.Stop();
-        npcVoiceSource.enabled = false;
+        if (npcVoiceSource != null)
+        {
+            npcVoiceSource.Stop();
+            npcVoiceSource.enabled = false;
+        }
+        
 
         if (deathSFX != null && deathArray.Length > 0)
         {
@@ -79,13 +82,13 @@ public class NPCRagdoll : MonoBehaviour
         if (bodyCollider != null) bodyCollider.enabled = false;
 
         foreach (var rb in ragdollBodies)
-    {
-        if (rb != null)
         {
-            rb.isKinematic = false;
-            rb.useGravity = true;
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+            }
         }
-    }
 
         foreach (var col in ragdollColliders)
         {

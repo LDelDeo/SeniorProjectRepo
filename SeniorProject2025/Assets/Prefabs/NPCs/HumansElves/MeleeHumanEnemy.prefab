@@ -1731,6 +1731,7 @@ MonoBehaviour:
   bodyCollider: {fileID: 601759701585310470}
   npcVoiceSource: {fileID: 0}
   deathSFX: {fileID: 0}
+  deathArray: []
   bloodCloud: {fileID: 0}
   bloodSplat: {fileID: 0}
 --- !u!1 &4191205936579100168
