@@ -187,7 +187,7 @@ public class FPShooting : MonoBehaviour
 
         if (playerStats.bullets <= 3 && currentWeapon == WeaponType.Gun)
         {
-            reloadText.text = "R to Reload";
+            reloadText.text = "[R] to Reload";
         }
         else
         {
