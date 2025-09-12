@@ -18,6 +18,7 @@ public class WriteTicket : MonoBehaviour
     [Header("Script Grabs")]
     private CrimeCompletion crimeCompletion;
     private IllegallyParkedCar illegallyParkedCar;
+    private SteamAchievementsManager steamAM;
 
     void Start()
     {
@@ -30,7 +31,9 @@ public class WriteTicket : MonoBehaviour
         texture.SetPixels(fillColor);
         texture.Apply();
 
-        drawArea.texture = texture;   
+        drawArea.texture = texture;  
+
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
     }
     
 
@@ -38,6 +41,7 @@ public class WriteTicket : MonoBehaviour
     {
         crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
         illegallyParkedCar = FindFirstObjectByType<IllegallyParkedCar>();
+        
 
         if (Input.GetMouseButton(0))
         {
@@ -106,6 +110,9 @@ public class WriteTicket : MonoBehaviour
         ticketPanel.SetActive(false);
         
         crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits, false, 1);
+
+        //steamAM.UnlockAchievements("tierOneCrime");
+        
 
         int current = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
         PlayerPrefs.SetInt("Tier1CrimesCompleted", current + 1);
