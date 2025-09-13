@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Steamworks;
 
 public class WriteTicket : MonoBehaviour
 {
@@ -111,8 +112,11 @@ public class WriteTicket : MonoBehaviour
         
         crimeCompletion.CrimeStopped(crimeCompletion.tierOneXP, crimeCompletion.tierOneCredits, false, 1);
 
-        //steamAM.UnlockAchievements("tierOneCrime");
-        
+        steamAM.UnlockAchievement("tierOneCrime");
+        SteamUserStats.StoreStats();
+        //steamAM.UnlockAchievement("ACH_WIN_ONE_GAME");
+
+
 
         int current = PlayerPrefs.GetInt("Tier1CrimesCompleted", 0);
         PlayerPrefs.SetInt("Tier1CrimesCompleted", current + 1);

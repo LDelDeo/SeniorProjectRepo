@@ -1,20 +1,28 @@
 using UnityEngine;
+using Steamworks;
 
 
 
 public class SteamAchievementsManager : MonoBehaviour
 {
-    public void IsThisAchievementUnlocked(string id)
+    public void UnlockAchievement(string achievementID)
     {
-        var ach = new Steamworks.Data.Achievement(id);
-
-        Debug.Log($"Achievement {id} status: " + ach.State);
-    }
-    public void UnlockAchievements(string id)
-    {
-        var ach = new Steamworks.Data.Achievement(id);
-        ach.Trigger();
-
-        Debug.Log($"Achievement {id} unlocked");
+        if (SteamManager.Initialized) // from your SteamManager script
+        {
+            bool success = SteamUserStats.SetAchievement(achievementID);
+            if (success)
+            {
+                SteamUserStats.StoreStats(); // Saves it to Steam
+                Debug.Log("Achievement unlocked: " + achievementID);
+            }
+            else
+            {
+                Debug.LogWarning("Failed to unlock achievement: " + achievementID);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Steam not initialized, cannot unlock achievement.");
+        }
     }
 }
