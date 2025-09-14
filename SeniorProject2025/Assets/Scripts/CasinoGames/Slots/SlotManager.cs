@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Steamworks;
 
 public class SlotMachineManager : MonoBehaviour
 {
@@ -36,9 +37,12 @@ public class SlotMachineManager : MonoBehaviour
     private Coroutine currentSpinRoutine;
     private Coroutine creditAnimationRoutine;
     private bool isSpinning = false;
+    private SteamAchievementsManager steamAM;
 
     void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>();
+
         spinButton.onClick.AddListener(Spin);
         maxBetButton.onClick.AddListener(() => SetMaxBet());
         resetBetButton.onClick.AddListener(() => SetResetBet());
@@ -145,6 +149,12 @@ public class SlotMachineManager : MonoBehaviour
             audioSource.PlayOneShot(
                 matchedIndex == payouts.Length - 1 ? jackpotClip : winClip
             );
+
+            if (matchedIndex == payouts.Length - 1)
+            {
+                steamAM.UnlockAchievement("jackpot");
+                SteamUserStats.StoreStats();
+            }
         }
         else
         {

@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Linq;
+using Steamworks;
 
 public class CarShopUI : MonoBehaviour
 {
@@ -40,9 +41,12 @@ public class CarShopUI : MonoBehaviour
     [Header("Purchase Animation")]
     public TMP_Text purchaseText;
     public Animator purchaseAnim;
+    private SteamAchievementsManager steamAM;
 
     private void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>();
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -204,6 +208,12 @@ public class CarShopUI : MonoBehaviour
                     purchaseAnim.SetTrigger("BoughtCar");
 
                     Debug.Log("Purchased: " + currentCar.name);
+
+                    if (requirement == CarRequirementType.PlayBlackjack && steamAM != null)
+                    {
+                        steamAM.UnlockAchievement("truck");
+                        SteamUserStats.StoreStats();
+                    }
                 }
                 else
                 {

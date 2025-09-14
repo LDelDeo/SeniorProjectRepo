@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Steamworks;
 
 public class Roulette : MonoBehaviour
 {
@@ -20,13 +21,16 @@ public class Roulette : MonoBehaviour
     private bool canPlaceABet = true;
 
     [Header("Sound Effects")]
-    [Header("Sound Effects")]
     public AudioSource audioSource;
     public AudioClip placeBetSFX;
     public AudioClip winMoneySFX;
 
+    private SteamAchievementsManager steamAM;
+
     void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
+
         gameText.text = "Place Your Bets!";
         UpdateBalanceDisplay();
         StartCoroutine(BalanceOnStart());
@@ -114,8 +118,10 @@ public class Roulette : MonoBehaviour
             if (wheelColor == 0)
             {
                 gameText.text = "Black! You Win!";
-                audioSource.PlayOneShot(winMoneySFX); 
+                audioSource.PlayOneShot(winMoneySFX);
                 audioSource.PlayOneShot(placeBetSFX);
+                steamAM.UnlockAchievement("roulette");
+                SteamUserStats.StoreStats();
             }
             else
             {
@@ -129,6 +135,8 @@ public class Roulette : MonoBehaviour
                 gameText.text = "Red! You Win!";
                 audioSource.PlayOneShot(winMoneySFX);
                 audioSource.PlayOneShot(placeBetSFX);
+                steamAM.UnlockAchievement("roulette");
+                SteamUserStats.StoreStats();
             }
             else
             {

@@ -22,7 +22,7 @@ public class EnterBombPlant : MonoBehaviour
 
     private void Start()
     {
-        countdownText.text = "";
+        countdownText.text = ""; 
     }
 
     void Update()

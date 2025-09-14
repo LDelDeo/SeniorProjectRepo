@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using TMPro;
+using Steamworks;
 
 public class FPShooting : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class FPShooting : MonoBehaviour
     private EnterGraffiti enterGraffiti;
     public Animator weaponTypeAnim;
     public Button imStuckBtn;
+    private SteamAchievementsManager steamAM;
     
 
     [Header("Shooting & Reloading")]
@@ -80,6 +82,7 @@ public class FPShooting : MonoBehaviour
         SwitchWeapon(WeaponType.Melee);
         //SwitchWeapon(WeaponType.Gun);
 
+        steamAM = FindObjectOfType<SteamAchievementsManager>();
 
         hasAmmo = true;
 
@@ -322,6 +325,8 @@ public class FPShooting : MonoBehaviour
                 if (hit.collider.tag == "Vick")
                 {
                     playerHealth.TakeDamage(1000);
+                    steamAM.UnlockAchievement("vick");
+                    SteamUserStats.StoreStats();
                 }
 
                 //This just checks what your hitting
@@ -441,6 +446,8 @@ public class FPShooting : MonoBehaviour
                 if (hit.collider.tag == "Vick")
                 {
                     playerHealth.TakeDamage(1000);
+                    steamAM.UnlockAchievement("vick");
+                    SteamUserStats.StoreStats();
                 }
 
 

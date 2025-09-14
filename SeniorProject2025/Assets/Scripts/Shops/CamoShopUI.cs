@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Linq;
 using System.Collections.Generic;
+using Steamworks;
 
 public class CamoShopUI : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class CamoShopUI : MonoBehaviour
     public Animator purchaseAnim;
 
     private Material currentSelectedCamo;
+    private SteamAchievementsManager steamAM;
 
     private class CamoItemData
     {
@@ -44,6 +46,8 @@ public class CamoShopUI : MonoBehaviour
 
     private void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -121,6 +125,9 @@ public class CamoShopUI : MonoBehaviour
 
                     animationText.text = "- " + camoPrice;
                     purchaseAnim.SetTrigger("Bought");
+
+                    steamAM.UnlockAchievement("paintWeapon");
+                    SteamUserStats.StoreStats();
                 }
             });
 

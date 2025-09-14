@@ -1,4 +1,5 @@
 using UnityEngine;
+using Steamworks;
 
 public class EnterVandalism : MonoBehaviour
 {
@@ -8,7 +9,12 @@ public class EnterVandalism : MonoBehaviour
 
     [Header("Script Grabs")]
     private CrimeCompletion crimeCompletion;
+    private SteamAchievementsManager steamAM;
 
+    private void Start()
+    {
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
+    }
     public void Update()
     {
         crimeCompletion = FindFirstObjectByType<CrimeCompletion>();
@@ -28,13 +34,15 @@ public class EnterVandalism : MonoBehaviour
             {
                 // Payout Player Credits
                 crimeCompletion.CrimeStopped(crimeCompletion.tierTwoXP, crimeCompletion.tierTwoCredits, false, 2);
+                steamAM.UnlockAchievement("tierTwoCrime");
+                SteamUserStats.StoreStats();
             }
             else
             {
                 // No Payout, Done Wrong
                 crimeCompletion.CrimeStopped(crimeCompletion.failedXP, crimeCompletion.failedCredits, true, 2);
             }
-            
+
 
             Destroy(exclamationPoint);
             Destroy(gameObject);

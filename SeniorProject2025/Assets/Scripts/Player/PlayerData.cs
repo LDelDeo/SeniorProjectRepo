@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Steamworks;
 
 public class PlayerData : MonoBehaviour
 {
@@ -24,9 +25,13 @@ public class PlayerData : MonoBehaviour
     public Slider xpBar;
     public TMP_Text levelText;
 
+    private SteamAchievementsManager steamAM;
+
 
     IEnumerator Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
+
         credits = PlayerPrefs.GetInt("Credits", 0);
         xp = PlayerPrefs.GetInt("XP", 0);
         level = PlayerPrefs.GetInt("Level", 1);
@@ -52,6 +57,18 @@ public class PlayerData : MonoBehaviour
         //SaveCarPosition();
         CheckCurrentLvl();
         CreditsCap(999999999); //999 Million
+
+        if (level >= 15)
+        {
+            steamAM.UnlockAchievement("level15");
+            SteamUserStats.StoreStats();
+        }
+
+        if (credits >= 1000000)
+        {
+            steamAM.UnlockAchievement("oneMillion");
+            SteamUserStats.StoreStats();
+        }
         
     }
 

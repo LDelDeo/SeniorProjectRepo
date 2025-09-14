@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Steamworks;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -49,8 +50,12 @@ public class UpgradeManager : MonoBehaviour
 
     private int baseCost = 300;
 
+    private SteamAchievementsManager steamAM;
+
     void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>();
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -63,6 +68,15 @@ public class UpgradeManager : MonoBehaviour
 
         LoadUpgrades();
         UpdateUI();
+    }
+
+    public void Update()
+    {
+        if (gunLevel >= maxUpgradeLevel)
+        {
+            steamAM.UnlockAchievement("maxLethal");
+            SteamUserStats.StoreStats();
+        }
     }
 
     public void UpgradeGunDamage()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using Steamworks;
 
 public class CarController : MonoBehaviour
 {
@@ -54,9 +55,12 @@ public class CarController : MonoBehaviour
 
     // Distance Tracking
     private Vector3 lastPosition;
+    private SteamAchievementsManager steamAM;
 
     private void Start()
     {
+        steamAM = FindObjectOfType<SteamAchievementsManager>();
+
         enterCarScript = GetComponent<EnterCarScript>();
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -.05f, 0);
@@ -392,6 +396,8 @@ public class CarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Npc"))
         {
+            steamAM.UnlockAchievement("hitPerson");
+            SteamUserStats.StoreStats();
             NPCRagdoll npc = collision.collider.GetComponent<NPCRagdoll>();
             if (npc != null)
             {

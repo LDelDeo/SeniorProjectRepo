@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Steamworks;
 
 public class WireCut : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class WireCut : MonoBehaviour
 
     private string correctWire;
     public AudioSource explosion;
+    private SteamAchievementsManager steamAM;
+
 
     void Start()
     {
@@ -28,6 +31,8 @@ public class WireCut : MonoBehaviour
 
         if (playerStats == null)
             playerStats = FindFirstObjectByType<PlayerStats>();
+            
+        steamAM = FindObjectOfType<SteamAchievementsManager>(); 
     }
 
     private void Update()
@@ -76,6 +81,9 @@ public class WireCut : MonoBehaviour
             Cursor.visible = false;
 
             doneCorrectly = true;
+
+            steamAM.UnlockAchievement("tierThreeCrime");
+            SteamUserStats.StoreStats();
             //End Game Here
         }
         else
