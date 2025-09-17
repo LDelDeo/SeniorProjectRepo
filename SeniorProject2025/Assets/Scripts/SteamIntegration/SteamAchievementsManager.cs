@@ -28,7 +28,11 @@ public class SteamAchievementsManager : MonoBehaviour
                 SteamUserStats.StoreStats();
                 Debug.Log("Achievement unlocked: " + achievementID);
 
-                CheckForMetaAchievement();
+                // Prevent infinite loop by only checking meta if it's not the meta achievement
+                if (achievementID != "hundredPercent")
+                {
+                    CheckForMetaAchievement();
+                }
             }
             else
             {
@@ -40,6 +44,7 @@ public class SteamAchievementsManager : MonoBehaviour
             Debug.LogWarning("Steam not initialized, cannot unlock achievement.");
         }
     }
+
 
     private void CheckForMetaAchievement()
     {
